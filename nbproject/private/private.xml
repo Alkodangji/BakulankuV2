@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/F:/05%20Project/04%20Experiment/toko/src/model/TransaksiKeuangan.java</file>
+            <file>file:/F:/05%20Project/04%20Experiment/toko/src/helper/FontIcon.java</file>
+            <file>file:/F:/05%20Project/04%20Experiment/toko/src/view/penjualan/PenjualanPanel.java</file>
+            <file>file:/F:/05%20Project/04%20Experiment/toko/src/config/Koneksi.java</file>
+            <file>file:/F:/05%20Project/04%20Experiment/toko/src/view/dashboard/DashboardPanel.java</file>
+            <file>file:/F:/05%20Project/04%20Experiment/toko/src/session/Session.java</file>
+            <file>file:/F:/05%20Project/04%20Experiment/toko/src/helper/SaldoHelper.java</file>
+            <file>file:/F:/05%20Project/04%20Experiment/toko/src/controller/TransaksiKeuanganController.java</file>
+            <file>file:/F:/05%20Project/04%20Experiment/toko/src/view/main/MainFrame.java</file>
+            <file>file:/F:/05%20Project/04%20Experiment/toko/src/view/bbm/BBMPanel.java</file>
+            <file>file:/F:/05%20Project/04%20Experiment/toko/src/helper/WrapLayout.java</file>
+            <file>file:/F:/05%20Project/04%20Experiment/toko/src/main/Main.java</file>
+            <file>file:/F:/05%20Project/04%20Experiment/toko/src/view/keuangan/KeuanganPanel.java</file>
+            <file>file:/F:/05%20Project/04%20Experiment/toko/src/helper/AlertHelper.java</file>
+            <file>file:/F:/05%20Project/04%20Experiment/toko/src/view/main/LoginFrame.java</file>
+            <file>file:/F:/05%20Project/04%20Experiment/toko/src/view/brilink/BRILinkPanel.java</file>
+            <file>file:/F:/05%20Project/04%20Experiment/toko/src/view/laporan/LaporanPanel.java</file>
+            <file>file:/F:/05%20Project/04%20Experiment/toko/src/view/component/MenuCard.java</file>
+            <file>file:/F:/05%20Project/04%20Experiment/toko/src/helper/Styler.java</file>
+            <file>file:/F:/05%20Project/04%20Experiment/toko/src/theme/FlatLaf.properties</file>
+            <file>file:/F:/05%20Project/04%20Experiment/toko/src/config/Theme.java</file>
+        </group>
+    </open-files>
+</project-private>
