@@ -5,6 +5,9 @@ import model.PenjualanDetail;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.table.DefaultTableModel;
+import helper.RupiahFormat;
 
 public class PenjualanDetailDAO {
 
@@ -60,4 +63,57 @@ public class PenjualanDetailDAO {
 
         return false;
     }
+
+    public DefaultTableModel getDetailTransaksi(int idPenjualan) {
+
+        DefaultTableModel model = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        model.addColumn("Produk");
+        model.addColumn("Qty");
+        model.addColumn("Harga");
+        model.addColumn("Subtotal");
+
+        try {
+
+            Connection conn =
+                    Koneksi.getConnection();
+
+            String sql =
+                    "SELECT p.nama_produk, d.qty, d.harga, d.subtotal "
+                  + "FROM tb_penjualan_detail d "
+                  + "JOIN tb_produk p ON p.id_produk = d.produk_id "
+                  + "WHERE d.penjualan_id = ? "
+                  + "ORDER BY d.id_detail";
+
+            PreparedStatement ps =
+                    conn.prepareStatement(sql);
+
+            ps.setInt(1, idPenjualan);
+
+            ResultSet rs =
+                    ps.executeQuery();
+
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    rs.getString("nama_produk"),
+                    rs.getInt("qty"),
+                    RupiahFormat.format(rs.getDouble("harga")),
+                    RupiahFormat.format(rs.getDouble("subtotal"))
+                });
+            }
+
+        } catch(Exception e) {
+
+            e.printStackTrace();
+
+        }
+
+        return model;
+    }
+
 }
