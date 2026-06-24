@@ -51,6 +51,40 @@ public class ProdukDAO {
         return daftarProduk;
     }
 
+    public Produk getProdukById(Connection conn, int idProduk) throws Exception {
+        String sql = "SELECT id_produk, kode_produk, nama_produk, harga_beli, harga_jual, stok, stok_minimum "
+                + "FROM tb_produk WHERE id_produk = ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idProduk);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Produk(
+                            rs.getInt("id_produk"),
+                            rs.getString("kode_produk"),
+                            rs.getString("nama_produk"),
+                            rs.getDouble("harga_beli"),
+                            rs.getDouble("harga_jual"),
+                            rs.getInt("stok"),
+                            rs.getInt("stok_minimum")
+                    );
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public boolean tambahStokDanUpdateHargaBeli(Connection conn, int idProduk, int qty, double hargaBeliBaru) throws Exception {
+        String sql = "UPDATE tb_produk SET stok = stok + ?, harga_beli = ? WHERE id_produk = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, qty);
+            ps.setDouble(2, hargaBeliBaru);
+            ps.setInt(3, idProduk);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
     public boolean tambahProduk(Produk produk) {
         String sql = "INSERT INTO tb_produk "
                 + "(kode_produk, nama_produk, harga_beli, harga_jual, stok, stok_minimum) "

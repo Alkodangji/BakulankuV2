@@ -4,7 +4,28 @@
  */
 package view.penjualan;
 
+import config.Koneksi;
+import dao.AkunDAO;
+import dao.ProdukDAO;
+import dao.ProdukRestokDAO;
+import helper.KodeTransaksi;
+import helper.NomorTransaksi;
+import helper.RupiahFormat;
 import java.awt.CardLayout;
+import java.sql.Connection;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import javax.swing.JOptionPane;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.table.DefaultTableModel;
+import model.Akun;
+import model.Produk;
+import model.ProdukRestok;
+import session.Session;
 import view.main.MainFrame;
 
 /**
@@ -20,6 +41,7 @@ public
     public
             Restok() {
         initComponents();
+        inisialisasiRestok();
     }
 
     /**
@@ -57,6 +79,7 @@ public
         jButton3 = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
+        jComboBox2 = new javax.swing.JComboBox<>();
         jTextField6 = new javax.swing.JTextField();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
@@ -209,13 +232,16 @@ public
         jPanel1.add(jTextField3, gridBagConstraints);
 
         jTextField4.setName("jTextField4"); // NOI18N
+        jTextField4.setEditable(false);
+
+        jComboBox2.setName("jComboBox2"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(0, 6, 6, 6);
-        jPanel1.add(jTextField4, gridBagConstraints);
+        jPanel1.add(jComboBox2, gridBagConstraints);
 
         jSpinner1.setName("jSpinner1"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -252,6 +278,11 @@ public
 
         jButton2.setText("Tambah");
         jButton2.setName("jButton2"); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tambahRestok();
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 12;
@@ -261,6 +292,11 @@ public
 
         jButton3.setText("Cancel");
         jButton3.setName("jButton3"); // NOI18N
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetForm();
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 12;
@@ -277,7 +313,6 @@ public
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 0, 7);
         jPanel1.add(jLabel11, gridBagConstraints);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cash", "BRI" }));
         jComboBox1.setName("jComboBox1"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -343,6 +378,12 @@ public
 
         BtnData.setText("Data Produk");
         BtnData.setName("BtnData"); // NOI18N
+        this.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                reloadDataForm();
+            }
+        });
+
         BtnData.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnDataActionPerformed(evt);
@@ -401,6 +442,199 @@ public
     }//GEN-LAST:event_BtnDataActionPerformed
 
 
+    private final ProdukDAO produkDAO = new ProdukDAO();
+    private final AkunDAO akunDAO = new AkunDAO();
+    private final ProdukRestokDAO produkRestokDAO = new ProdukRestokDAO();
+    private final Map<String, Produk> produkComboMap = new LinkedHashMap<>();
+    private final Map<String, Akun> akunComboMap = new LinkedHashMap<>();
+
+    private void inisialisasiRestok() {
+        jTextField1.setEditable(false);
+        jTextField2.setEditable(false);
+        jTextField3.setEditable(false);
+        jTextField4.setEditable(false);
+        jTextField5.setEditable(false);
+        jFormattedTextField1.setEditable(false);
+        jSpinner1.setModel(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
+        jButton4.setEnabled(false);
+        jButton5.setEnabled(false);
+
+        jComboBox2.addActionListener(e -> pilihProduk());
+        jTextField6.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                formatTotalHarga();
+            }
+        });
+        reloadDataForm();
+    }
+
+    private void reloadDataForm() {
+        loadComboProduk();
+        loadComboAkun();
+        resetForm();
+    }
+
+    private void loadComboProduk() {
+        produkComboMap.clear();
+        jComboBox2.removeAllItems();
+        jComboBox2.addItem("-- Pilih Produk --");
+        List<Produk> daftarProduk = produkDAO.getAllProduk("");
+        for (Produk produk : daftarProduk) {
+            String label = produk.getNamaProduk() + " (" + produk.getKodeProduk() + ") - ID " + produk.getIdProduk();
+            produkComboMap.put(label, produk);
+            jComboBox2.addItem(label);
+        }
+    }
+
+    private void loadComboAkun() {
+        akunComboMap.clear();
+        jComboBox1.removeAllItems();
+        jComboBox1.addItem("-- Pilih Akun --");
+        for (Akun akun : akunDAO.getAllAkun()) {
+            String label = akun.getNamaAkun() + " - ID " + akun.getIdAkun();
+            akunComboMap.put(label, akun);
+            jComboBox1.addItem(label);
+        }
+    }
+
+    private void pilihProduk() {
+        Produk produk = getProdukTerpilih();
+        if (produk == null) {
+            jTextField3.setText("");
+            jTextField4.setText("");
+            jTextField5.setText("");
+            return;
+        }
+        jTextField3.setText(String.valueOf(produk.getIdProduk()));
+        jTextField4.setText(produk.getNamaProduk());
+        jTextField5.setText(RupiahFormat.format(produk.getHargaBeli()));
+    }
+
+    private Produk getProdukTerpilih() {
+        Object item = jComboBox2.getSelectedItem();
+        return item == null ? null : produkComboMap.get(item.toString());
+    }
+
+    private Akun getAkunTerpilih() {
+        Object item = jComboBox1.getSelectedItem();
+        return item == null ? null : akunComboMap.get(item.toString());
+    }
+
+    private void resetForm() {
+        jTextField1.setText("");
+        jTextField2.setText(NomorTransaksi.generate(KodeTransaksi.RESTOK_PRODUK, "tb_produk_restok"));
+        jFormattedTextField1.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        if (jComboBox2.getItemCount() > 0) {
+            jComboBox2.setSelectedIndex(0);
+        }
+        if (jComboBox1.getItemCount() > 0) {
+            jComboBox1.setSelectedIndex(0);
+        }
+        jSpinner1.setValue(1);
+        jTextField6.setText("");
+        jTextArea1.setText("");
+        isiTabelKosong();
+    }
+
+    private void isiTabelKosong() {
+        DefaultTableModel model = new DefaultTableModel(new Object[]{"No Transaksi", "Tanggal", "Produk", "Qty", "Total"}, 0);
+        jTable1.setModel(model);
+    }
+
+    private void formatTotalHarga() {
+        double total = RupiahFormat.parse(jTextField6.getText());
+        if (total > 0) {
+            jTextField6.setText(RupiahFormat.format(total));
+        }
+    }
+
+    private void tambahRestok() {
+        Produk produkPilihan = getProdukTerpilih();
+        Akun akunPilihan = getAkunTerpilih();
+        int qty = ((Number) jSpinner1.getValue()).intValue();
+        double total = RupiahFormat.parse(jTextField6.getText());
+
+        if (produkPilihan == null) {
+            JOptionPane.showMessageDialog(this, "Produk wajib dipilih.");
+            return;
+        }
+        if (akunPilihan == null) {
+            JOptionPane.showMessageDialog(this, "Akun wajib dipilih.");
+            return;
+        }
+        if (qty <= 0) {
+            JOptionPane.showMessageDialog(this, "Qty harus lebih dari 0.");
+            return;
+        }
+        if (total <= 0) {
+            JOptionPane.showMessageDialog(this, "Total harga harus lebih dari 0.");
+            return;
+        }
+        if (Session.idUser <= 0) {
+            JOptionPane.showMessageDialog(this, "Session user tidak valid. Silakan login ulang.");
+            return;
+        }
+
+        try (Connection conn = Koneksi.getConnection()) {
+            conn.setAutoCommit(false);
+            try {
+                double saldo = akunDAO.getSaldo(conn, akunPilihan.getIdAkun());
+                if (saldo < total) {
+                    conn.rollback();
+                    JOptionPane.showMessageDialog(this, "Saldo akun tidak cukup.");
+                    return;
+                }
+
+                Produk produkDb = produkDAO.getProdukById(conn, produkPilihan.getIdProduk());
+                if (produkDb == null) {
+                    conn.rollback();
+                    JOptionPane.showMessageDialog(this, "Produk tidak ditemukan.");
+                    return;
+                }
+
+                double hargaBeliBaru = total / qty;
+                int stokLama = produkDb.getStok();
+                double hargaBeliLama = produkDb.getHargaBeli();
+                double hargaBeliRataRata = ((stokLama * hargaBeliLama) + (qty * hargaBeliBaru)) / (stokLama + qty);
+
+                ProdukRestok restok = new ProdukRestok();
+                restok.setNomorTransaksi(jTextField2.getText());
+                restok.setTanggal(Date.valueOf(LocalDate.now()));
+                restok.setUserId(Session.idUser);
+                restok.setProdukId(produkDb.getIdProduk());
+                restok.setAkunId(akunPilihan.getIdAkun());
+                restok.setQty(qty);
+                restok.setHargaBeli(hargaBeliBaru);
+                restok.setTotal(total);
+                restok.setCatatan(jTextArea1.getText());
+
+                if (!produkRestokDAO.tambahRestok(conn, restok)) {
+                    throw new Exception("Gagal menyimpan transaksi restok.");
+                }
+                if (!produkDAO.tambahStokDanUpdateHargaBeli(conn, produkDb.getIdProduk(), qty, hargaBeliRataRata)) {
+                    throw new Exception("Gagal menambah stok produk.");
+                }
+                if (!akunDAO.kurangiSaldo(conn, akunPilihan.getIdAkun(), total)) {
+                    throw new Exception("Gagal mengurangi saldo akun.");
+                }
+
+                conn.commit();
+                JOptionPane.showMessageDialog(this, "Restok produk berhasil disimpan.");
+                reloadDataForm();
+            } catch (Exception e) {
+                conn.rollback();
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, e.getMessage());
+            } finally {
+                conn.setAutoCommit(true);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Koneksi database gagal: " + e.getMessage());
+        }
+    }
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnBack;
     private javax.swing.JButton BtnData;
@@ -410,6 +644,7 @@ public
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
