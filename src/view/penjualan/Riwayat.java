@@ -5,12 +5,16 @@
 package view.penjualan;
 
 import dao.PenjualanDAO;
+import dao.PenjualanDetailDAO;
 import dao.ProdukDAO;
 import java.awt.CardLayout;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.sql.*;
 import javax.swing.JOptionPane;
+import javax.swing.JButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import view.main.MainFrame;
 
 /**
@@ -26,6 +30,8 @@ public
     public
             Riwayat() {
         initComponents();
+        initDetailButton();
+        jButton2.setEnabled(false);
         loadTable();
         
         addComponentListener(new ComponentAdapter() {
@@ -35,6 +41,23 @@ public
             resetForm();
         }
     });
+    }
+
+    private void initDetailButton() {
+
+        BtnDetail = new JButton("Detail");
+        BtnDetail.setName("BtnDetail");
+        BtnDetail.addActionListener(evt -> tampilkanDetailTransaksi());
+
+        java.awt.GridBagConstraints gridBagConstraints =
+                new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE_LEADING;
+        gridBagConstraints.weightx = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
+        jPanel1.add(BtnDetail, gridBagConstraints);
     }
 
     private void resetForm() {
@@ -109,6 +132,38 @@ public
     );
 }
     
+    private void tampilkanDetailTransaksi() {
+
+        if (TxtId.getText().trim().isEmpty()) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Pilih transaksi terlebih dahulu"
+            );
+
+            return;
+        }
+
+        int idPenjualan = Integer.parseInt(
+                TxtId.getText().trim()
+        );
+
+        PenjualanDetailDAO dao =
+                new PenjualanDetailDAO();
+
+        JTable table =
+                new JTable(dao.getDetailTransaksi(idPenjualan));
+        table.setEnabled(false);
+        table.getTableHeader().setReorderingAllowed(false);
+
+        JOptionPane.showMessageDialog(
+                this,
+                new JScrollPane(table),
+                "Detail Transaksi " + TxtNoTransaksi.getText(),
+                JOptionPane.INFORMATION_MESSAGE
+        );
+    }
+
     private void deleteTransaksi() {
 
     if (TxtId.getText().trim().isEmpty()) {
@@ -580,6 +635,7 @@ public
     private javax.swing.JButton BtnBack;
     private javax.swing.JButton BtnClear;
     private javax.swing.JButton BtnDelete;
+    private javax.swing.JButton BtnDetail;
     private javax.swing.JButton BtnRestok;
     private javax.swing.JButton Btndata;
     private javax.swing.JComboBox<String> CbMetode;
