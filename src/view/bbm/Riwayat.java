@@ -4,7 +4,19 @@
  */
 package view.bbm;
 
+import dao.BBMDAO;
 import java.awt.CardLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.sql.Date;
+import java.time.LocalDate;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import model.BBM;
+import model.BBMPenjualan;
+import session.Session;
 import view.main.MainFrame;
 
 /**
@@ -20,6 +32,7 @@ public
     public
             Riwayat() {
         initComponents();
+        setupPenjualanBBM();
     }
 
     /**
@@ -419,6 +432,155 @@ public
         cl.show(MainFrame.BBMContainer, "DATA");
         // TODO add your handling code here:
     }//GEN-LAST:event_BtnDataActionPerformed
+
+    private final BBMDAO bbmDAO = new BBMDAO();
+    private final JComboBox<String> comboMetodePembayaran = new JComboBox<>();
+    private int selectedBbmId = 0;
+    private int selectedHistoryId = 0;
+    private String modeTabel = "DATA";
+
+    private void setupPenjualanBBM() {
+        jButton1.setText("Simpan Penjualan");
+        jButton2.setText("Clear");
+        jTextField7.setEditable(false);
+        jTextField10.setEditable(false);
+        jTextField2.setEditable(false);
+        jTextField4.setEditable(false);
+        jFormattedTextField1.setText(LocalDate.now().toString());
+        setupMetodePembayaran();
+        setupTombolRiwayat();
+        jButton1.addActionListener(e -> simpanPenjualan());
+        jButton2.addActionListener(e -> clearForm());
+        jTable2.addMouseListener(new java.awt.event.MouseAdapter() { public void mouseClicked(java.awt.event.MouseEvent evt) { pilihBarisTabel(); } });
+        jTable2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_DELETE) hapusRiwayatTerpilih();
+            }
+        });
+        tampilBBM();
+    }
+
+    private void setupMetodePembayaran() {
+        jTextField6.setVisible(false);
+        comboMetodePembayaran.setName("comboMetodePembayaranBBM");
+        comboMetodePembayaran.removeAllItems();
+        comboMetodePembayaran.addItem("Cash");
+        comboMetodePembayaran.addItem("BRI");
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new Insets(0, 6, 6, 5);
+        jPanel1.add(comboMetodePembayaran, gridBagConstraints);
+    }
+
+    private void setupTombolRiwayat() {
+        JButton btnRiwayatPenjualan = new JButton("Riwayat Jual");
+        JButton btnRiwayatRestok = new JButton("Riwayat Restok");
+        btnRiwayatPenjualan.addActionListener(e -> tampilRiwayatPenjualan());
+        btnRiwayatRestok.addActionListener(e -> tampilRiwayatRestok());
+        GridBagConstraints gbcJual = new GridBagConstraints();
+        gbcJual.gridx = 0;
+        gbcJual.gridy = 13;
+        gbcJual.gridwidth = 2;
+        gbcJual.fill = GridBagConstraints.HORIZONTAL;
+        gbcJual.insets = new Insets(6, 6, 6, 6);
+        jPanel1.add(btnRiwayatPenjualan, gbcJual);
+        GridBagConstraints gbcRestok = new GridBagConstraints();
+        gbcRestok.gridx = 2;
+        gbcRestok.gridy = 13;
+        gbcRestok.gridwidth = 2;
+        gbcRestok.fill = GridBagConstraints.HORIZONTAL;
+        gbcRestok.insets = new Insets(6, 6, 6, 6);
+        jPanel1.add(btnRiwayatRestok, gbcRestok);
+        jPanel1.revalidate();
+        jPanel1.repaint();
+    }
+
+    private void tampilBBM() {
+        modeTabel = "DATA";
+        selectedHistoryId = 0;
+        DefaultTableModel model = new DefaultTableModel(new Object[]{"ID", "Kode", "Nama", "Harga Jual", "Stok"}, 0) { public boolean isCellEditable(int r, int c) { return false; } };
+        for (BBM b : bbmDAO.getAllBBM(null)) model.addRow(new Object[]{b.getIdBbm(), b.getKodeBbm(), b.getNamaBbm(), b.getHargaJual(), b.getStok()});
+        jTable2.setModel(model);
+    }
+
+    private void tampilRiwayatPenjualan() {
+        modeTabel = "PENJUALAN";
+        selectedHistoryId = 0;
+        DefaultTableModel model = new DefaultTableModel(new Object[]{"ID", "No Transaksi", "Tanggal", "BBM", "Liter", "Harga Jual", "Total", "Metode", "Diterima", "Kembalian"}, 0) { public boolean isCellEditable(int r, int c) { return false; } };
+        for (Object[] row : bbmDAO.getRiwayatPenjualan()) model.addRow(row);
+        jTable2.setModel(model);
+    }
+
+    private void tampilRiwayatRestok() {
+        modeTabel = "RESTOK";
+        selectedHistoryId = 0;
+        DefaultTableModel model = new DefaultTableModel(new Object[]{"ID", "No Transaksi", "Tanggal", "BBM", "Liter", "Harga Beli", "Total", "Akun", "Catatan"}, 0) { public boolean isCellEditable(int r, int c) { return false; } };
+        for (Object[] row : bbmDAO.getRiwayatRestok()) model.addRow(row);
+        jTable2.setModel(model);
+    }
+
+    private void pilihBarisTabel() {
+        int row = jTable2.getSelectedRow();
+        if (row < 0) return;
+        if (!"DATA".equals(modeTabel)) {
+            selectedHistoryId = Integer.parseInt(jTable2.getValueAt(row, 0).toString());
+            return;
+        }
+        selectedBbmId = Integer.parseInt(jTable2.getValueAt(row, 0).toString());
+        jTextField7.setText(String.valueOf(selectedBbmId));
+        jTextField10.setText(jTable2.getValueAt(row, 2).toString());
+        jTextField1.setText(jTable2.getValueAt(row, 3).toString());
+        hitungTotal();
+    }
+
+    private void simpanPenjualan() {
+        try {
+            if (selectedBbmId <= 0) throw new Exception("BBM wajib dipilih dari tabel.");
+            double liter = parseDouble(jTextField11.getText());
+            double hargaJual = parseDouble(jTextField1.getText());
+            String metode = comboMetodePembayaran.getSelectedItem() == null ? "" : comboMetodePembayaran.getSelectedItem().toString();
+            if (liter <= 0) throw new Exception("Liter harus lebih dari 0.");
+            if (hargaJual <= 0) throw new Exception("Harga jual harus lebih dari 0.");
+            if (metode.isEmpty()) throw new Exception("Metode pembayaran wajib dipilih (Cash/BRI).");
+            double total = liter * hargaJual;
+            double diterima = metode.equalsIgnoreCase("Cash") ? parseDouble(jTextField3.getText()) : total;
+            if (metode.equalsIgnoreCase("Cash") && diterima < total) throw new Exception("Uang diterima tidak boleh kurang dari total.");
+            double kembali = metode.equalsIgnoreCase("Cash") ? diterima - total : 0;
+            BBMPenjualan p = new BBMPenjualan();
+            p.setTanggal(Date.valueOf(jFormattedTextField1.getText().trim())); p.setUserId(Session.idUser); p.setBbmId(selectedBbmId);
+            p.setLiter(liter); p.setHargaJual(hargaJual); p.setTotal(total); p.setMetodePembayaran(metode); p.setDiterima(diterima); p.setKembalian(kembali);
+            bbmDAO.prosesPenjualan(p);
+            JOptionPane.showMessageDialog(this, "Penjualan BBM berhasil disimpan: " + p.getNomorTransaksi());
+            clearForm(); tampilRiwayatPenjualan();
+        } catch (Exception e) { JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); }
+    }
+
+    private void hapusRiwayatTerpilih() {
+        try {
+            if (selectedHistoryId <= 0 || "DATA".equals(modeTabel)) throw new Exception("Pilih baris riwayat penjualan/restok yang akan dihapus.");
+            int confirm1 = JOptionPane.showConfirmDialog(this, "Yakin ingin menghapus transaksi BBM terpilih?", "Konfirmasi Hapus", JOptionPane.YES_NO_OPTION);
+            if (confirm1 != JOptionPane.YES_OPTION) return;
+            int confirm2 = JOptionPane.showConfirmDialog(this, "Penghapusan akan mempengaruhi stok, saldo, harga beli rata-rata, dashboard, dan laporan. Lanjutkan?", "Peringatan Rollback", JOptionPane.YES_NO_OPTION);
+            if (confirm2 != JOptionPane.YES_OPTION) return;
+            if ("PENJUALAN".equals(modeTabel)) {
+                bbmDAO.hapusPenjualanDenganRollback(selectedHistoryId);
+                tampilRiwayatPenjualan();
+            } else if ("RESTOK".equals(modeTabel)) {
+                bbmDAO.hapusRestokDenganRollback(selectedHistoryId);
+                tampilRiwayatRestok();
+            }
+            JOptionPane.showMessageDialog(this, "Transaksi BBM berhasil dihapus dan efek lama sudah di-rollback.");
+        } catch (Exception e) { JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); }
+    }
+
+    private void hitungTotal() {
+        try { double liter = parseDouble(jTextField11.getText()); double harga = parseDouble(jTextField1.getText()); jTextField2.setText(String.valueOf(liter * harga)); } catch (Exception ignored) {}
+    }
+    private double parseDouble(String value) throws Exception { try { return Double.parseDouble(value.trim().replace(",", ".")); } catch (Exception e) { throw new Exception("Input angka tidak valid."); } }
+    private void clearForm() { selectedBbmId = 0; jTextField7.setText(""); jTextField9.setText(""); jTextField10.setText(""); jTextField11.setText(""); jTextField1.setText(""); jTextField2.setText(""); jTextField6.setText(""); if (comboMetodePembayaran.getItemCount() > 0) comboMetodePembayaran.setSelectedIndex(0); jTextField3.setText(""); jTextField4.setText(""); jFormattedTextField1.setText(LocalDate.now().toString()); jTable2.clearSelection(); }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -4,7 +4,18 @@
  */
 package view.bbm;
 
+import dao.BBMDAO;
 import java.awt.CardLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.sql.Date;
+import java.time.LocalDate;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import model.BBM;
+import model.BBMRestok;
+import session.Session;
 import view.main.MainFrame;
 
 /**
@@ -20,6 +31,7 @@ public
     public
             Restok() {
         initComponents();
+        setupRestokBBM();
     }
 
     /**
@@ -341,6 +353,93 @@ public
         cl.show(MainFrame.BBMContainer, "RIWAYAT");
         // TODO add your handling code here:
     }//GEN-LAST:event_BtnHistActionPerformed
+
+    private final BBMDAO bbmDAO = new BBMDAO();
+    private final JComboBox<String> comboAkun = new JComboBox<>();
+    private int selectedBbmId = 0;
+
+    private void setupRestokBBM() {
+        jLabel8.setText("ID BBM");
+        jLabel2.setText("No. Transaksi");
+        jLabel3.setText("Akun Bayar");
+        jLabel4.setText("Total Harga");
+        jButton1.setText("Simpan Restok");
+        jButton2.setText("Clear");
+        jTextField2.setEditable(false);
+        jTextField2.setText("Auto");
+        jFormattedTextField1.setText(LocalDate.now().toString());
+        setupComboAkun();
+        jButton1.addActionListener(e -> simpanRestok());
+        jButton2.addActionListener(e -> clearForm());
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() { public void mouseClicked(java.awt.event.MouseEvent evt) { pilihBBM(); } });
+        tampilBBM();
+    }
+
+    private void setupComboAkun() {
+        jTextField3.setVisible(false);
+        comboAkun.setName("comboAkunBBMRestok");
+        comboAkun.removeAllItems();
+        for (String namaAkun : bbmDAO.getNamaAkun()) {
+            comboAkun.addItem(namaAkun);
+        }
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new Insets(0, 6, 6, 6);
+        jPanel1.add(comboAkun, gridBagConstraints);
+        jPanel1.revalidate();
+        jPanel1.repaint();
+    }
+
+    private void tampilBBM() {
+        DefaultTableModel model = new DefaultTableModel(new Object[]{"ID", "Kode", "Nama", "Harga Beli", "Harga Jual", "Stok"}, 0) {
+            public boolean isCellEditable(int row, int column) { return false; }
+        };
+        for (BBM b : bbmDAO.getAllBBM(null)) model.addRow(new Object[]{b.getIdBbm(), b.getKodeBbm(), b.getNamaBbm(), b.getHargaBeli(), b.getHargaJual(), b.getStok()});
+        jTable1.setModel(model);
+    }
+
+    private void pilihBBM() {
+        int row = jTable1.getSelectedRow();
+        if (row < 0) return;
+        selectedBbmId = Integer.parseInt(jTable1.getValueAt(row, 0).toString());
+        jTextField4.setText(String.valueOf(selectedBbmId));
+    }
+
+    private void simpanRestok() {
+        try {
+            if (selectedBbmId <= 0) throw new Exception("BBM wajib dipilih dari tabel.");
+            double liter = parseDouble(jTextField5.getText());
+            double total = parseDouble(jTextField6.getText());
+            String namaAkun = comboAkun.getSelectedItem() == null ? "" : comboAkun.getSelectedItem().toString();
+            if (liter <= 0) throw new Exception("Liter harus lebih dari 0.");
+            if (total <= 0) throw new Exception("Total harga harus lebih dari 0.");
+            if (namaAkun.trim().isEmpty()) throw new Exception("Akun pembayaran wajib dipilih.");
+            int akunId = bbmDAO.getAkunIdByNama(namaAkun);
+            BBMRestok r = new BBMRestok();
+            r.setTanggal(Date.valueOf(jFormattedTextField1.getText().trim()));
+            r.setUserId(Session.idUser);
+            r.setBbmId(selectedBbmId);
+            r.setAkunId(akunId);
+            r.setLiter(liter);
+            r.setTotal(total);
+            r.setCatatan(jTextArea1.getText().trim());
+            bbmDAO.prosesRestok(r);
+            JOptionPane.showMessageDialog(this, "Restok BBM berhasil disimpan: " + r.getNomorTransaksi());
+            clearForm(); tampilBBM();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private double parseDouble(String value) throws Exception {
+        try { return Double.parseDouble(value.trim().replace(",", ".")); } catch (Exception e) { throw new Exception("Input angka tidak valid."); }
+    }
+
+    private void clearForm() {
+        selectedBbmId = 0; jTextField4.setText(""); jTextField3.setText(""); jTextField5.setText(""); jTextField6.setText(""); jTextArea1.setText(""); jFormattedTextField1.setText(LocalDate.now().toString()); jTextField2.setText("Auto"); if (comboAkun.getItemCount() > 0) comboAkun.setSelectedIndex(0); jTable1.clearSelection();
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
