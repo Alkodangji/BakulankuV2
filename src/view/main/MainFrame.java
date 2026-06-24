@@ -37,6 +37,11 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.*;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import java.awt.CardLayout;
+import config.Koneksi;
+import dao.AkunDAO;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.sql.Connection;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
@@ -108,6 +113,7 @@ LblLogo.setIcon(logo);
         BRILinkContainer = BRILink;
         PenjualanContainer = Penjualan;
         KeuanganContainer= Keuangan;
+        refreshSaldoHeader();
 
     //  Load All Panel     
         Home.setLayout(new BorderLayout());
@@ -559,6 +565,26 @@ LblLogo.setIcon(logo);
     }//GEN-LAST:event_BtnOutMouseExited
 
  
+
+    public void refreshSaldoHeader() {
+        AkunDAO akunDAO = new AkunDAO();
+        try (Connection conn = Koneksi.getConnection()) {
+            if (conn == null) {
+                return;
+            }
+            LblCash.setText(formatRupiahTanpaSimbol(akunDAO.getSaldo(conn, 1)));
+            LblBri.setText(formatRupiahTanpaSimbol(akunDAO.getSaldo(conn, 2)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String formatRupiahTanpaSimbol(double nominal) {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setGroupingSeparator('.');
+        symbols.setDecimalSeparator(',');
+        return new DecimalFormat("#,##0", symbols).format(nominal);
+    }
 
     /**
      * @param args the command line arguments
