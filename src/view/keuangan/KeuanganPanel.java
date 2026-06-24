@@ -4,7 +4,21 @@
  */
 package view.keuangan;
 
+import config.Koneksi;
+import dao.AkunDAO;
 import java.awt.CardLayout;
+import java.awt.Window;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import session.Session;
 import view.main.MainFrame;
 
 /**
@@ -17,8 +31,176 @@ public
     /**
      * Creates new form KeuanganPanel
      */
+    private final AkunDAO akunDAO = new AkunDAO();
+
     public KeuanganPanel() {
             initComponents();
+            initPemasukanMinimal();
+            refreshRingkasanSaldo();
+    }
+
+    private void initPemasukanMinimal() {
+        TxtTgl.setText(LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
+        jComboBox4.setSelectedItem("Pemasukan");
+        jComboBox2.setModel(new DefaultComboBoxModel<>(new String[] { "Cash", "BRI" }));
+        jComboBox3.setModel(new DefaultComboBoxModel<>(new String[] { "Cash", "BRI" }));
+        jComboBox5.setModel(new DefaultComboBoxModel<>(new String[] { "Saldo Awal", "Modal", "Lainnya" }));
+        jComboBox6.setModel(new DefaultComboBoxModel<>(new String[] { "Saldo Awal", "Modal", "Lainnya" }));
+    }
+
+    private void simpanPemasukan() {
+        String jenis = String.valueOf(jComboBox4.getSelectedItem());
+        if (!"Pemasukan".equals(jenis)) {
+            JOptionPane.showMessageDialog(this, "Untuk sementara hanya Pemasukan yang aktif.");
+            return;
+        }
+
+        double nominal = parseNominal(jTextField1.getText());
+        if (nominal <= 0) {
+            JOptionPane.showMessageDialog(this, "Nominal harus lebih dari 0.");
+            return;
+        }
+
+        int idAkunTujuan = getIdAkun(String.valueOf(jComboBox3.getSelectedItem()));
+        String kategori = String.valueOf(jComboBox5.getSelectedItem());
+        String catatan = jTextArea1.getText().trim();
+        int idUser = Session.idUser > 0 ? Session.idUser : 1;
+
+        Connection conn = null;
+        try {
+            conn = Koneksi.getConnection();
+            if (conn == null) {
+                throw new Exception("Koneksi database gagal.");
+            }
+            conn.setAutoCommit(false);
+
+            String nomorTransaksi = generateNomorTransaksi(conn);
+            String sql = "INSERT INTO tb_keuangan "
+                    + "(nomor_transaksi, tanggal, user_id, akun_asal_id, akun_tujuan_id, jenis, nominal, kategori, catatan) "
+                    + "VALUES (?, ?, ?, NULL, ?, 'Pemasukan', ?, ?, ?)";
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setString(1, nomorTransaksi);
+                ps.setDate(2, Date.valueOf(getTanggalInput()));
+                ps.setInt(3, idUser);
+                ps.setInt(4, idAkunTujuan);
+                ps.setDouble(5, nominal);
+                ps.setString(6, kategori);
+                ps.setString(7, catatan);
+                ps.executeUpdate();
+            }
+
+            if (!akunDAO.tambahSaldo(conn, idAkunTujuan, nominal)) {
+                throw new Exception("Gagal menambah saldo akun tujuan.");
+            }
+
+            conn.commit();
+            JOptionPane.showMessageDialog(this, "Pemasukan berhasil disimpan.");
+            bersihkanForm();
+            refreshRingkasanSaldo();
+            refreshSaldoHeaderMainFrame();
+        } catch (Exception e) {
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (Exception rollbackError) {
+                    rollbackError.printStackTrace();
+                }
+            }
+            JOptionPane.showMessageDialog(this, "Gagal simpan pemasukan: " + e.getMessage());
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                } catch (Exception closeError) {
+                    closeError.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private LocalDate getTanggalInput() {
+        String teksTanggal = TxtTgl.getText().trim();
+        if (teksTanggal.isEmpty()) {
+            return LocalDate.now();
+        }
+        return LocalDate.parse(teksTanggal, DateTimeFormatter.ISO_LOCAL_DATE);
+    }
+
+    private double parseNominal(String teksNominal) {
+        String bersih = teksNominal.replace("Rp", "").replace(".", "").replace(",", "").trim();
+        if (bersih.isEmpty()) {
+            return 0;
+        }
+        return Double.parseDouble(bersih);
+    }
+
+    private int getIdAkun(String namaAkun) {
+        return "BRI".equalsIgnoreCase(namaAkun) ? 2 : 1;
+    }
+
+    private String generateNomorTransaksi(Connection conn) throws Exception {
+        String prefix = "KEU" + LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
+        String sql = "SELECT COUNT(*) FROM tb_keuangan WHERE nomor_transaksi LIKE ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, prefix + "%");
+            try (ResultSet rs = ps.executeQuery()) {
+                int urut = 1;
+                if (rs.next()) {
+                    urut = rs.getInt(1) + 1;
+                }
+                return prefix + String.format("%04d", urut);
+            }
+        }
+    }
+
+    private void refreshRingkasanSaldo() {
+        try (Connection conn = Koneksi.getConnection()) {
+            if (conn == null) {
+                return;
+            }
+            saldoCash.setText(formatRupiah(akunDAO.getSaldo(conn, 1)));
+            saldoCash1.setText(formatRupiah(akunDAO.getSaldo(conn, 2)));
+            saldoCash2.setText(formatRupiah(getTotalHariIni(conn, "Pemasukan")));
+            saldoCash3.setText(formatRupiah(getTotalHariIni(conn, "Transfer")));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private double getTotalHariIni(Connection conn, String jenis) throws Exception {
+        String sql = "SELECT COALESCE(SUM(nominal), 0) FROM tb_keuangan WHERE tanggal = CURDATE() AND jenis = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, jenis);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() ? rs.getDouble(1) : 0;
+            }
+        }
+    }
+
+    private String formatRupiah(double nominal) {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setGroupingSeparator('.');
+        symbols.setDecimalSeparator(',');
+        return "Rp " + new DecimalFormat("#,##0", symbols).format(nominal);
+    }
+
+    private void bersihkanForm() {
+        TxtTgl.setText(LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
+        jTextField1.setText("");
+        jTextArea1.setText("");
+        jComboBox4.setSelectedItem("Pemasukan");
+        jComboBox3.setSelectedItem("Cash");
+        jComboBox5.setSelectedIndex(0);
+    }
+
+    private void refreshSaldoHeaderMainFrame() {
+        for (Window window : Window.getWindows()) {
+            if (window instanceof MainFrame) {
+                ((MainFrame) window).refreshSaldoHeader();
+                break;
+            }
+        }
     }
 
     /**
@@ -533,11 +715,11 @@ public
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActionPerformed
-        // TODO add your handling code here:
+        simpanPemasukan();
     }//GEN-LAST:event_btnActionPerformed
 
     private void btn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn1ActionPerformed
-        // TODO add your handling code here:
+        bersihkanForm();
     }//GEN-LAST:event_btn1ActionPerformed
 
     private void BtnHistMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BtnHistMouseEntered

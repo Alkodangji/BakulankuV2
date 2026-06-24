@@ -4,7 +4,12 @@
  */
 package view.brilink;
 
+import dao.KategoriTopupDAO;
 import java.awt.CardLayout;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import model.KategoriTopup;
 import view.main.MainFrame;
 
 /**
@@ -14,12 +19,17 @@ import view.main.MainFrame;
 public
         class Kategori extends javax.swing.JPanel {
 
+    private final KategoriTopupDAO kategoriDAO = new KategoriTopupDAO();
+
     /**
      * Creates new form Kategori
      */
     public
             Kategori() {
         initComponents();
+        jTextField1.setEditable(false);
+        initActions();
+        loadKategori();
     }
 
     /**
@@ -192,6 +202,64 @@ public
                 .addGap(6, 6, 6))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void initActions() {
+        jButton1.addActionListener(e -> tambahKategori());
+        jButton4.addActionListener(e -> updateKategori());
+        jButton2.addActionListener(e -> deleteKategori());
+        jButton3.addActionListener(e -> clearForm());
+        jTable1.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting() && jTable1.getSelectedRow() >= 0) {
+                int row = jTable1.getSelectedRow();
+                jTextField1.setText(jTable1.getValueAt(row, 0).toString());
+                jTextField2.setText(jTable1.getValueAt(row, 1).toString());
+            }
+        });
+    }
+
+    private void loadKategori() {
+        DefaultTableModel model = new DefaultTableModel(new Object[]{"ID", "Nama Kategori"}, 0) {
+            @Override public boolean isCellEditable(int row, int column) { return false; }
+        };
+        for (KategoriTopup k : kategoriDAO.getAll()) model.addRow(new Object[]{k.getIdKategori(), k.getNamaKategori()});
+        jTable1.setModel(model);
+    }
+
+    private void tambahKategori() {
+        String nama = jTextField2.getText().trim();
+        if (nama.isEmpty()) { JOptionPane.showMessageDialog(this, "Nama kategori wajib diisi."); return; }
+        if (kategoriDAO.isDuplicate(nama)) { JOptionPane.showMessageDialog(this, "Nama kategori sudah ada."); return; }
+        kategoriDAO.insert(new KategoriTopup(0, nama));
+        JOptionPane.showMessageDialog(this, "Kategori berhasil ditambahkan.");
+        clearForm(); loadKategori();
+    }
+
+    private void updateKategori() {
+        if (jTextField1.getText().trim().isEmpty()) { JOptionPane.showMessageDialog(this, "Pilih kategori yang akan diupdate."); return; }
+        String nama = jTextField2.getText().trim();
+        if (nama.isEmpty()) { JOptionPane.showMessageDialog(this, "Nama kategori wajib diisi."); return; }
+        KategoriTopup existing = kategoriDAO.findById(Integer.parseInt(jTextField1.getText()));
+        if (existing != null && !existing.getNamaKategori().equalsIgnoreCase(nama) && kategoriDAO.isDuplicate(nama)) { JOptionPane.showMessageDialog(this, "Nama kategori sudah ada."); return; }
+        kategoriDAO.update(new KategoriTopup(Integer.parseInt(jTextField1.getText()), nama));
+        JOptionPane.showMessageDialog(this, "Kategori berhasil diupdate.");
+        clearForm(); loadKategori();
+    }
+
+    private void deleteKategori() {
+        if (jTextField1.getText().trim().isEmpty()) { JOptionPane.showMessageDialog(this, "Pilih kategori yang akan dihapus."); return; }
+        if (JOptionPane.showConfirmDialog(this, "Hapus kategori ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) return;
+        try {
+            kategoriDAO.delete(Integer.parseInt(jTextField1.getText()));
+            JOptionPane.showMessageDialog(this, "Kategori berhasil dihapus.");
+            clearForm(); loadKategori();
+        } catch (RuntimeException e) {
+            Throwable cause = e.getCause();
+            if (cause instanceof SQLException) JOptionPane.showMessageDialog(this, "Kategori tidak dapat dihapus karena masih dipakai transaksi BRILink.");
+            else JOptionPane.showMessageDialog(this, "Gagal menghapus kategori: " + e.getMessage());
+        }
+    }
+
+    private void clearForm() { jTextField1.setText(""); jTextField2.setText(""); jTable1.clearSelection(); }
 
     private void BtnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBackActionPerformed
         CardLayout cl =

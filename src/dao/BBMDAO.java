@@ -160,7 +160,7 @@ public class BBMDAO {
     }
 
     public String generateNomor(Connection conn, String prefix, String table, Date tanggalTransaksi) throws Exception {
-        String tanggal = tanggalTransaksi.toLocalDate().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+    String tanggal = tanggalTransaksi.toLocalDate().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         String sql = "SELECT nomor_transaksi FROM " + table + " WHERE nomor_transaksi LIKE ? ORDER BY nomor_transaksi DESC LIMIT 1";
         int urut = 1;
         try (PreparedStatement ps = conn.prepareStatement(sql)) {

@@ -4,7 +4,12 @@
  */
 package view.brilink;
 
+import dao.BrilinkDAO;
+import helper.RupiahFormat;
 import java.awt.CardLayout;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import model.Brilink;
 import view.main.MainFrame;
 
 /**
@@ -14,12 +19,16 @@ import view.main.MainFrame;
 public
         class Riwayat extends javax.swing.JPanel {
 
+    private final BrilinkDAO brilinkDAO = new BrilinkDAO();
+
     /**
      * Creates new form Riwayat
      */
     public
             Riwayat() {
         initComponents();
+        initActions();
+        loadRiwayat();
     }
 
     /**
@@ -418,6 +427,43 @@ public
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void initActions() {
+        jButton4.addActionListener(e -> deleteTransaksi());
+        jButton2.addActionListener(e -> clearForm());
+        jTable1.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting() && jTable1.getSelectedRow() >= 0) {
+                int row = jTable1.getSelectedRow();
+                jTextField1.setText(jTable1.getValueAt(row, 0).toString());
+            }
+        });
+    }
+
+    private void loadRiwayat() {
+        DefaultTableModel model = new DefaultTableModel(new Object[]{"ID", "Nomor Transaksi", "Tanggal", "Jenis", "Kategori", "Nominal", "Fee", "Metode Fee", "Catatan"}, 0) {
+            @Override public boolean isCellEditable(int row, int column) { return false; }
+        };
+        for (Brilink b : brilinkDAO.getAll()) {
+            model.addRow(new Object[]{b.getIdBrilink(), b.getNomorTransaksi(), b.getTanggal(), b.getJenis(), b.getKategoriNama() == null ? "-" : b.getKategoriNama(), RupiahFormat.format(b.getNominal().longValue()), RupiahFormat.format(b.getFee().longValue()), b.getMetodeFee() == null ? "-" : b.getMetodeFee(), b.getCatatan()});
+        }
+        jTable1.setModel(model);
+    }
+
+    private void deleteTransaksi() {
+        if (jTextField1.getText().trim().isEmpty()) { JOptionPane.showMessageDialog(this, "Pilih transaksi yang akan dihapus."); return; }
+        if (JOptionPane.showConfirmDialog(this, "Hapus transaksi BRILink ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) return;
+        if (JOptionPane.showConfirmDialog(this, "Saldo akan dikembalikan sesuai transaksi lama. Lanjutkan?", "Konfirmasi Saldo", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) return;
+        try {
+            brilinkDAO.delete(Integer.parseInt(jTextField1.getText()));
+            JOptionPane.showMessageDialog(this, "Transaksi berhasil dihapus dan saldo dikembalikan.");
+            clearForm(); loadRiwayat();
+        } catch (RuntimeException e) {
+            JOptionPane.showMessageDialog(this, "Gagal menghapus transaksi: " + rootMessage(e));
+        }
+    }
+
+    private String rootMessage(Throwable e) { Throwable t=e; while(t.getCause()!=null) t=t.getCause(); return t.getMessage(); }
+    private void clearForm() { jTextField1.setText(""); jTable1.clearSelection(); }
 
     private void BtnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBackActionPerformed
         CardLayout cl =

@@ -563,11 +563,14 @@ public
 
     private void hapusRiwayatTerpilih() {
         try {
-            if ("DATA".equals(modeTabel)) {
-                hapusBBMModeData();
-                return;
-            }
-            if (selectedHistoryId <= 0) throw new Exception("Pilih baris riwayat penjualan/restok yang akan dihapus.");
+if ("DATA".equals(modeTabel)) {
+    hapusBBMModeData();
+    return;
+}
+
+if (selectedHistoryId <= 0) {
+    throw new Exception("Pilih baris riwayat penjualan/restok yang akan dihapus.");
+}
             int confirm1 = JOptionPane.showConfirmDialog(this, "Yakin ingin menghapus transaksi BBM terpilih?", "Konfirmasi Hapus", JOptionPane.YES_NO_OPTION);
             if (confirm1 != JOptionPane.YES_OPTION) return;
             int confirm2 = JOptionPane.showConfirmDialog(this, "Penghapusan akan mempengaruhi stok, saldo, harga beli rata-rata, dashboard, dan laporan. Lanjutkan?", "Peringatan Rollback", JOptionPane.YES_NO_OPTION);

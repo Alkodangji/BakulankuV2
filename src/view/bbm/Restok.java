@@ -418,7 +418,7 @@ public
             if (namaAkun.trim().isEmpty()) throw new Exception("Akun pembayaran wajib dipilih.");
             int akunId = bbmDAO.getAkunIdByNama(namaAkun);
             BBMRestok r = new BBMRestok();
-            r.setTanggal(parseTanggal(jFormattedTextField1.getText()));
+            r.setTanggal(Date.valueOf(jFormattedTextField1.getText().trim()));
             r.setUserId(Session.idUser);
             r.setBbmId(selectedBbmId);
             r.setAkunId(akunId);
