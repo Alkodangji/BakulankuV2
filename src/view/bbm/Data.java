@@ -4,7 +4,11 @@
  */
 package view.bbm;
 
+import dao.BBMDAO;
 import java.awt.CardLayout;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import model.BBM;
 import view.main.MainFrame;
 
 /**
@@ -20,6 +24,7 @@ public
     public
             Data() {
         initComponents();
+        setupDataBBM();
     }
 
     /**
@@ -330,6 +335,104 @@ public
         cl.show(MainFrame.BBMContainer, "RIWAYAT");
         // TODO add your handling code here:
     }//GEN-LAST:event_BtnHistActionPerformed
+
+    private final BBMDAO bbmDAO = new BBMDAO();
+    private int selectedId = 0;
+
+    private void setupDataBBM() {
+        jLabel1.setText("Kode BBM");
+        jLabel3.setText("Harga Beli");
+        jButton1.setText("Simpan");
+        jButton2.setText("Clear");
+        jButton1.addActionListener(e -> simpanBBM());
+        jButton2.addActionListener(e -> clearForm());
+        jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) { pilihBaris(); }
+        });
+        jTable2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_DELETE) hapusBBM();
+            }
+        });
+        tampilData();
+    }
+
+    private void tampilData() {
+        DefaultTableModel model = new DefaultTableModel(new Object[]{"ID", "Kode", "Nama", "Harga Beli", "Harga Jual", "Stok", "Stok Min"}, 0) {
+            public boolean isCellEditable(int row, int column) { return false; }
+        };
+        for (BBM b : bbmDAO.getAllBBM(null)) {
+            model.addRow(new Object[]{b.getIdBbm(), b.getKodeBbm(), b.getNamaBbm(), b.getHargaBeli(), b.getHargaJual(), b.getStok(), b.getStokMinimum()});
+        }
+        jTable2.setModel(model);
+    }
+
+    private void pilihBaris() {
+        int row = jTable2.getSelectedRow();
+        if (row < 0) return;
+        selectedId = Integer.parseInt(jTable2.getValueAt(row, 0).toString());
+        jTextField1.setText(jTable2.getValueAt(row, 1).toString());
+        jTextField2.setText(jTable2.getValueAt(row, 2).toString());
+        jTextField6.setText(jTable2.getValueAt(row, 3).toString());
+        jTextField3.setText(jTable2.getValueAt(row, 4).toString());
+        jTextField4.setText(jTable2.getValueAt(row, 5).toString());
+        jTextField5.setText(jTable2.getValueAt(row, 6).toString());
+    }
+
+    private void simpanBBM() {
+        try {
+            BBM b = ambilInput();
+            if (bbmDAO.isKodeDipakai(b.getKodeBbm(), selectedId)) {
+                JOptionPane.showMessageDialog(this, "Kode BBM sudah dipakai.");
+                return;
+            }
+            boolean ok;
+            if (selectedId == 0) ok = bbmDAO.tambahBBM(b); else { b.setIdBbm(selectedId); ok = bbmDAO.updateBBM(b); }
+            if (!ok) throw new Exception("Gagal menyimpan data BBM.");
+            JOptionPane.showMessageDialog(this, "Data BBM berhasil disimpan.");
+            clearForm(); tampilData();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void hapusBBM() {
+        try {
+            if (selectedId == 0) throw new Exception("Pilih data BBM yang akan dihapus.");
+            int confirm = JOptionPane.showConfirmDialog(this, "Hapus data BBM terpilih?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+            if (confirm != JOptionPane.YES_OPTION) return;
+            if (!bbmDAO.hapusBBM(selectedId)) throw new Exception("Gagal menghapus data BBM. Pastikan BBM belum dipakai transaksi.");
+            JOptionPane.showMessageDialog(this, "Data BBM berhasil dihapus.");
+            clearForm(); tampilData();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private BBM ambilInput() throws Exception {
+        String kode = jTextField1.getText().trim();
+        String nama = jTextField2.getText().trim();
+        double hargaBeli = parseDouble(jTextField6.getText());
+        double hargaJual = parseDouble(jTextField3.getText());
+        double stok = parseDouble(jTextField4.getText());
+        double stokMin = parseDouble(jTextField5.getText());
+        if (kode.isEmpty()) throw new Exception("Kode BBM wajib diisi.");
+        if (nama.isEmpty()) throw new Exception("Nama BBM wajib diisi.");
+        if (hargaJual <= 0) throw new Exception("Harga jual harus lebih dari 0.");
+        if (hargaBeli < 0 || stok < 0 || stokMin < 0) throw new Exception("Harga beli, stok, dan stok minimum tidak boleh negatif.");
+        return new BBM(0, kode, nama, hargaBeli, hargaJual, stok, stokMin);
+    }
+
+    private double parseDouble(String value) throws Exception {
+        try { return Double.parseDouble(value.trim().replace(",", ".")); } catch (Exception e) { throw new Exception("Input angka tidak valid."); }
+    }
+
+    private void clearForm() {
+        selectedId = 0;
+        jTextField1.setText(""); jTextField2.setText(""); jTextField3.setText("");
+        jTextField4.setText(""); jTextField5.setText(""); jTextField6.setText("");
+        jTable2.clearSelection();
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
