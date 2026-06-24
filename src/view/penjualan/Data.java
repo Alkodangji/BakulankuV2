@@ -4,7 +4,15 @@
  */
 package view.penjualan;
 
+import dao.ProdukDAO;
+import helper.RupiahFormat;
 import java.awt.CardLayout;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import model.Produk;
 import view.main.MainFrame;
 
 /**
@@ -14,12 +22,258 @@ import view.main.MainFrame;
 public
         class Data extends javax.swing.JPanel {
 
+    private final ProdukDAO produkDAO = new ProdukDAO();
+    private DefaultTableModel produkTableModel;
+
     /**
      * Creates new form Data
      */
     public
             Data() {
         initComponents();
+        initProdukCrud();
+    }
+
+    private void initProdukCrud() {
+        produkTableModel = new DefaultTableModel(
+                new Object[][]{},
+                new String[]{"ID", "Kode Produk", "Nama Produk", "Harga Beli", "Harga Jual", "Stok", "Stok Minimum"}
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        jTable1.setModel(produkTableModel);
+        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        sembunyikanKolomId();
+
+        jTextField1.setEditable(false);
+
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                isiFormDariTabel();
+            }
+        });
+
+        jButton4.addActionListener(evt -> tambahProduk());
+        jButton5.addActionListener(evt -> clearForm());
+        jButton6.addActionListener(evt -> editProduk());
+        jButton7.addActionListener(evt -> hapusProduk());
+
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                loadTableProduk();
+            }
+        });
+
+        loadTableProduk();
+        clearForm();
+    }
+
+    private void loadTableProduk() {
+        loadTableProduk(null);
+    }
+
+    private void loadTableProduk(String keyword) {
+        produkTableModel.setRowCount(0);
+        List<Produk> daftarProduk = produkDAO.getAllProduk(keyword);
+
+        for (Produk produk : daftarProduk) {
+            produkTableModel.addRow(new Object[]{
+                produk.getIdProduk(),
+                produk.getKodeProduk(),
+                produk.getNamaProduk(),
+                RupiahFormat.format(produk.getHargaBeli()),
+                RupiahFormat.format(produk.getHargaJual()),
+                produk.getStok(),
+                produk.getStokMinimum()
+            });
+        }
+
+        sembunyikanKolomId();
+    }
+
+    private void sembunyikanKolomId() {
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setMinWidth(0);
+            jTable1.getColumnModel().getColumn(0).setMaxWidth(0);
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(0);
+        }
+    }
+
+    private void isiFormDariTabel() {
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow < 0) {
+            return;
+        }
+
+        int modelRow = jTable1.convertRowIndexToModel(selectedRow);
+        jTextField1.setText(String.valueOf(produkTableModel.getValueAt(modelRow, 0)));
+        jTextField2.setText(String.valueOf(produkTableModel.getValueAt(modelRow, 1)));
+        jTextField3.setText(String.valueOf(produkTableModel.getValueAt(modelRow, 2)));
+        jTextField4.setText(String.valueOf(RupiahFormat.parse(String.valueOf(produkTableModel.getValueAt(modelRow, 3)))));
+        jTextField5.setText(String.valueOf(RupiahFormat.parse(String.valueOf(produkTableModel.getValueAt(modelRow, 4)))));
+        jTextField6.setText(String.valueOf(produkTableModel.getValueAt(modelRow, 5)));
+        jTextField7.setText(String.valueOf(produkTableModel.getValueAt(modelRow, 6)));
+    }
+
+    private void tambahProduk() {
+        Produk produk = bacaForm(false);
+        if (produk == null) {
+            return;
+        }
+
+        if (produkDAO.tambahProduk(produk)) {
+            JOptionPane.showMessageDialog(this, "Produk berhasil ditambahkan.");
+            loadTableProduk();
+            clearForm();
+        } else {
+            JOptionPane.showMessageDialog(this, "Produk gagal ditambahkan.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void editProduk() {
+        Produk produk = bacaForm(true);
+        if (produk == null) {
+            return;
+        }
+
+        if (produkDAO.updateProduk(produk)) {
+            JOptionPane.showMessageDialog(this, "Produk berhasil diupdate.");
+            loadTableProduk();
+            clearForm();
+        } else {
+            JOptionPane.showMessageDialog(this, "Produk gagal diupdate.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void hapusProduk() {
+        int idProduk = getIdProdukTerpilih();
+        if (idProduk <= 0) {
+            JOptionPane.showMessageDialog(this, "Pilih produk yang akan dihapus.");
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "Hapus produk ini?",
+                "Konfirmasi Hapus",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        if (produkDAO.hapusProduk(idProduk)) {
+            JOptionPane.showMessageDialog(this, "Produk berhasil dihapus.");
+            loadTableProduk();
+            clearForm();
+        } else {
+            JOptionPane.showMessageDialog(this, "Produk gagal dihapus.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private Produk bacaForm(boolean wajibAdaId) {
+        int idProduk = 0;
+        if (wajibAdaId) {
+            idProduk = getIdProdukTerpilih();
+            if (idProduk <= 0) {
+                JOptionPane.showMessageDialog(this, "Pilih produk yang akan diupdate.");
+                return null;
+            }
+        }
+
+        String kodeProduk = jTextField2.getText().trim();
+        String namaProduk = jTextField3.getText().trim();
+
+        if (namaProduk.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Nama produk wajib diisi.");
+            return null;
+        }
+
+        double hargaBeli = parseAngka(jTextField4.getText());
+        double hargaJual = parseAngka(jTextField5.getText());
+        int stok = parseInteger(jTextField6.getText());
+        int stokMinimum = parseInteger(jTextField7.getText());
+
+        if (hargaBeli < 0) {
+            JOptionPane.showMessageDialog(this, "Harga beli tidak boleh kurang dari 0.");
+            return null;
+        }
+        if (hargaJual <= 0) {
+            JOptionPane.showMessageDialog(this, "Harga jual harus lebih dari 0.");
+            return null;
+        }
+        if (stok < 0) {
+            JOptionPane.showMessageDialog(this, "Stok tidak boleh kurang dari 0.");
+            return null;
+        }
+        if (stokMinimum < 0) {
+            JOptionPane.showMessageDialog(this, "Stok minimum tidak boleh kurang dari 0.");
+            return null;
+        }
+        if (kodeProduk.isEmpty()) {
+            kodeProduk = produkDAO.generateKodeProduk();
+        }
+
+        return new Produk(idProduk, kodeProduk, namaProduk, hargaBeli, hargaJual, stok, stokMinimum);
+    }
+
+    private int getIdProdukTerpilih() {
+        try {
+            if (!jTextField1.getText().trim().isEmpty()) {
+                return Integer.parseInt(jTextField1.getText().trim());
+            }
+
+            int selectedRow = jTable1.getSelectedRow();
+            if (selectedRow >= 0) {
+                int modelRow = jTable1.convertRowIndexToModel(selectedRow);
+                return Integer.parseInt(String.valueOf(produkTableModel.getValueAt(modelRow, 0)));
+            }
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+        return 0;
+    }
+
+    private double parseAngka(String nilai) {
+        if (nilai == null || nilai.trim().isEmpty()) {
+            return 0;
+        }
+
+        try {
+            return Double.parseDouble(nilai.trim().replace(",", "."));
+        } catch (NumberFormatException e) {
+            return RupiahFormat.parse(nilai);
+        }
+    }
+
+    private int parseInteger(String nilai) {
+        if (nilai == null || nilai.trim().isEmpty()) {
+            return 0;
+        }
+
+        try {
+            return Integer.parseInt(nilai.trim());
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
+
+    private void clearForm() {
+        jTextField1.setText("");
+        jTextField2.setText("");
+        jTextField3.setText("");
+        jTextField4.setText("");
+        jTextField5.setText("");
+        jTextField6.setText("");
+        jTextField7.setText("");
+        jTable1.clearSelection();
     }
 
     /**
