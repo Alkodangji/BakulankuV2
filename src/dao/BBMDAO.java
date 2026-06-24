@@ -159,8 +159,8 @@ public class BBMDAO {
         throw new Exception("Akun '" + namaAkun + "' tidak ditemukan di tb_akun.");
     }
 
-    public String generateNomor(Connection conn, String prefix, String table) throws Exception {
-        String tanggal = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+    public String generateNomor(Connection conn, String prefix, String table, Date tanggalTransaksi) throws Exception {
+    String tanggal = tanggalTransaksi.toLocalDate().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         String sql = "SELECT nomor_transaksi FROM " + table + " WHERE nomor_transaksi LIKE ? ORDER BY nomor_transaksi DESC LIMIT 1";
         int urut = 1;
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -174,11 +174,15 @@ public class BBMDAO {
         return String.format("%s-%s-%03d", prefix, tanggal, urut);
     }
 
+    public String generateNomor(Connection conn, String prefix, String table) throws Exception {
+        return generateNomor(conn, prefix, table, Date.valueOf(LocalDate.now()));
+    }
+
     public void prosesRestok(BBMRestok restok) throws Exception {
         try (Connection conn = Koneksi.getConnection()) {
             conn.setAutoCommit(false);
             try {
-                restok.setNomorTransaksi(generateNomor(conn, "BMR", "tb_bbm_restok"));
+                restok.setNomorTransaksi(generateNomor(conn, "BMR", "tb_bbm_restok", restok.getTanggal()));
                 BBM bbm = getBBMById(conn, restok.getBbmId());
                 if (bbm == null) {
                     throw new Exception("Data BBM tidak ditemukan.");
@@ -224,7 +228,7 @@ public class BBMDAO {
             conn.setAutoCommit(false);
             try {
                 int akunId = getAkunIdByNama(conn, penjualan.getMetodePembayaran());
-                penjualan.setNomorTransaksi(generateNomor(conn, "BMP", "tb_bbm_penjualan"));
+                penjualan.setNomorTransaksi(generateNomor(conn, "BMP", "tb_bbm_penjualan", penjualan.getTanggal()));
                 BBM bbm = getBBMById(conn, penjualan.getBbmId());
                 if (bbm == null) {
                     throw new Exception("Data BBM tidak ditemukan.");
@@ -276,7 +280,9 @@ public class BBMDAO {
                 updateSaldo(conn, akunId, -penjualan.total);
                 try (PreparedStatement ps = conn.prepareStatement("DELETE FROM tb_bbm_penjualan WHERE id_penjualan_bbm = ?")) {
                     ps.setInt(1, idPenjualan);
-                    ps.executeUpdate();
+                    if (ps.executeUpdate() == 0) {
+                        throw new Exception("Gagal menghapus transaksi penjualan BBM.");
+                    }
                 }
                 conn.commit();
             } catch (Exception e) {
@@ -304,7 +310,9 @@ public class BBMDAO {
                 updateSaldo(conn, restok.akunId, restok.total);
                 try (PreparedStatement ps = conn.prepareStatement("DELETE FROM tb_bbm_restok WHERE id_restok_bbm = ?")) {
                     ps.setInt(1, idRestok);
-                    ps.executeUpdate();
+                    if (ps.executeUpdate() == 0) {
+                        throw new Exception("Gagal menghapus transaksi restok BBM.");
+                    }
                 }
                 updateHargaBeliDariSisaRestok(conn, restok.bbmId);
                 conn.commit();

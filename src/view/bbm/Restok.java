@@ -433,6 +433,10 @@ public
         }
     }
 
+    private Date parseTanggal(String value) throws Exception {
+        try { return Date.valueOf(value.trim()); } catch (Exception e) { throw new Exception("Tanggal wajib diisi dengan format yyyy-MM-dd."); }
+    }
+
     private double parseDouble(String value) throws Exception {
         try { return Double.parseDouble(value.trim().replace(",", ".")); } catch (Exception e) { throw new Exception("Input angka tidak valid."); }
     }

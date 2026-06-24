@@ -500,6 +500,7 @@ public
 
     private void tampilBBM() {
         modeTabel = "DATA";
+        selectedBbmId = 0;
         selectedHistoryId = 0;
         DefaultTableModel model = new DefaultTableModel(new Object[]{"ID", "Kode", "Nama", "Harga Jual", "Stok"}, 0) { public boolean isCellEditable(int r, int c) { return false; } };
         for (BBM b : bbmDAO.getAllBBM(null)) model.addRow(new Object[]{b.getIdBbm(), b.getKodeBbm(), b.getNamaBbm(), b.getHargaJual(), b.getStok()});
@@ -508,6 +509,7 @@ public
 
     private void tampilRiwayatPenjualan() {
         modeTabel = "PENJUALAN";
+        selectedBbmId = 0;
         selectedHistoryId = 0;
         DefaultTableModel model = new DefaultTableModel(new Object[]{"ID", "No Transaksi", "Tanggal", "BBM", "Liter", "Harga Jual", "Total", "Metode", "Diterima", "Kembalian"}, 0) { public boolean isCellEditable(int r, int c) { return false; } };
         for (Object[] row : bbmDAO.getRiwayatPenjualan()) model.addRow(row);
@@ -516,6 +518,7 @@ public
 
     private void tampilRiwayatRestok() {
         modeTabel = "RESTOK";
+        selectedBbmId = 0;
         selectedHistoryId = 0;
         DefaultTableModel model = new DefaultTableModel(new Object[]{"ID", "No Transaksi", "Tanggal", "BBM", "Liter", "Harga Beli", "Total", "Akun", "Catatan"}, 0) { public boolean isCellEditable(int r, int c) { return false; } };
         for (Object[] row : bbmDAO.getRiwayatRestok()) model.addRow(row);
@@ -550,7 +553,7 @@ public
             if (metode.equalsIgnoreCase("Cash") && diterima < total) throw new Exception("Uang diterima tidak boleh kurang dari total.");
             double kembali = metode.equalsIgnoreCase("Cash") ? diterima - total : 0;
             BBMPenjualan p = new BBMPenjualan();
-            p.setTanggal(Date.valueOf(jFormattedTextField1.getText().trim())); p.setUserId(Session.idUser); p.setBbmId(selectedBbmId);
+            p.setTanggal(parseTanggal(jFormattedTextField1.getText())); p.setUserId(Session.idUser); p.setBbmId(selectedBbmId);
             p.setLiter(liter); p.setHargaJual(hargaJual); p.setTotal(total); p.setMetodePembayaran(metode); p.setDiterima(diterima); p.setKembalian(kembali);
             bbmDAO.prosesPenjualan(p);
             JOptionPane.showMessageDialog(this, "Penjualan BBM berhasil disimpan: " + p.getNomorTransaksi());
@@ -560,7 +563,14 @@ public
 
     private void hapusRiwayatTerpilih() {
         try {
-            if (selectedHistoryId <= 0 || "DATA".equals(modeTabel)) throw new Exception("Pilih baris riwayat penjualan/restok yang akan dihapus.");
+if ("DATA".equals(modeTabel)) {
+    hapusBBMModeData();
+    return;
+}
+
+if (selectedHistoryId <= 0) {
+    throw new Exception("Pilih baris riwayat penjualan/restok yang akan dihapus.");
+}
             int confirm1 = JOptionPane.showConfirmDialog(this, "Yakin ingin menghapus transaksi BBM terpilih?", "Konfirmasi Hapus", JOptionPane.YES_NO_OPTION);
             if (confirm1 != JOptionPane.YES_OPTION) return;
             int confirm2 = JOptionPane.showConfirmDialog(this, "Penghapusan akan mempengaruhi stok, saldo, harga beli rata-rata, dashboard, dan laporan. Lanjutkan?", "Peringatan Rollback", JOptionPane.YES_NO_OPTION);
@@ -576,11 +586,22 @@ public
         } catch (Exception e) { JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); }
     }
 
+    private void hapusBBMModeData() throws Exception {
+        if (selectedBbmId <= 0) throw new Exception("Pilih data BBM yang akan dihapus.");
+        int confirm = JOptionPane.showConfirmDialog(this, "Hapus master BBM terpilih?", "Konfirmasi Hapus", JOptionPane.YES_NO_OPTION);
+        if (confirm != JOptionPane.YES_OPTION) return;
+        if (!bbmDAO.hapusBBM(selectedBbmId)) throw new Exception("Gagal menghapus master BBM. Pastikan BBM belum dipakai transaksi.");
+        JOptionPane.showMessageDialog(this, "Data BBM berhasil dihapus.");
+        clearForm();
+        tampilBBM();
+    }
+
     private void hitungTotal() {
         try { double liter = parseDouble(jTextField11.getText()); double harga = parseDouble(jTextField1.getText()); jTextField2.setText(String.valueOf(liter * harga)); } catch (Exception ignored) {}
     }
+    private Date parseTanggal(String value) throws Exception { try { return Date.valueOf(value.trim()); } catch (Exception e) { throw new Exception("Tanggal wajib diisi dengan format yyyy-MM-dd."); } }
     private double parseDouble(String value) throws Exception { try { return Double.parseDouble(value.trim().replace(",", ".")); } catch (Exception e) { throw new Exception("Input angka tidak valid."); } }
-    private void clearForm() { selectedBbmId = 0; jTextField7.setText(""); jTextField9.setText(""); jTextField10.setText(""); jTextField11.setText(""); jTextField1.setText(""); jTextField2.setText(""); jTextField6.setText(""); if (comboMetodePembayaran.getItemCount() > 0) comboMetodePembayaran.setSelectedIndex(0); jTextField3.setText(""); jTextField4.setText(""); jFormattedTextField1.setText(LocalDate.now().toString()); jTable2.clearSelection(); }
+    private void clearForm() { selectedBbmId = 0; selectedHistoryId = 0; jTextField7.setText(""); jTextField9.setText(""); jTextField10.setText(""); jTextField11.setText(""); jTextField1.setText(""); jTextField2.setText(""); jTextField6.setText(""); if (comboMetodePembayaran.getItemCount() > 0) comboMetodePembayaran.setSelectedIndex(0); jTextField3.setText(""); jTextField4.setText(""); jFormattedTextField1.setText(LocalDate.now().toString()); jTable2.clearSelection(); }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
