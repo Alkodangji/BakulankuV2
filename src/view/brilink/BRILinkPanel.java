@@ -5,11 +5,23 @@
 package view.brilink;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import dao.BrilinkDAO;
+import dao.KategoriTopupDAO;
 import helper.AppIcon;
 import helper.RupiahFormat;
 import java.awt.CardLayout;
 
 import java.awt.Color;
+import java.math.BigDecimal;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import model.Brilink;
+import model.KategoriTopup;
+import session.Session;
 import raven.datetime.DatePicker;
 import raven.datetime.TimePicker;
 import view.main.MainFrame;
@@ -23,6 +35,8 @@ public
      private Color PRIMARY = new Color(9,87,195);
      
      private DatePicker datePicker;
+     private final BrilinkDAO brilinkDAO = new BrilinkDAO();
+     private final KategoriTopupDAO kategoriDAO = new KategoriTopupDAO();
      
 
      
@@ -44,6 +58,9 @@ public
         );
         datePicker.setSelectionArc(20);
         datePicker.now();
+        loadKategoriCombo();
+        loadSaldo();
+        loadRiwayatRingkas();
         
 //        Custom Component
         BriCard.putClientProperty(
@@ -107,7 +124,7 @@ public
         TxtBayar.setEnabled(false);
         TxtKembali.setText("-");
 
-    } else if (jenis.equals("Setor / Transfer")) {
+    } else if (jenis.equals("Setor Tunai") || jenis.equals("Setor / Transfer")) {
 
         CbKat.setEnabled(false);
         CbFee.setEnabled(false);
@@ -150,7 +167,7 @@ private void hitungTransaksi() {
         TxtBayar.setText("-");
         TxtKembali.setText("-");
 
-    } else if (jenis.equals("Setor / Transfer") || jenis.equals("Top Up")) {
+    } else if (jenis.equals("Setor Tunai") || jenis.equals("Setor / Transfer") || jenis.equals("Top Up")) {
 
         long total = nominal + fee;
     long bayar = (long) RupiahFormat.parse(TxtBayar.getText());
@@ -393,7 +410,7 @@ private void hitungTransaksi() {
         Form.add(BtnAtur, gridBagConstraints);
 
         CbJenis.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
-        CbJenis.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tarik Tunai", "Setor / Transfer", "Top Up" }));
+        CbJenis.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tarik Tunai", "Setor Tunai", "Top Up" }));
         CbJenis.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         CbJenis.setName("CbJenis"); // NOI18N
         CbJenis.setPreferredSize(new java.awt.Dimension(126, 30));
@@ -991,7 +1008,7 @@ private void hitungTransaksi() {
     }//GEN-LAST:event_TxtNominalActionPerformed
 
     private void btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActionPerformed
-        // TODO add your handling code here:
+        simpanTransaksi();
     }//GEN-LAST:event_btnActionPerformed
 
     private void TxtNominalKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtNominalKeyReleased
@@ -1064,6 +1081,71 @@ private void hitungTransaksi() {
         cl.show(MainFrame.BRILinkContainer, "RIWAYAT");
 // TODO add your handling code here:
     }//GEN-LAST:event_BtnHistActionPerformed
+
+    private void loadKategoriCombo() {
+        DefaultComboBoxModel model = new DefaultComboBoxModel();
+        model.addElement(new KategoriTopup(0, "-- Pilih Kategori --"));
+        for (KategoriTopup k : kategoriDAO.getAll()) model.addElement(k);
+        CbKat.setModel(model);
+    }
+
+    private void loadSaldo() {
+        try {
+            saldoCash.setText(RupiahFormat.format(brilinkDAO.getSaldoByNamaAkun("Cash").longValue()));
+            saldoCash1.setText(RupiahFormat.format(brilinkDAO.getSaldoByNamaAkun("BRI").longValue()));
+        } catch (RuntimeException e) {
+            saldoCash.setText("Rp 0"); saldoCash1.setText("Rp 0");
+        }
+    }
+
+    private void loadRiwayatRingkas() {
+        DefaultTableModel model = new DefaultTableModel(new Object[]{"No", "Tanggal", "Jenis", "Kategori", "Nominal", "Fee"}, 0) {
+            @Override public boolean isCellEditable(int row, int column) { return false; }
+        };
+        for (Brilink b : brilinkDAO.getAll()) model.addRow(new Object[]{b.getNomorTransaksi(), b.getTanggal(), b.getJenis(), b.getKategoriNama() == null ? "-" : b.getKategoriNama(), RupiahFormat.format(b.getNominal().longValue()), RupiahFormat.format(b.getFee().longValue())});
+        jTable1.setModel(model);
+    }
+
+    private void simpanTransaksi() {
+        try {
+            String jenis = CbJenis.getSelectedItem().toString();
+            BigDecimal nominal = parseMoney(TxtNominal.getText());
+            BigDecimal fee = parseMoney(TxtFee.getText());
+            if (nominal.compareTo(BigDecimal.ZERO) <= 0) { JOptionPane.showMessageDialog(this, "Nominal wajib diisi dan harus lebih dari 0."); return; }
+            if (fee.compareTo(BigDecimal.ZERO) < 0) { JOptionPane.showMessageDialog(this, "Fee wajib diisi dan tidak boleh negatif."); return; }
+            Brilink b = new Brilink();
+            b.setTanggal(parseTanggal());
+            b.setUserId(Session.idUser);
+            b.setJenis(jenis);
+            b.setNominal(nominal);
+            b.setFee(fee);
+            b.setCatatan(jTextArea1.getText());
+            if ("Tarik Tunai".equals(jenis)) {
+                b.setMetodeFee(CbFee.getSelectedItem().toString());
+            } else {
+                b.setMetodeFee(null);
+            }
+            if ("Top Up".equals(jenis)) {
+                KategoriTopup kategori = (KategoriTopup) CbKat.getSelectedItem();
+                if (kategori == null || kategori.getIdKategori() == 0) { JOptionPane.showMessageDialog(this, "Kategori wajib dipilih untuk Top Up."); return; }
+                b.setKategoriId(kategori.getIdKategori());
+            }
+            brilinkDAO.insert(b);
+            JOptionPane.showMessageDialog(this, "Transaksi BRILink berhasil disimpan.");
+            clearTransaksi(); loadKategoriCombo(); loadSaldo(); loadRiwayatRingkas();
+        } catch (RuntimeException e) {
+            JOptionPane.showMessageDialog(this, "Gagal menyimpan transaksi: " + rootMessage(e));
+        }
+    }
+
+    private Date parseTanggal() {
+        try { return Date.valueOf(LocalDate.parse(TxtTgl.getText(), DateTimeFormatter.ofPattern("dd-MM-yyyy"))); }
+        catch (Exception e) { return new Date(System.currentTimeMillis()); }
+    }
+
+    private BigDecimal parseMoney(String text) { return BigDecimal.valueOf((long) RupiahFormat.parse(text)); }
+    private String rootMessage(Throwable e) { Throwable t=e; while(t.getCause()!=null) t=t.getCause(); return t.getMessage(); }
+    private void clearTransaksi() { TxtNominal.setText(""); TxtFee.setText(""); TxtBayar.setText(""); TxtTotal.setText(""); TxtKembali.setText(""); jTextArea1.setText(""); }
 
     private void BtnAturActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAturActionPerformed
         CardLayout cl =
