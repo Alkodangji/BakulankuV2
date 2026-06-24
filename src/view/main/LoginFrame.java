@@ -4,6 +4,8 @@
  */
 package view.main;
 
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import javax.swing.JFrame;
 import config.Koneksi;
 import helper.AlertHelper;
@@ -25,6 +27,8 @@ public class LoginFrame extends javax.swing.JFrame {
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/assets/shop.png")));
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
+        
+        TxtUser.putClientProperty("FlatLaf.style", "showClearButton:true");
     }
 
     /**
@@ -41,8 +45,8 @@ public class LoginFrame extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        txtUser = new javax.swing.JTextField();
-        txtPass = new javax.swing.JPasswordField();
+        TxtUser = new javax.swing.JTextField();
+        TxtPass = new javax.swing.JPasswordField();
         cmdLogin = new javax.swing.JButton();
         cmdClear = new javax.swing.JButton();
 
@@ -62,14 +66,13 @@ public class LoginFrame extends javax.swing.JFrame {
         jLabel1.setName("jLabel1"); // NOI18N
         jPanel2.add(jLabel1, java.awt.BorderLayout.CENTER);
 
-        txtUser.setBackground(new java.awt.Color(102, 102, 102));
-        txtUser.setName("txtUser"); // NOI18N
+        TxtUser.setName("TxtUser"); // NOI18N
 
-        txtPass.setBackground(new java.awt.Color(102, 102, 102));
-        txtPass.setName("txtPass"); // NOI18N
+        TxtPass.setName("TxtPass"); // NOI18N
 
         cmdLogin.setBackground(java.awt.Color.blue);
         cmdLogin.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        cmdLogin.setForeground(new java.awt.Color(255, 255, 255));
         cmdLogin.setText("Login");
         cmdLogin.setName("cmdLogin"); // NOI18N
         cmdLogin.addActionListener(new java.awt.event.ActionListener() {
@@ -80,7 +83,6 @@ public class LoginFrame extends javax.swing.JFrame {
 
         cmdClear.setBackground(java.awt.Color.gray);
         cmdClear.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        cmdClear.setForeground(java.awt.Color.black);
         cmdClear.setText("Clear");
         cmdClear.setName("cmdClear"); // NOI18N
         cmdClear.addActionListener(new java.awt.event.ActionListener() {
@@ -97,12 +99,14 @@ public class LoginFrame extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(31, 31, 31)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtUser, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtPass, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmdClear, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cmdLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(99, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(TxtUser, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                        .addComponent(cmdClear, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(cmdLogin, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(TxtPass, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -110,13 +114,13 @@ public class LoginFrame extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(40, 40, 40)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmdLogin))
+                    .addComponent(TxtUser, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmdClear))
                 .addGap(10, 10, 10)
-                .addComponent(txtPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(49, 49, 49)
-                .addComponent(cmdClear)
-                .addGap(0, 48, Short.MAX_VALUE))
+                .addComponent(TxtPass, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cmdLogin)
+                .addGap(0, 80, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -138,7 +142,8 @@ public class LoginFrame extends javax.swing.JFrame {
 
     private void cmdLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdLoginActionPerformed
         prosesLogin();
-        // TODO add your handling code here:
+//        demoLogin();        
+// TODO add your handling code here:
     }//GEN-LAST:event_cmdLoginActionPerformed
 
     private void cmdClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdClearActionPerformed
@@ -146,10 +151,32 @@ public class LoginFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cmdClearActionPerformed
 
-    
+//    Login demo
+     private void demoLogin() {
+        String username = TxtUser.getText();
+        String password = TxtPass.getText();
+
+        if (username.equals("tian") && password.equals("1111")) {
+
+            JOptionPane.showMessageDialog(this, "Login Berhasil");
+
+            MainFrame main = new MainFrame();
+            main.setVisible(true);
+
+            this.dispose();
+
+        } else {
+
+            JOptionPane.showMessageDialog(this, "Username atau Password Salah");
+
+        }
+
+     }
+     
+//     Login beneran
     private void prosesLogin() {
-        String user = txtUser.getText().trim();
-        String pass = new String(txtPass.getPassword()).trim();
+        String user = TxtUser.getText().trim();
+        String pass = new String(TxtPass.getPassword()).trim();
 
         // Validasi input kosong
         if (user.isEmpty() || pass.isEmpty()) {
@@ -158,7 +185,7 @@ public class LoginFrame extends javax.swing.JFrame {
         }
 
         // Query cek user
-        String sql = "SELECT id_user, username, nama_user FROM tabel_user WHERE username = ? AND password = ?";
+        String sql = "SELECT id_user, username, nama FROM tb_user WHERE username = ? AND password = ?";
         try (Connection conn = Koneksi.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user);
@@ -169,7 +196,7 @@ public class LoginFrame extends javax.swing.JFrame {
                 // Simpan session
                 Session.idUser = rs.getInt("id_user");
                 Session.username = rs.getString("username");
-                Session.namaUser = rs.getString("nama_user");
+                Session.namaUser = rs.getString("nama");
 
                 AlertHelper.showMessage("Berhasil Login. Selamat Datang");
 
@@ -183,36 +210,36 @@ public class LoginFrame extends javax.swing.JFrame {
                 AlertHelper.showMessage("Login Gagal. Username atau Password salah");
             }
         } catch (SQLException ex) {
-            AlertHelper.showMessage("Database Error");
+            JOptionPane.showMessageDialog(
+        null,
+        ex.getMessage(),
+        "SQL Error",
+        JOptionPane.ERROR_MESSAGE
+    );
+    ex.printStackTrace();
         }
     }
     
     private void bersih() {
-        txtUser.setText("");
-        txtPass.setText("");
+        TxtUser.setText("");
+        TxtPass.setText("");
     }
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (Exception ex) {
-            // ignore
-        }
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new LoginFrame().setVisible(true);
-            }
-        });
+    FlatLaf.registerCustomDefaultsSource("theme");
+
+    FlatLightLaf.setup();
+        
+    java.awt.EventQueue.invokeLater(() -> {
+    new LoginFrame().setVisible(true);
+    }); 
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPasswordField TxtPass;
+    private javax.swing.JTextField TxtUser;
     private javax.swing.JButton cmdClear;
     private javax.swing.JButton cmdLogin;
     private com.formdev.flatlaf.FlatDarkLaf flatDarkLaf1;
@@ -220,7 +247,5 @@ public class LoginFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private com.formdev.flatlaf.util.SwingUtils swingUtils1;
-    private javax.swing.JPasswordField txtPass;
-    private javax.swing.JTextField txtUser;
     // End of variables declaration//GEN-END:variables
 }

@@ -4,29 +4,104 @@
  */
 package view.component;
 
+import helper.RupiahFormat;
+import java.awt.Dimension;
+import com.formdev.flatlaf.FlatClientProperties;
+import java.awt.Color;
+
 /**
  *
  * @author ASUS
  */
 public class MenuCard extends javax.swing.JPanel {
 
-    /**
-     * Creates new form MenuCard
-     */
-    public MenuCard(
-            String id,
-            String nama,
-            String harga,
-            String stok
-    ) {
-        
-        initComponents();
-        lblID.setText(id);
-        lblNama.setText(nama);
-        lblHarga.setText("Rp "+harga);
-        lblStok.setText(stok);
-        
+    private int idProduk;
+    private String namaProduk;
+    private double harga;
+    private int stok;
+
+public MenuCard(
+        int idProduk,
+        String nama,
+        String harga,
+        String stok
+) 
+{
+
+    this.idProduk = idProduk;
+
+    initComponents();
+    
+    this.idProduk = idProduk;
+    this.namaProduk = nama;
+    this.harga = Double.parseDouble(harga);
+    this.stok = Integer.parseInt(stok);
+
+    lblNama.setText(nama);
+    lblHarga.setText("Rp " + harga);
+    lblHarga.setText(
+    RupiahFormat.format(harga)
+);
+    lblStok.setText(stok);
+    
+    setPreferredSize(
+    new Dimension(180, 64)
+    );
+    
+    ProdukCard.putClientProperty(
+                "FlatLaf.style",
+                   "arc:12;"
+                 + "border:2,2,2,2,@accentColor");
+    
+    PnlStok.putClientProperty(
+                "FlatLaf.style",
+                   "arc:12");
+    
+    setSelected(false);
+}
+
+
+    public int getIdProduk() {
+    return idProduk;
     }
+
+    public String getNamaProduk() {
+    return namaProduk;
+    }
+
+    public double getHarga() {
+    return harga;
+    }
+    
+    public int getStok() {
+    return stok;
+    }
+
+    public void setSelected(boolean selected){
+
+    if(selected){
+
+        ProdukCard.setBackground(Color.BLACK);
+
+        lblNama.setForeground(Color.WHITE);
+        lblHarga.setForeground(Color.WHITE);
+
+        PnlStok.setBackground(Color.WHITE);
+        lblStok.setForeground(Color.BLACK);
+
+    }else{
+
+        ProdukCard.setBackground(Color.WHITE);
+
+        lblNama.setForeground(Color.BLACK);
+        lblHarga.setForeground(Color.BLACK);
+
+        PnlStok.setBackground(Color.BLACK);
+        lblStok.setForeground(Color.WHITE);
+    }
+
+    repaint();
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -36,88 +111,89 @@ public class MenuCard extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
-        jPanel1 = new javax.swing.JPanel();
-        lblID = new javax.swing.JLabel();
+        ProdukCard = new javax.swing.JPanel();
         lblNama = new javax.swing.JLabel();
         lblHarga = new javax.swing.JLabel();
+        PnlStok = new javax.swing.JPanel();
         lblStok = new javax.swing.JLabel();
 
-        setBackground(java.awt.Color.red);
+        setPreferredSize(new java.awt.Dimension(160, 64));
+        setLayout(new java.awt.GridBagLayout());
 
-        jPanel1.setBackground(java.awt.Color.white);
-        jPanel1.setName("jPanel1"); // NOI18N
+        ProdukCard.setBackground(new java.awt.Color(255, 255, 255));
+        ProdukCard.setName("ProdukCard"); // NOI18N
+        ProdukCard.setLayout(new java.awt.GridBagLayout());
 
-        lblID.setForeground(new java.awt.Color(102, 102, 102));
-        lblID.setText("RK-001");
-        lblID.setName("lblID"); // NOI18N
-
-        lblNama.setFont(new java.awt.Font("Segoe UI Black", 1, 16)); // NOI18N
-        lblNama.setForeground(java.awt.Color.black);
+        lblNama.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
         lblNama.setText("Sampoerna Mild 16");
+        lblNama.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         lblNama.setName("lblNama"); // NOI18N
+        lblNama.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 0.3;
+        gridBagConstraints.weighty = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 6);
+        ProdukCard.add(lblNama, gridBagConstraints);
 
-        lblHarga.setFont(new java.awt.Font("Segoe UI Black", 1, 16)); // NOI18N
-        lblHarga.setForeground(java.awt.Color.red);
+        lblHarga.setFont(new java.awt.Font("Poppins ExtraBold", 1, 14)); // NOI18N
         lblHarga.setText("Rp 32.000");
+        lblHarga.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         lblHarga.setName("lblHarga"); // NOI18N
+        lblHarga.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
+        gridBagConstraints.weightx = 0.7;
+        gridBagConstraints.weighty = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(0, 6, 6, 6);
+        ProdukCard.add(lblHarga, gridBagConstraints);
 
-        lblStok.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblStok.setForeground(java.awt.Color.red);
-        lblStok.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        PnlStok.setBackground(new java.awt.Color(0, 0, 0));
+        PnlStok.setName("PnlStok"); // NOI18N
+        PnlStok.setLayout(new java.awt.BorderLayout());
+
+        lblStok.setFont(new java.awt.Font("Poppins Medium", 0, 12)); // NOI18N
+        lblStok.setForeground(new java.awt.Color(255, 255, 255));
+        lblStok.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblStok.setText("5");
+        lblStok.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         lblStok.setName("lblStok"); // NOI18N
+        PnlStok.add(lblStok, java.awt.BorderLayout.CENTER);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(lblID, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblStok, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lblNama, javax.swing.GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
-                    .addComponent(lblHarga, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblID)
-                    .addComponent(lblStok))
-                .addGap(0, 0, 0)
-                .addComponent(lblNama)
-                .addGap(0, 0, 0)
-                .addComponent(lblHarga)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHEAST;
+        gridBagConstraints.weightx = 0.3;
+        gridBagConstraints.weighty = 0.5;
+        gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
+        ProdukCard.add(PnlStok, gridBagConstraints);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.weightx = 0.6;
+        gridBagConstraints.weighty = 0.5;
+        add(ProdukCard, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel PnlStok;
+    private javax.swing.JPanel ProdukCard;
     private javax.swing.JLabel lblHarga;
-    private javax.swing.JLabel lblID;
     private javax.swing.JLabel lblNama;
     private javax.swing.JLabel lblStok;
     // End of variables declaration//GEN-END:variables
