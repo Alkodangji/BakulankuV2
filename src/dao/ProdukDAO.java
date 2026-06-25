@@ -188,23 +188,9 @@ public class ProdukDAO {
             int qty
     ) {
 
-        try {
+        try (Connection conn = Koneksi.getConnection()) {
 
-            Connection conn =
-                    Koneksi.getConnection();
-
-            String sql =
-                    "UPDATE tb_produk "
-                  + "SET stok = stok - ? "
-                  + "WHERE id_produk = ?";
-
-            PreparedStatement ps =
-                    conn.prepareStatement(sql);
-
-            ps.setInt(1, qty);
-            ps.setInt(2, idProduk);
-
-            return ps.executeUpdate() > 0;
+            return kurangiStokAman(conn, idProduk, qty);
 
         } catch (Exception e) {
 
@@ -216,21 +202,9 @@ public class ProdukDAO {
     
     public boolean tambahStok(int idProduk, int qty) {
 
-    try {
+    try (Connection conn = Koneksi.getConnection()) {
 
-        Connection conn = Koneksi.getConnection();
-
-        String sql =
-                "UPDATE tb_produk "
-              + "SET stok = stok + ? "
-              + "WHERE id_produk = ?";
-
-        PreparedStatement ps = conn.prepareStatement(sql);
-
-        ps.setInt(1, qty);
-        ps.setInt(2, idProduk);
-
-        return ps.executeUpdate() > 0;
+        return tambahStok(conn, idProduk, qty);
 
     } catch (Exception e) {
 

@@ -351,16 +351,19 @@ public
     
     private void simpanTransaksi() {
 
-    if(!validasiTransaksi()){
-        return;
-    }
-
     Connection conn = null;
 
     try {
 
         conn = Koneksi.getConnection();
+        if (conn == null) {
+            throw new Exception("Koneksi database tidak tersedia");
+        }
         conn.setAutoCommit(false);
+
+        if(!validasiTransaksi()){
+            throw new Exception("Validasi transaksi gagal");
+        }
 
         Penjualan penjualan = getDataPenjualan();
         PenjualanDAO penjualanDAO = new PenjualanDAO();

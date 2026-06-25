@@ -211,6 +211,9 @@ public
         );
 
         conn = config.Koneksi.getConnection();
+        if (conn == null) {
+            throw new Exception("Koneksi database tidak tersedia");
+        }
         conn.setAutoCommit(false);
 
         PenjualanDAO penjualanDAO = new PenjualanDAO();

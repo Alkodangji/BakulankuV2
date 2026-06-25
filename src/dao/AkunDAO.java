@@ -45,9 +45,9 @@ public class AkunDAO {
     }
 
     public int getIdByNama(Connection conn, String namaAkun) throws Exception {
-        String sql = "SELECT id_akun FROM tb_akun WHERE nama_akun = ?";
+        String sql = "SELECT id_akun FROM tb_akun WHERE LOWER(nama_akun) = LOWER(?) LIMIT 1";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, namaAkun);
+            ps.setString(1, namaAkun == null ? "" : namaAkun.trim());
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return rs.getInt("id_akun");
