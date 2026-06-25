@@ -403,7 +403,7 @@ public
     }
 
     private void setupComboAkun() {
-        TxtAkun.setVisible(false);
+        CbAkun.setVisible(false);
         comboAkun.setName("comboAkunBBMRestok");
         comboAkun.removeAllItems();
         for (String namaAkun : bbmDAO.getNamaAkun()) {
@@ -431,7 +431,7 @@ public
         int row = TbRestok.getSelectedRow();
         if (row < 0) return;
         selectedBbmId = Integer.parseInt(TbRestok.getValueAt(row, 0).toString());
-        TxtId.setText(String.valueOf(selectedBbmId));
+        
     }
 
     private void simpanRestok() {

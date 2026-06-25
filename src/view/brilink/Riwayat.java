@@ -489,6 +489,22 @@ public
             // TODO add your handling code here:
     }//GEN-LAST:event_BtnAturActionPerformed
 
+     private void updateFormByJenis() {
+        Object selected = CbJenis.getSelectedItem();
+        String jenis = selected == null ? "" : selected.toString();
+
+        boolean isTarikTunai = "Tarik Tunai".equalsIgnoreCase(jenis);
+        boolean isTopUp = "Top Up".equalsIgnoreCase(jenis);
+
+        CbKategori.setEnabled(isTopUp);
+        CbFee.setEnabled(isTarikTunai);
+    }
+
+    private void hitungTransaksi() {
+        // Riwayat BRILink tidak menghitung ulang total pada panel riwayat.
+    }
+
+    
     private void CbJenisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CbJenisActionPerformed
         updateFormByJenis();
         hitungTransaksi();

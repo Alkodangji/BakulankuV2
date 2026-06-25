@@ -80,7 +80,6 @@ public
         TxtNoTransaksi = new javax.swing.JTextField();
         TxtTgl = new javax.swing.JFormattedTextField();
         TxtIdProduk = new javax.swing.JTextField();
-        TxtNama = new javax.swing.JTextField();
         TxtQty = new javax.swing.JSpinner();
         TxtHargaBeli = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -92,6 +91,7 @@ public
         TxtTotal = new javax.swing.JTextField();
         BtnUpdate = new javax.swing.JButton();
         BtnDelete = new javax.swing.JButton();
+        CbProduk = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         TbRestok = new javax.swing.JTable();
         BtnHist = new javax.swing.JButton();
@@ -239,6 +239,9 @@ public
         gridBagConstraints.insets = new java.awt.Insets(0, 6, 6, 6);
         Form.add(TxtTgl, gridBagConstraints);
 
+        TxtIdProduk.setEditable(false);
+        TxtIdProduk.setEnabled(false);
+        TxtIdProduk.setFocusable(false);
         TxtIdProduk.setName("TxtIdProduk"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -246,15 +249,6 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 6, 6, 6);
         Form.add(TxtIdProduk, gridBagConstraints);
-
-        TxtNama.setName("TxtNama"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.insets = new java.awt.Insets(0, 6, 6, 6);
-        Form.add(TxtNama, gridBagConstraints);
 
         TxtQty.setName("TxtQty"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -265,6 +259,11 @@ public
         Form.add(TxtQty, gridBagConstraints);
 
         TxtHargaBeli.setName("TxtHargaBeli"); // NOI18N
+        TxtHargaBeli.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                TxtHargaBeliKeyReleased(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
@@ -326,6 +325,11 @@ public
         Form.add(CbAkun, gridBagConstraints);
 
         TxtTotal.setName("TxtTotal"); // NOI18N
+        TxtTotal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                TxtTotalKeyReleased(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 9;
@@ -351,6 +355,20 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
         Form.add(BtnDelete, gridBagConstraints);
+
+        CbProduk.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        CbProduk.setName("CbProduk"); // NOI18N
+        CbProduk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CbProdukActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(0, 6, 6, 6);
+        Form.add(CbProduk, gridBagConstraints);
 
         jSplitPane1.setRightComponent(Form);
 
@@ -439,6 +457,21 @@ public
         // TODO add your handling code here:
     }//GEN-LAST:event_BtnDataActionPerformed
 
+    private void CbProdukActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CbProdukActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CbProdukActionPerformed
+
+    private void TxtHargaBeliKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtHargaBeliKeyReleased
+        
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TxtHargaBeliKeyReleased
+
+    private void TxtTotalKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtTotalKeyReleased
+        RupiahFormat.formatTextField(TxtTotal);
+        RupiahFormat.formatTextField(TxtHargaBeli);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TxtTotalKeyReleased
+
 
     private final ProdukDAO produkDAO = new ProdukDAO();
     private final AkunDAO akunDAO = new AkunDAO();
@@ -447,24 +480,31 @@ public
     private final Map<String, Akun> akunComboMap = new LinkedHashMap<>();
 
     private void inisialisasiRestok() {
-        TxtId.setEditable(false);
-        TxtNoTransaksi.setEditable(false);
-        TxtIdProduk.setEditable(false);
-        TxtNama.setEditable(false);
-        TxtHargaBeli.setEditable(false);
-        TxtTgl.setEditable(false);
-        TxtQty.setModel(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
-        BtnUpdate.setEnabled(false);
-        BtnDelete.setEnabled(false);
+    TxtId.setEditable(false);
+    TxtNoTransaksi.setEditable(false);
+    TxtIdProduk.setEditable(false);
+    TxtHargaBeli.setEditable(false);
+    TxtTgl.setEditable(false);
 
-        jComboBox2.addActionListener(e -> pilihProduk());
-        TxtTotal.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                formatTotalHarga();
-            }
-        });
-        reloadDataForm();
-    }
+    TxtQty.setModel(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
+
+    BtnUpdate.setEnabled(false);
+    BtnDelete.setEnabled(false);
+
+    BtnAdd.addActionListener(e -> tambahRestok());
+    BtnClear.addActionListener(e -> resetForm());
+
+    CbProduk.addActionListener(e -> pilihProduk());
+
+    TxtTotal.addFocusListener(new java.awt.event.FocusAdapter() {
+        @Override
+        public void focusLost(java.awt.event.FocusEvent evt) {
+            formatTotalHarga();
+        }
+    });
+
+    reloadDataForm();
+}
 
     private void reloadDataForm() {
         loadComboProduk();
@@ -474,13 +514,13 @@ public
 
     private void loadComboProduk() {
         produkComboMap.clear();
-        jComboBox2.removeAllItems();
-        jComboBox2.addItem("-- Pilih Produk --");
+        CbProduk.removeAllItems();
+        CbProduk.addItem("-- Pilih Produk --");
         List<Produk> daftarProduk = produkDAO.getAllProduk("");
         for (Produk produk : daftarProduk) {
             String label = produk.getNamaProduk() + " (" + produk.getKodeProduk() + ") - ID " + produk.getIdProduk();
             produkComboMap.put(label, produk);
-            jComboBox2.addItem(label);
+            CbProduk.addItem(label);
         }
     }
 
@@ -496,20 +536,20 @@ public
     }
 
     private void pilihProduk() {
-        Produk produk = getProdukTerpilih();
-        if (produk == null) {
-            TxtIdProduk.setText("");
-            TxtNama.setText("");
-            TxtHargaBeli.setText("");
-            return;
-        }
-        TxtIdProduk.setText(String.valueOf(produk.getIdProduk()));
-        TxtNama.setText(produk.getNamaProduk());
-        TxtHargaBeli.setText(RupiahFormat.format(produk.getHargaBeli()));
+    Produk produk = getProdukTerpilih();
+
+    if (produk == null) {
+        TxtIdProduk.setText("");
+        TxtHargaBeli.setText("");
+        return;
     }
 
+    TxtIdProduk.setText(String.valueOf(produk.getIdProduk()));
+    TxtHargaBeli.setText(RupiahFormat.format(produk.getHargaBeli()));
+}
+
     private Produk getProdukTerpilih() {
-        Object item = jComboBox2.getSelectedItem();
+        Object item = CbProduk.getSelectedItem();
         return item == null ? null : produkComboMap.get(item.toString());
     }
 
@@ -519,25 +559,63 @@ public
     }
 
     private void resetForm() {
-        TxtId.setText("");
-        TxtNoTransaksi.setText(NomorTransaksi.generate(KodeTransaksi.RESTOK_PRODUK, "tb_produk_restok"));
-        DatePickerHelper.resetToToday(TxtTgl, DpTgl);
-        if (jComboBox2.getItemCount() > 0) {
-            jComboBox2.setSelectedIndex(0);
-        }
-        if (CbAkun.getItemCount() > 0) {
-            CbAkun.setSelectedIndex(0);
-        }
-        TxtQty.setValue(1);
-        TxtTotal.setText("");
-        TxtNote.setText("");
-        isiTabelKosong();
+    TxtId.setText("");
+    TxtNoTransaksi.setText(NomorTransaksi.generate(KodeTransaksi.RESTOK_PRODUK, "tb_produk_restok"));
+    DatePickerHelper.resetToToday(TxtTgl, DpTgl);
+
+    if (CbProduk.getItemCount() > 0) {
+        CbProduk.setSelectedIndex(0);
     }
 
-    private void isiTabelKosong() {
-        DefaultTableModel model = new DefaultTableModel(new Object[]{"No Transaksi", "Tanggal", "Produk", "Qty", "Total"}, 0);
-        TbRestok.setModel(model);
+    if (CbAkun.getItemCount() > 0) {
+        CbAkun.setSelectedIndex(0);
     }
+
+    TxtQty.setValue(1);
+    TxtTotal.setText("");
+    TxtNote.setText("");
+
+    loadTabelRestok();
+}
+    private void loadTabelRestok() {
+    DefaultTableModel model = new DefaultTableModel(
+        new Object[]{"No Transaksi", "Tanggal", "Produk", "Qty", "Harga Beli", "Total", "Akun", "Catatan"},
+        0
+    );
+
+    try (Connection conn = Koneksi.getConnection()) {
+        String sql =
+            "SELECT r.nomor_transaksi, r.tanggal, p.nama_produk, r.qty, " +
+            "r.harga_beli, r.total, a.nama_akun, r.catatan " +
+            "FROM tb_produk_restok r " +
+            "JOIN tb_produk p ON r.produk_id = p.id_produk " +
+            "JOIN tb_akun a ON r.akun_id = a.id_akun " +
+            "ORDER BY r.tanggal DESC, r.id_restok DESC";
+
+        try (
+            java.sql.PreparedStatement ps = conn.prepareStatement(sql);
+            java.sql.ResultSet rs = ps.executeQuery()
+        ) {
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    rs.getString("nomor_transaksi"),
+                    rs.getTimestamp("tanggal"),
+                    rs.getString("nama_produk"),
+                    rs.getInt("qty"),
+                    RupiahFormat.format(rs.getDouble("harga_beli")),
+                    RupiahFormat.format(rs.getDouble("total")),
+                    rs.getString("nama_akun"),
+                    rs.getString("catatan")
+                });
+            }
+        }
+
+        TbRestok.setModel(model);
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Gagal memuat tabel restok produk: " + e.getMessage());
+    }
+}
 
     private void formatTotalHarga() {
         double total = RupiahFormat.parse(TxtTotal.getText());
@@ -642,12 +720,12 @@ public
     private javax.swing.JButton BtnHist;
     private javax.swing.JButton BtnUpdate;
     private javax.swing.JComboBox<String> CbAkun;
+    private javax.swing.JComboBox<String> CbProduk;
     private javax.swing.JPanel Form;
     private javax.swing.JTable TbRestok;
     private javax.swing.JTextField TxtHargaBeli;
     private javax.swing.JTextField TxtId;
     private javax.swing.JTextField TxtIdProduk;
-    private javax.swing.JTextField TxtNama;
     private javax.swing.JTextField TxtNoTransaksi;
     private javax.swing.JTextArea TxtNote;
     private javax.swing.JSpinner TxtQty;

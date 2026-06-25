@@ -34,9 +34,9 @@ public
     public
             Riwayat() {
         initComponents();
-        initDetailButton();
         BtnUpdate.setEnabled(false);
         loadTable();
+        kosongkanDetailTransaksi();
         
         addComponentListener(new ComponentAdapter() {
         @Override
@@ -47,22 +47,7 @@ public
     });
     }
 
-    private void initDetailButton() {
-
-        BtnDetail = new JButton("Detail");
-        BtnDetail.setName("BtnDetail");
-        BtnDetail.addActionListener(evt -> tampilkanDetailTransaksi());
-
-        java.awt.GridBagConstraints gridBagConstraints =
-                new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE_LEADING;
-        gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel1.add(BtnDetail, gridBagConstraints);
-    }
+    
 
     private void resetForm() {
 
@@ -99,75 +84,104 @@ public
             .setWidth(0);
 }
     
-    private void pilihDataTabel() {
+private void pilihDataTabel() {
 
     int row = TbRiwayat.getSelectedRow();
 
-    if(row == -1){
+    if (row == -1) {
+        kosongkanDetailTransaksi();
         return;
     }
 
+    int modelRow = TbRiwayat.convertRowIndexToModel(row);
+
     TxtId.setText(
-            TbRiwayat.getValueAt(row, 0).toString()
+            TbRiwayat.getModel().getValueAt(modelRow, 0).toString()
     );
 
     TxtNoTransaksi.setText(
-            TbRiwayat.getValueAt(row, 1).toString()
+            TbRiwayat.getModel().getValueAt(modelRow, 1).toString()
     );
 
     TxtTgl.setText(
-            TbRiwayat.getValueAt(row, 2).toString()
+            TbRiwayat.getModel().getValueAt(modelRow, 2).toString()
     );
 
     TxtTotal.setText(
-            TbRiwayat.getValueAt(row, 3).toString()
+            TbRiwayat.getModel().getValueAt(modelRow, 3).toString()
     );
 
     CbMetode.setSelectedItem(
-            TbRiwayat.getValueAt(row, 4).toString()
+            TbRiwayat.getModel().getValueAt(modelRow, 4).toString()
     );
 
     TxtBayar.setText(
-            TbRiwayat.getValueAt(row, 5).toString()
+            TbRiwayat.getModel().getValueAt(modelRow, 5).toString()
     );
 
     TxtKembalian.setText(
-            TbRiwayat.getValueAt(row, 6).toString()
+            TbRiwayat.getModel().getValueAt(modelRow, 6).toString()
     );
+
+    tampilkanDetailTransaksi();
 }
     
     private void tampilkanDetailTransaksi() {
 
-        if (TxtId.getText().trim().isEmpty()) {
+    String idText = TxtId.getText() == null ? "" : TxtId.getText().trim();
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Pilih transaksi terlebih dahulu"
-            );
+    if (idText.isEmpty()) {
+        kosongkanDetailTransaksi();
+        return;
+    }
 
-            return;
-        }
+    try {
+        int idPenjualan = Integer.parseInt(idText);
 
-        int idPenjualan = Integer.parseInt(
-                TxtId.getText().trim()
+        PenjualanDetailDAO dao = new PenjualanDetailDAO();
+
+        TbDetail.setModel(
+                dao.getDetailTransaksi(idPenjualan)
         );
 
-        PenjualanDetailDAO dao =
-                new PenjualanDetailDAO();
+        TbDetail.setEnabled(false);
+        TbDetail.getTableHeader().setReorderingAllowed(false);
 
-        JTable table =
-                new JTable(dao.getDetailTransaksi(idPenjualan));
-        table.setEnabled(false);
-        table.getTableHeader().setReorderingAllowed(false);
+    } catch (NumberFormatException e) {
+        kosongkanDetailTransaksi();
 
         JOptionPane.showMessageDialog(
                 this,
-                new JScrollPane(table),
-                "Detail Transaksi " + TxtNoTransaksi.getText(),
-                JOptionPane.INFORMATION_MESSAGE
+                "ID penjualan tidak valid."
+        );
+
+    } catch (Exception e) {
+        kosongkanDetailTransaksi();
+        e.printStackTrace();
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Gagal menampilkan detail transaksi: " + e.getMessage()
         );
     }
+}
 
+    private void kosongkanDetailTransaksi() {
+
+    javax.swing.table.DefaultTableModel model =
+            new javax.swing.table.DefaultTableModel(
+                    new Object[]{"No", "Produk", "Qty", "Harga", "Subtotal"},
+                    0
+            );
+
+    TbDetail.setModel(model);
+    TbDetail.setEnabled(false);
+
+    if (TbDetail.getTableHeader() != null) {
+        TbDetail.getTableHeader().setReorderingAllowed(false);
+    }
+}
+    
     private void deleteTransaksi() {
 
     if (TxtId.getText().trim().isEmpty()) {
@@ -319,6 +333,7 @@ public
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
+        jSplitPane2 = new javax.swing.JSplitPane();
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -343,6 +358,12 @@ public
         BtnClear = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         TbRiwayat = new javax.swing.JTable();
+        PnlDetail = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        TbDetail = new javax.swing.JTable();
+        jLabel8 = new javax.swing.JLabel();
+
+        jSplitPane2.setName("jSplitPane2"); // NOI18N
 
         jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         jSplitPane1.setResizeWeight(0.4);
@@ -540,7 +561,7 @@ public
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE_LEADING;
@@ -630,21 +651,70 @@ public
 
         jSplitPane1.setRightComponent(jScrollPane1);
 
+        jSplitPane2.setLeftComponent(jSplitPane1);
+
+        PnlDetail.setBackground(new java.awt.Color(0, 0, 0));
+        PnlDetail.setName("PnlDetail"); // NOI18N
+
+        jScrollPane2.setName("jScrollPane2"); // NOI18N
+
+        TbDetail.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        TbDetail.setName("TbDetail"); // NOI18N
+        jScrollPane2.setViewportView(TbDetail);
+
+        jLabel8.setFont(new java.awt.Font("Poppins SemiBold", 0, 12)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setText("Detail Transaksi");
+        jLabel8.setName("jLabel8"); // NOI18N
+
+        javax.swing.GroupLayout PnlDetailLayout = new javax.swing.GroupLayout(PnlDetail);
+        PnlDetail.setLayout(PnlDetailLayout);
+        PnlDetailLayout.setHorizontalGroup(
+            PnlDetailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PnlDetailLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(PnlDetailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 397, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addContainerGap())
+        );
+        PnlDetailLayout.setVerticalGroup(
+            PnlDetailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PnlDetailLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2)
+                .addContainerGap())
+        );
+
+        jSplitPane2.setRightComponent(PnlDetail);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 769, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jSplitPane2)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 722, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(6, 6, 6))
+                .addComponent(jSplitPane2)
+                .addGap(42, 42, 42))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -693,6 +763,8 @@ public
     private javax.swing.JButton BtnUpdate;
     private javax.swing.JButton Btndata;
     private javax.swing.JComboBox<String> CbMetode;
+    private javax.swing.JPanel PnlDetail;
+    private javax.swing.JTable TbDetail;
     private javax.swing.JTable TbRiwayat;
     private javax.swing.JTextField TxtBayar;
     private javax.swing.JTextField TxtId;
@@ -707,8 +779,11 @@ public
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JSplitPane jSplitPane2;
     // End of variables declaration//GEN-END:variables
 }

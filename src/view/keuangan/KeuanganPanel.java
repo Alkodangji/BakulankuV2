@@ -7,6 +7,7 @@ package view.keuangan;
 import dao.AkunDAO;
 import dao.KeuanganDAO;
 import helper.DatePickerHelper;
+import helper.RupiahFormat;
 import helper.UiThemeUtil;
 import java.awt.CardLayout;
 import java.awt.Window;
@@ -327,6 +328,11 @@ public
         Form.add(jLabel4, gridBagConstraints);
 
         TxtNominal.setName("TxtNominal"); // NOI18N
+        TxtNominal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                TxtNominalKeyReleased(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
@@ -737,6 +743,11 @@ public
         cl.show(MainFrame.KeuanganContainer, "KATEGORI");
         // TODO add your handling code here:
     }//GEN-LAST:event_BtnAturActionPerformed
+
+    private void TxtNominalKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtNominalKeyReleased
+        RupiahFormat.formatTextField(TxtNominal);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TxtNominalKeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

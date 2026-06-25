@@ -6,6 +6,7 @@ package view.bbm;
 
 import java.awt.CardLayout;
 import helper.DatePickerHelper;
+import helper.RupiahFormat;
 import helper.UiThemeUtil;
 import raven.datetime.DatePicker;
 import view.main.MainFrame;
@@ -76,7 +77,6 @@ public
         TxtBayar = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         TxtKembali = new javax.swing.JTextField();
-        CStruk = new javax.swing.JCheckBox();
         BtnOk = new javax.swing.JButton();
         BtnClear = new javax.swing.JButton();
 
@@ -417,6 +417,11 @@ public
         Form.add(TxtLiter, gridBagConstraints);
 
         TxtNominal.setName("TxtNominal"); // NOI18N
+        TxtNominal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                TxtNominalKeyReleased(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -484,6 +489,8 @@ public
         gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_END;
+        gridBagConstraints.weighty = 0.7;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 6);
         Form.add(LblInfoTitle, gridBagConstraints);
 
@@ -567,22 +574,6 @@ public
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
         Form.add(TxtKembali, gridBagConstraints);
 
-        CStruk.setText("Cetak Struk Sekaligus?");
-        CStruk.setContentAreaFilled(false);
-        CStruk.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        CStruk.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        CStruk.setName("CStruk"); // NOI18N
-        CStruk.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        gridBagConstraints.weighty = 0.7;
-        gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 6);
-        Form.add(CStruk, gridBagConstraints);
-
         BtnOk.setFont(new java.awt.Font("Poppins SemiBold", 0, 14)); // NOI18N
         BtnOk.setText("Konfirmasi");
         BtnOk.setName("BtnOk"); // NOI18N
@@ -654,7 +645,7 @@ public
     }//GEN-LAST:event_TxtBayarActionPerformed
 
     private void TxtBayarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtBayarKeyReleased
-        
+        RupiahFormat.formatTextField(TxtBayar);
         // TODO add your handling code here:
     }//GEN-LAST:event_TxtBayarKeyReleased
 
@@ -695,6 +686,11 @@ public
         // TODO add your handling code here:
     }//GEN-LAST:event_BtnRestokActionPerformed
 
+    private void TxtNominalKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtNominalKeyReleased
+        RupiahFormat.formatTextField(TxtNominal);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TxtNominalKeyReleased
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnClear;
@@ -702,7 +698,6 @@ public
     private javax.swing.JButton BtnHist;
     private javax.swing.JButton BtnOk;
     private javax.swing.JButton BtnRestok;
-    private javax.swing.JCheckBox CStruk;
     private javax.swing.JPanel Card1;
     private javax.swing.JPanel Card2;
     private javax.swing.JPanel Card3;

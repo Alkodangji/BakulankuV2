@@ -4,7 +4,6 @@
  */
 package view.penjualan;
 
-import static com.formdev.flatlaf.extras.components.FlatTabbedPane.TabType.card;
 import config.Koneksi;
 import dao.AkunDAO;
 import dao.PenjualanDAO;
@@ -14,6 +13,7 @@ import helper.DatePickerHelper;
 import helper.KodeTransaksi;
 import helper.NomorTransaksi;
 import helper.RupiahFormat;
+import helper.StrukPrinter;
 import helper.WrapLayout;
 import helper.UiThemeUtil;
 import java.awt.CardLayout;
@@ -23,12 +23,14 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.print.PrinterException;
 import view.component.MenuCard;
 import view.main.MainFrame;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import raven.datetime.DatePicker;
 import javax.swing.BoxLayout;
 import javax.swing.JOptionPane;
@@ -227,6 +229,21 @@ public
     PnlCart.repaint();
     }
     
+    private List<StrukPrinter.Item> buatItemStrukDariCartItems() {
+    List<StrukPrinter.Item> items = new ArrayList<>();
+
+    for (CartItem item : cartItems.values()) {
+        items.add(new StrukPrinter.Item(
+                item.getNamaProduk(),
+                item.getQty(),
+                item.getHarga(),
+                item.getSubtotal()
+        ));
+    }
+
+    return items;
+}
+    
     private void updateTotal() {
 
     double total = 0;
@@ -290,38 +307,26 @@ public
     
     private Penjualan getDataPenjualan() {
 
-    Penjualan penjualan =
-            new Penjualan();
+    Penjualan penjualan = new Penjualan();
 
-    penjualan.setNomorTransaksi(
-            TxtNoTransaksi.getText()
-    );
-
-    penjualan.setUserId(
-            Session.idUser
-    );
+    penjualan.setNomorTransaksi(TxtNoTransaksi.getText());
+    penjualan.setTanggal(DatePickerHelper.getSqlDate(TxtTgl));
+    penjualan.setUserId(Session.idUser);
 
     penjualan.setTotal(
-            RupiahFormat.parse(
-                    TxtTotal.getText()
-            )
+            RupiahFormat.parse(TxtTotal.getText())
     );
 
     penjualan.setMetodePembayaran(
-            CbAkun.getSelectedItem()
-                    .toString()
+            CbAkun.getSelectedItem().toString()
     );
 
     penjualan.setDiterima(
-            RupiahFormat.parse(
-                    TxtBayar.getText()
-            )
+            RupiahFormat.parse(TxtBayar.getText())
     );
 
     penjualan.setKembalian(
-            RupiahFormat.parse(
-                    TxtKembali.getText()
-            )
+            RupiahFormat.parse(TxtKembali.getText())
     );
 
     return penjualan;
@@ -369,6 +374,38 @@ public
     }
 
     return true;
+}
+    
+    private void cetakStrukPenjualanJikaDipilih(
+        String nomorTransaksi,
+        java.util.Date tanggal,
+        double total,
+        String metodePembayaran,
+        double diterima,
+        double kembalian
+) {
+    if (!CStruk.isSelected()) {
+        return;
+    }
+
+    try {
+        List<StrukPrinter.Item> itemsStruk = buatItemStrukDariCartItems();
+
+        StrukPrinter.printPenjualan(
+                nomorTransaksi,
+                tanggal,
+                itemsStruk,
+                total,
+                metodePembayaran,
+                diterima,
+                kembalian
+        );
+
+    } catch (PrinterException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this,
+                "Transaksi berhasil disimpan, tetapi struk gagal dicetak.\n" + e.getMessage());
+    }
 }
     
     private boolean isTanggalValid() {
@@ -444,9 +481,19 @@ public
 
         conn.commit();
 
+        cetakStrukPenjualanJikaDipilih(
+        penjualan.getNomorTransaksi(),
+        new java.util.Date(),
+        penjualan.getTotal(),
+        penjualan.getMetodePembayaran(),
+        penjualan.getDiterima(),
+        penjualan.getKembalian()
+        );
+
         if (MainFrame.RiwayatPenjualanPanel != null) {
             MainFrame.RiwayatPenjualanPanel.loadTable();
         }
+
         refreshSaldoHeaderMainFrame();
 
         JOptionPane.showMessageDialog(
@@ -948,6 +995,7 @@ public
 
     private void BtnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnOkActionPerformed
         simpanTransaksi();
+        resetForm();
 // TODO add your handling code here:
     }//GEN-LAST:event_BtnOkActionPerformed
 
