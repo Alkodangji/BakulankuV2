@@ -50,6 +50,24 @@ public class KeuanganDAO {
         }
     }
 
+    public void updateKategori(int idKategori, String namaKategori, String jenis) throws Exception {
+        String sql = "UPDATE tb_kategori_keuangan SET nama_kategori = ?, jenis = ? WHERE id_kategori = ?";
+        try (Connection conn = Koneksi.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, namaKategori);
+            ps.setString(2, jenis);
+            ps.setInt(3, idKategori);
+            ps.executeUpdate();
+        }
+    }
+
+    public void hapusKategori(int idKategori) throws Exception {
+        String sql = "DELETE FROM tb_kategori_keuangan WHERE id_kategori = ?";
+        try (Connection conn = Koneksi.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idKategori);
+            ps.executeUpdate();
+        }
+    }
+
     public void simpanTransaksi(KeuanganTransaksi transaksi) throws Exception {
         Connection conn = null;
         try {

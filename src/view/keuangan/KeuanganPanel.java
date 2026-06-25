@@ -118,7 +118,7 @@ public
     private LocalDate getTanggalInput() {
         String teksTanggal = TxtTgl.getText().trim();
         if (teksTanggal.isEmpty()) {
-            return LocalDate.now();
+            throw new IllegalArgumentException("Tanggal transaksi wajib diisi.");
         }
         return LocalDate.parse(teksTanggal, DateTimeFormatter.ISO_LOCAL_DATE);
     }
@@ -173,9 +173,6 @@ public
                 ((MainFrame) window).refreshSaldoHeader();
                 break;
             }
-        }
-        if (MainFrame.DashboardPanel != null) {
-            MainFrame.DashboardPanel.refreshData();
         }
         if (MainFrame.RiwayatKeuanganPanel != null) {
             MainFrame.RiwayatKeuanganPanel.loadTable();

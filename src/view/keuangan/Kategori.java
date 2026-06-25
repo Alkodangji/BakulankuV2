@@ -7,6 +7,7 @@ package view.keuangan;
 import dao.KeuanganDAO;
 import java.awt.CardLayout;
 import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
 import view.main.MainFrame;
 
 /**
@@ -27,6 +28,17 @@ public
         jTextField1.setEditable(false);
         jButton4.addActionListener(e -> simpanKategori());
         jButton3.addActionListener(e -> bersihkanForm());
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pilihKategoriDariTabel();
+            }
+        });
+        jTable1.getInputMap(javax.swing.JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("DELETE"), "hapusKategori");
+        jTable1.getActionMap().put("hapusKategori", new javax.swing.AbstractAction() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hapusKategoriTerpilih();
+            }
+        });
         loadTable();
     }
 
@@ -46,7 +58,11 @@ public
             return;
         }
         try {
-            keuanganDAO.tambahKategori(nama, jenis);
+            if (jTextField1.getText().trim().isEmpty()) {
+                keuanganDAO.tambahKategori(nama, jenis);
+            } else {
+                keuanganDAO.updateKategori(Integer.parseInt(jTextField1.getText().trim()), nama, jenis);
+            }
             bersihkanForm();
             loadTable();
             if (MainFrame.KeuanganPanel != null) {
@@ -62,6 +78,40 @@ public
         jTextField1.setText("");
         jTextField2.setText("");
         jComboBox1.setSelectedIndex(0);
+        jTable1.clearSelection();
+    }
+
+    private void pilihKategoriDariTabel() {
+        int row = jTable1.getSelectedRow();
+        if (row < 0) {
+            return;
+        }
+        jTextField1.setText(String.valueOf(jTable1.getValueAt(row, 0)));
+        jTextField2.setText(String.valueOf(jTable1.getValueAt(row, 1)));
+        jComboBox1.setSelectedItem(String.valueOf(jTable1.getValueAt(row, 2)));
+    }
+
+    private void hapusKategoriTerpilih() {
+        int row = jTable1.getSelectedRow();
+        if (row < 0) {
+            JOptionPane.showMessageDialog(this, "Pilih kategori yang akan dihapus.");
+            return;
+        }
+        int konfirmasi = JOptionPane.showConfirmDialog(this, "Hapus kategori terpilih?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+        if (konfirmasi != JOptionPane.YES_OPTION) {
+            return;
+        }
+        try {
+            keuanganDAO.hapusKategori(Integer.parseInt(String.valueOf(jTable1.getValueAt(row, 0))));
+            bersihkanForm();
+            loadTable();
+            if (MainFrame.KeuanganPanel != null) {
+                MainFrame.KeuanganPanel.refreshKategoriByJenis();
+            }
+            JOptionPane.showMessageDialog(this, "Kategori berhasil dihapus.");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Gagal hapus kategori: " + e.getMessage());
+        }
     }
 
     /**

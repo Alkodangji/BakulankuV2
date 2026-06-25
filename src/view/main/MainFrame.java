@@ -61,7 +61,6 @@ public class MainFrame extends javax.swing.JFrame {
     public static JPanel KeuanganContainer;
     
     public static view.penjualan.Riwayat RiwayatPenjualanPanel;
-    public static DashboardPanel DashboardPanel;
     public static view.keuangan.KeuanganPanel KeuanganPanel;
     public static view.keuangan.Riwayat RiwayatKeuanganPanel;
     
@@ -120,8 +119,7 @@ LblLogo.setIcon(logo);
 
     //  Load All Panel     
         Home.setLayout(new BorderLayout());
-        DashboardPanel = new DashboardPanel();
-        Home.add(DashboardPanel,BorderLayout.CENTER);
+        Home.add(new DashboardPanel(),BorderLayout.CENTER);
 
         BBM.setLayout(new CardLayout());
         BBM.add(new view.bbm.BBMPanel(), "HOME");
