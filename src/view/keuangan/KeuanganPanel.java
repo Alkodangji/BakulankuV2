@@ -4,19 +4,18 @@
  */
 package view.keuangan;
 
-import config.Koneksi;
 import dao.AkunDAO;
+import dao.KeuanganDAO;
 import java.awt.CardLayout;
 import java.awt.Window;
 import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import javax.swing.DefaultComboBoxModel;
+import model.KategoriKeuangan;
+import model.KeuanganTransaksi;
 import javax.swing.JOptionPane;
 import session.Session;
 import view.main.MainFrame;
@@ -32,6 +31,7 @@ public
      * Creates new form KeuanganPanel
      */
     private final AkunDAO akunDAO = new AkunDAO();
+    private final KeuanganDAO keuanganDAO = new KeuanganDAO();
 
     public KeuanganPanel() {
             initComponents();
@@ -44,85 +44,81 @@ public
         jComboBox4.setSelectedItem("Pemasukan");
         jComboBox2.setModel(new DefaultComboBoxModel<>(new String[] { "Cash", "BRI" }));
         jComboBox3.setModel(new DefaultComboBoxModel<>(new String[] { "Cash", "BRI" }));
-        jComboBox5.setModel(new DefaultComboBoxModel<>(new String[] { "Saldo Awal", "Modal", "Lainnya" }));
-        jComboBox6.setModel(new DefaultComboBoxModel<>(new String[] { "Saldo Awal", "Modal", "Lainnya" }));
+        jComboBox4.addActionListener(e -> refreshKategoriByJenis());
+        refreshKategoriByJenis();
     }
 
-    private void simpanPemasukan() {
-        String jenis = String.valueOf(jComboBox4.getSelectedItem());
-        if (!"Pemasukan".equals(jenis)) {
-            JOptionPane.showMessageDialog(this, "Untuk sementara hanya Pemasukan yang aktif.");
-            return;
-        }
-
-        double nominal = parseNominal(jTextField1.getText());
-        if (nominal <= 0) {
-            JOptionPane.showMessageDialog(this, "Nominal harus lebih dari 0.");
-            return;
-        }
-
-        int idAkunTujuan = getIdAkun(String.valueOf(jComboBox3.getSelectedItem()));
-        String kategori = String.valueOf(jComboBox5.getSelectedItem());
-        String catatan = jTextArea1.getText().trim();
-        int idUser = Session.idUser > 0 ? Session.idUser : 1;
-
-        Connection conn = null;
+    private void simpanTransaksiKeuangan() {
         try {
-            conn = Koneksi.getConnection();
-            if (conn == null) {
-                throw new Exception("Koneksi database gagal.");
-            }
-            conn.setAutoCommit(false);
-
-            String nomorTransaksi = generateNomorTransaksi(conn);
-            String sql = "INSERT INTO tb_keuangan "
-                    + "(nomor_transaksi, tanggal, user_id, akun_asal_id, akun_tujuan_id, jenis, nominal, kategori, catatan) "
-                    + "VALUES (?, ?, ?, NULL, ?, 'Pemasukan', ?, ?, ?)";
-            try (PreparedStatement ps = conn.prepareStatement(sql)) {
-                ps.setString(1, nomorTransaksi);
-                ps.setDate(2, Date.valueOf(getTanggalInput()));
-                ps.setInt(3, idUser);
-                ps.setInt(4, idAkunTujuan);
-                ps.setDouble(5, nominal);
-                ps.setString(6, kategori);
-                ps.setString(7, catatan);
-                ps.executeUpdate();
-            }
-
-            if (!akunDAO.tambahSaldo(conn, idAkunTujuan, nominal)) {
-                throw new Exception("Gagal menambah saldo akun tujuan.");
-            }
-
-            conn.commit();
-            JOptionPane.showMessageDialog(this, "Pemasukan berhasil disimpan.");
+            KeuanganTransaksi transaksi = buatTransaksiDariForm();
+            keuanganDAO.simpanTransaksi(transaksi);
+            JOptionPane.showMessageDialog(this, transaksi.getJenis() + " berhasil disimpan.");
             bersihkanForm();
-            refreshRingkasanSaldo();
-            refreshSaldoHeaderMainFrame();
+            refreshSemuaTampilan();
         } catch (Exception e) {
-            if (conn != null) {
-                try {
-                    conn.rollback();
-                } catch (Exception rollbackError) {
-                    rollbackError.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Gagal simpan transaksi: " + e.getMessage());
+        }
+    }
+
+    private KeuanganTransaksi buatTransaksiDariForm() throws Exception {
+        String jenis = String.valueOf(jComboBox4.getSelectedItem());
+        double nominal = parseNominal(jTextField1.getText());
+        KategoriKeuangan kategori = getKategoriDipilih();
+
+        KeuanganTransaksi transaksi = new KeuanganTransaksi();
+        transaksi.setJenis(jenis);
+        transaksi.setTanggal(getTanggalInput());
+        transaksi.setUserId(Session.idUser > 0 ? Session.idUser : 1);
+        transaksi.setNominal(nominal);
+        transaksi.setCatatan(jTextArea1.getText().trim());
+
+        if ("Pemasukan".equals(jenis)) {
+            transaksi.setAkunTujuanId(getIdAkun(String.valueOf(jComboBox3.getSelectedItem())));
+            transaksi.setIdKategori(kategori == null ? null : kategori.getIdKategori());
+            transaksi.setKategori(kategori == null ? null : kategori.getNamaKategori());
+        } else if ("Pengeluaran".equals(jenis)) {
+            transaksi.setAkunAsalId(getIdAkun(String.valueOf(jComboBox2.getSelectedItem())));
+            transaksi.setIdKategori(kategori == null ? null : kategori.getIdKategori());
+            transaksi.setKategori(kategori == null ? null : kategori.getNamaKategori());
+        } else if ("Transfer".equals(jenis)) {
+            transaksi.setAkunAsalId(getIdAkun(String.valueOf(jComboBox2.getSelectedItem())));
+            transaksi.setAkunTujuanId(getIdAkun(String.valueOf(jComboBox3.getSelectedItem())));
+            transaksi.setIdKategori(null);
+            transaksi.setKategori("Transfer");
+        }
+        return transaksi;
+    }
+
+    private KategoriKeuangan getKategoriDipilih() {
+        Object item = jComboBox5.getSelectedItem();
+        return item instanceof KategoriKeuangan ? (KategoriKeuangan) item : null;
+    }
+
+    public void refreshKategoriByJenis() {
+        String jenis = String.valueOf(jComboBox4.getSelectedItem());
+        DefaultComboBoxModel modelKategori = new DefaultComboBoxModel();
+        DefaultComboBoxModel modelKategoriDuplikat = new DefaultComboBoxModel();
+        if (!"Transfer".equals(jenis)) {
+            try {
+                for (KategoriKeuangan kategori : keuanganDAO.getKategoriByJenis(jenis)) {
+                    modelKategori.addElement(kategori);
+                    modelKategoriDuplikat.addElement(kategori);
                 }
-            }
-            JOptionPane.showMessageDialog(this, "Gagal simpan pemasukan: " + e.getMessage());
-        } finally {
-            if (conn != null) {
-                try {
-                    conn.setAutoCommit(true);
-                    conn.close();
-                } catch (Exception closeError) {
-                    closeError.printStackTrace();
-                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Gagal memuat kategori: " + e.getMessage());
             }
         }
+        jComboBox5.setModel(modelKategori);
+        jComboBox6.setModel(modelKategoriDuplikat);
+        boolean pakaiKategori = !"Transfer".equals(jenis);
+        jComboBox5.setEnabled(pakaiKategori);
+        jComboBox6.setEnabled(pakaiKategori);
     }
 
     private LocalDate getTanggalInput() {
         String teksTanggal = TxtTgl.getText().trim();
         if (teksTanggal.isEmpty()) {
-            return LocalDate.now();
+            throw new IllegalArgumentException("Tanggal transaksi wajib diisi.");
         }
         return LocalDate.parse(teksTanggal, DateTimeFormatter.ISO_LOCAL_DATE);
     }
@@ -139,42 +135,17 @@ public
         return "BRI".equalsIgnoreCase(namaAkun) ? 2 : 1;
     }
 
-    private String generateNomorTransaksi(Connection conn) throws Exception {
-        String prefix = "KEU" + LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
-        String sql = "SELECT COUNT(*) FROM tb_keuangan WHERE nomor_transaksi LIKE ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, prefix + "%");
-            try (ResultSet rs = ps.executeQuery()) {
-                int urut = 1;
-                if (rs.next()) {
-                    urut = rs.getInt(1) + 1;
-                }
-                return prefix + String.format("%04d", urut);
-            }
-        }
-    }
-
-    private void refreshRingkasanSaldo() {
-        try (Connection conn = Koneksi.getConnection()) {
+    public void refreshRingkasanSaldo() {
+        try (Connection conn = config.Koneksi.getConnection()) {
             if (conn == null) {
                 return;
             }
             saldoCash.setText(formatRupiah(akunDAO.getSaldo(conn, 1)));
             saldoCash1.setText(formatRupiah(akunDAO.getSaldo(conn, 2)));
-            saldoCash2.setText(formatRupiah(getTotalHariIni(conn, "Pemasukan")));
-            saldoCash3.setText(formatRupiah(getTotalHariIni(conn, "Transfer")));
+            saldoCash2.setText(formatRupiah(0));
+            saldoCash3.setText(formatRupiah(0));
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    private double getTotalHariIni(Connection conn, String jenis) throws Exception {
-        String sql = "SELECT COALESCE(SUM(nominal), 0) FROM tb_keuangan WHERE tanggal = CURDATE() AND jenis = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, jenis);
-            try (ResultSet rs = ps.executeQuery()) {
-                return rs.next() ? rs.getDouble(1) : 0;
-            }
         }
     }
 
@@ -190,16 +161,31 @@ public
         jTextField1.setText("");
         jTextArea1.setText("");
         jComboBox4.setSelectedItem("Pemasukan");
+        jComboBox2.setSelectedItem("Cash");
         jComboBox3.setSelectedItem("Cash");
-        jComboBox5.setSelectedIndex(0);
+        refreshKategoriByJenis();
     }
 
-    private void refreshSaldoHeaderMainFrame() {
+    private void refreshSemuaTampilan() {
+        refreshRingkasanSaldo();
         for (Window window : Window.getWindows()) {
             if (window instanceof MainFrame) {
-                ((MainFrame) window).refreshSaldoHeader();
+                panggilRefreshSaldoHeader((MainFrame) window);
                 break;
             }
+        }
+        if (MainFrame.RiwayatKeuanganPanel != null) {
+            MainFrame.RiwayatKeuanganPanel.loadTable();
+        }
+    }
+
+    private void panggilRefreshSaldoHeader(MainFrame mainFrame) {
+        try {
+            MainFrame.class.getMethod("refreshSaldoHeader").invoke(mainFrame);
+        } catch (NoSuchMethodException ignored) {
+            // Method tersedia di branch terbaru; jika belum ada, refresh header dilewati tanpa mengubah MainFrame.
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -715,7 +701,7 @@ public
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActionPerformed
-        simpanPemasukan();
+        simpanTransaksiKeuangan();
     }//GEN-LAST:event_btnActionPerformed
 
     private void btn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn1ActionPerformed

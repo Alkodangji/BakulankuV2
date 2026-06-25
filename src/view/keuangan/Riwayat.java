@@ -4,7 +4,9 @@
  */
 package view.keuangan;
 
+import dao.KeuanganDAO;
 import java.awt.CardLayout;
+import javax.swing.JOptionPane;
 import view.main.MainFrame;
 
 /**
@@ -17,9 +19,20 @@ public
     /**
      * Creates new form Riwayat
      */
+    private final KeuanganDAO keuanganDAO = new KeuanganDAO();
+
     public
             Riwayat() {
         initComponents();
+        loadTable();
+    }
+
+    public void loadTable() {
+        try {
+            jTable1.setModel(keuanganDAO.getRiwayatTableModel());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Gagal memuat riwayat keuangan: " + e.getMessage());
+        }
     }
 
     /**
