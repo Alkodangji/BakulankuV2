@@ -44,12 +44,12 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout"/>
       <SubComponents>
-        <Container class="javax.swing.JPanel" name="jPanel1">
+        <Container class="javax.swing.JPanel" name="Form">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
-            <Property name="name" type="java.lang.String" value="jPanel1" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="Form" noResource="true"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout$JSplitPaneConstraintsDescription">
@@ -69,7 +69,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JComboBox" name="jComboBox2">
+            <Component class="javax.swing.JComboBox" name="CbAkunAsal">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="2">
@@ -77,7 +77,7 @@
                     <StringItem index="1" value="Cash"/>
                   </StringArray>
                 </Property>
-                <Property name="name" type="java.lang.String" value="jComboBox2" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="CbAkunAsal" noResource="true"/>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
@@ -88,7 +88,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JComboBox" name="jComboBox3">
+            <Component class="javax.swing.JComboBox" name="CbAkunTujuan">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="2">
@@ -96,7 +96,7 @@
                     <StringItem index="1" value="Cash"/>
                   </StringArray>
                 </Property>
-                <Property name="name" type="java.lang.String" value="jComboBox3" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="CbAkunTujuan" noResource="true"/>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
@@ -151,9 +151,9 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField1">
+            <Component class="javax.swing.JTextField" name="TxtNominal">
               <Properties>
-                <Property name="name" type="java.lang.String" value="jTextField1" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="TxtNominal" noResource="true"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -161,7 +161,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JComboBox" name="jComboBox4">
+            <Component class="javax.swing.JComboBox" name="CbJenis">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="3">
@@ -170,7 +170,7 @@
                     <StringItem index="2" value="Transfer"/>
                   </StringArray>
                 </Property>
-                <Property name="name" type="java.lang.String" value="jComboBox4" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="CbJenis" noResource="true"/>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
@@ -192,7 +192,7 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JComboBox" name="jComboBox5">
+            <Component class="javax.swing.JComboBox" name="CbKategori">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="2">
@@ -200,7 +200,7 @@
                     <StringItem index="1" value="Cash"/>
                   </StringArray>
                 </Property>
-                <Property name="name" type="java.lang.String" value="jComboBox5" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="CbKategori" noResource="true"/>
               </Properties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
@@ -237,25 +237,25 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JTextArea" name="jTextArea1">
+                <Component class="javax.swing.JTextArea" name="TxtNote">
                   <Properties>
                     <Property name="columns" type="int" value="20"/>
                     <Property name="rows" type="int" value="5"/>
-                    <Property name="name" type="java.lang.String" value="jTextArea1" noResource="true"/>
+                    <Property name="name" type="java.lang.String" value="TxtNote" noResource="true"/>
                   </Properties>
                 </Component>
               </SubComponents>
             </Container>
-            <Component class="javax.swing.JButton" name="btn">
+            <Component class="javax.swing.JButton" name="BtnOk">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Poppins SemiBold" size="14" style="0"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Konfirmasi"/>
-                <Property name="name" type="java.lang.String" value="btn" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="BtnOk" noResource="true"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnOkActionPerformed"/>
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -263,16 +263,16 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JButton" name="btn1">
+            <Component class="javax.swing.JButton" name="BtnClear">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Poppins Medium" size="14" style="0"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Bersih"/>
-                <Property name="name" type="java.lang.String" value="btn1" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="BtnClear" noResource="true"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn1ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnClearActionPerformed"/>
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -324,12 +324,12 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
           <SubComponents>
-            <Container class="javax.swing.JPanel" name="BriCard">
+            <Container class="javax.swing.JPanel" name="Card1">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="0" green="99" red="0" type="rgb"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="BriCard" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="Card1" noResource="true"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -356,7 +356,7 @@
                     </Constraint>
                   </Constraints>
                 </Component>
-                <Component class="javax.swing.JLabel" name="saldoCash1">
+                <Component class="javax.swing.JLabel" name="TotalAllSaldo">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Poppins SemiBold" size="16" style="1"/>
@@ -365,7 +365,7 @@
                       <Color blue="ff" green="ff" red="ff" type="rgb"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Rp 2.000.000"/>
-                    <Property name="name" type="java.lang.String" value="saldoCash1" noResource="true"/>
+                    <Property name="name" type="java.lang.String" value="TotalAllSaldo" noResource="true"/>
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -406,12 +406,12 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Container class="javax.swing.JPanel" name="CashCard">
+            <Container class="javax.swing.JPanel" name="Card3">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="CashCard" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="Card3" noResource="true"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -435,13 +435,13 @@
                     </Constraint>
                   </Constraints>
                 </Component>
-                <Component class="javax.swing.JLabel" name="saldoCash">
+                <Component class="javax.swing.JLabel" name="PengeluaranToday">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Poppins Medium" size="16" style="1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Rp 1.200.000"/>
-                    <Property name="name" type="java.lang.String" value="saldoCash" noResource="true"/>
+                    <Property name="name" type="java.lang.String" value="PengeluaranToday" noResource="true"/>
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -451,12 +451,12 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Container class="javax.swing.JPanel" name="CashCard1">
+            <Container class="javax.swing.JPanel" name="Card2">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="CashCard1" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="Card2" noResource="true"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -480,13 +480,13 @@
                     </Constraint>
                   </Constraints>
                 </Component>
-                <Component class="javax.swing.JLabel" name="saldoCash2">
+                <Component class="javax.swing.JLabel" name="PemasukanToday">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Poppins Medium" size="16" style="1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Rp 200.000"/>
-                    <Property name="name" type="java.lang.String" value="saldoCash2" noResource="true"/>
+                    <Property name="name" type="java.lang.String" value="PemasukanToday" noResource="true"/>
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -496,12 +496,12 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Container class="javax.swing.JPanel" name="CashCard2">
+            <Container class="javax.swing.JPanel" name="Card4">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="CashCard2" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="Card4" noResource="true"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -525,13 +525,13 @@
                     </Constraint>
                   </Constraints>
                 </Component>
-                <Component class="javax.swing.JLabel" name="saldoCash3">
+                <Component class="javax.swing.JLabel" name="TransferToday">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Poppins Medium" size="16" style="1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Rp 240.000"/>
-                    <Property name="name" type="java.lang.String" value="saldoCash3" noResource="true"/>
+                    <Property name="name" type="java.lang.String" value="TransferToday" noResource="true"/>
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -567,7 +567,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JTable" name="jTable1">
+                <Component class="javax.swing.JTable" name="TbTransaksi">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="4" rowCount="4">
@@ -577,7 +577,7 @@
                         <Column editable="true" title="Title 4" type="java.lang.Object"/>
                       </Table>
                     </Property>
-                    <Property name="name" type="java.lang.String" value="jTable1" noResource="true"/>
+                    <Property name="name" type="java.lang.String" value="TbTransaksi" noResource="true"/>
                   </Properties>
                 </Component>
               </SubComponents>

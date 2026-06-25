@@ -8,16 +8,16 @@ import config.Koneksi;
 import dao.AkunDAO;
 import dao.ProdukDAO;
 import dao.ProdukRestokDAO;
+import helper.DatePickerHelper;
 import helper.KodeTransaksi;
 import helper.NomorTransaksi;
 import helper.RupiahFormat;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.sql.Connection;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
@@ -25,6 +25,7 @@ import javax.swing.table.DefaultTableModel;
 import model.Akun;
 import model.Produk;
 import model.ProdukRestok;
+import raven.datetime.DatePicker;
 import session.Session;
 import view.main.MainFrame;
 
@@ -35,12 +36,20 @@ import view.main.MainFrame;
 public
         class Restok extends javax.swing.JPanel {
 
+    
+    private DatePicker DpTgl;
+    
     /**
      * Creates new form Restok
      */
     public
             Restok() {
         initComponents();
+        DpTgl = DatePickerHelper.install(
+            TxtTgl,
+            LocalDate.now(),
+            Color.WHITE
+        );
         inisialisasiRestok();
     }
 
@@ -56,7 +65,7 @@ public
 
         BtnBack = new javax.swing.JButton();
         jSplitPane1 = new javax.swing.JSplitPane();
-        jPanel1 = new javax.swing.JPanel();
+        Form = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -66,25 +75,24 @@ public
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jFormattedTextField1 = new javax.swing.JFormattedTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jSpinner1 = new javax.swing.JSpinner();
-        jTextField5 = new javax.swing.JTextField();
+        TxtId = new javax.swing.JTextField();
+        TxtNoTransaksi = new javax.swing.JTextField();
+        TxtTgl = new javax.swing.JFormattedTextField();
+        TxtIdProduk = new javax.swing.JTextField();
+        TxtNama = new javax.swing.JTextField();
+        TxtQty = new javax.swing.JSpinner();
+        TxtHargaBeli = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        TxtNote = new javax.swing.JTextArea();
+        BtnAdd = new javax.swing.JButton();
+        BtnClear = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jTextField6 = new javax.swing.JTextField();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        CbAkun = new javax.swing.JComboBox<>();
+        TxtTotal = new javax.swing.JTextField();
+        BtnUpdate = new javax.swing.JButton();
+        BtnDelete = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        TbRestok = new javax.swing.JTable();
         BtnHist = new javax.swing.JButton();
         BtnData = new javax.swing.JButton();
 
@@ -98,8 +106,9 @@ public
 
         jSplitPane1.setName("jSplitPane1"); // NOI18N
 
-        jPanel1.setName("jPanel1"); // NOI18N
-        jPanel1.setLayout(new java.awt.GridBagLayout());
+        Form.setBackground(new java.awt.Color(255, 255, 255));
+        Form.setName("Form"); // NOI18N
+        Form.setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setText("ID");
         jLabel1.setName("jLabel1"); // NOI18N
@@ -109,7 +118,7 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 6);
-        jPanel1.add(jLabel1, gridBagConstraints);
+        Form.add(jLabel1, gridBagConstraints);
 
         jLabel2.setText("No. Transaksi");
         jLabel2.setName("jLabel2"); // NOI18N
@@ -120,7 +129,7 @@ public
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.6;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 6);
-        jPanel1.add(jLabel2, gridBagConstraints);
+        Form.add(jLabel2, gridBagConstraints);
 
         jLabel3.setText("Tanggal");
         jLabel3.setName("jLabel3"); // NOI18N
@@ -131,7 +140,7 @@ public
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 6);
-        jPanel1.add(jLabel3, gridBagConstraints);
+        Form.add(jLabel3, gridBagConstraints);
 
         jLabel5.setText("ID Produk");
         jLabel5.setName("jLabel5"); // NOI18N
@@ -141,7 +150,7 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 6);
-        jPanel1.add(jLabel5, gridBagConstraints);
+        Form.add(jLabel5, gridBagConstraints);
 
         jLabel6.setText("Nama Produk");
         jLabel6.setName("jLabel6"); // NOI18N
@@ -152,7 +161,7 @@ public
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 6);
-        jPanel1.add(jLabel6, gridBagConstraints);
+        Form.add(jLabel6, gridBagConstraints);
 
         jLabel7.setText("Qty");
         jLabel7.setName("jLabel7"); // NOI18N
@@ -162,7 +171,7 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 6);
-        jPanel1.add(jLabel7, gridBagConstraints);
+        Form.add(jLabel7, gridBagConstraints);
 
         jLabel8.setText("Harga beli");
         jLabel8.setName("jLabel8"); // NOI18N
@@ -173,7 +182,7 @@ public
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 6);
-        jPanel1.add(jLabel8, gridBagConstraints);
+        Form.add(jLabel8, gridBagConstraints);
 
         jLabel9.setText("Total");
         jLabel9.setName("jLabel9"); // NOI18N
@@ -184,7 +193,7 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 6);
-        jPanel1.add(jLabel9, gridBagConstraints);
+        Form.add(jLabel9, gridBagConstraints);
 
         jLabel10.setText("Catatan");
         jLabel10.setName("jLabel10"); // NOI18N
@@ -195,77 +204,80 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 6);
-        jPanel1.add(jLabel10, gridBagConstraints);
+        Form.add(jLabel10, gridBagConstraints);
 
-        jTextField1.setName("jTextField1"); // NOI18N
+        TxtId.setEditable(false);
+        TxtId.setEnabled(false);
+        TxtId.setFocusable(false);
+        TxtId.setName("TxtId"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 6, 6, 6);
-        jPanel1.add(jTextField1, gridBagConstraints);
+        Form.add(TxtId, gridBagConstraints);
 
-        jTextField2.setName("jTextField2"); // NOI18N
+        TxtNoTransaksi.setEditable(false);
+        TxtNoTransaksi.setEnabled(false);
+        TxtNoTransaksi.setFocusable(false);
+        TxtNoTransaksi.setName("TxtNoTransaksi"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.6;
         gridBagConstraints.insets = new java.awt.Insets(0, 6, 6, 6);
-        jPanel1.add(jTextField2, gridBagConstraints);
+        Form.add(TxtNoTransaksi, gridBagConstraints);
 
-        jFormattedTextField1.setName("jFormattedTextField1"); // NOI18N
+        TxtTgl.setName("TxtTgl"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(0, 6, 6, 6);
-        jPanel1.add(jFormattedTextField1, gridBagConstraints);
+        Form.add(TxtTgl, gridBagConstraints);
 
-        jTextField3.setName("jTextField3"); // NOI18N
+        TxtIdProduk.setName("TxtIdProduk"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 6, 6, 6);
-        jPanel1.add(jTextField3, gridBagConstraints);
+        Form.add(TxtIdProduk, gridBagConstraints);
 
-        jTextField4.setName("jTextField4"); // NOI18N
-        jTextField4.setEditable(false);
-
-        jComboBox2.setName("jComboBox2"); // NOI18N
+        TxtNama.setName("TxtNama"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(0, 6, 6, 6);
-        jPanel1.add(jComboBox2, gridBagConstraints);
+        Form.add(TxtNama, gridBagConstraints);
 
-        jSpinner1.setName("jSpinner1"); // NOI18N
+        TxtQty.setName("TxtQty"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 6, 6, 6);
-        jPanel1.add(jSpinner1, gridBagConstraints);
+        Form.add(TxtQty, gridBagConstraints);
 
-        jTextField5.setName("jTextField5"); // NOI18N
+        TxtHargaBeli.setName("TxtHargaBeli"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(0, 6, 6, 6);
-        jPanel1.add(jTextField5, gridBagConstraints);
+        Form.add(TxtHargaBeli, gridBagConstraints);
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jTextArea1.setName("jTextArea1"); // NOI18N
-        jScrollPane1.setViewportView(jTextArea1);
+        TxtNote.setColumns(20);
+        TxtNote.setRows(5);
+        TxtNote.setName("TxtNote"); // NOI18N
+        jScrollPane1.setViewportView(TxtNote);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -274,35 +286,25 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(0, 6, 6, 6);
-        jPanel1.add(jScrollPane1, gridBagConstraints);
+        Form.add(jScrollPane1, gridBagConstraints);
 
-        jButton2.setText("Tambah");
-        jButton2.setName("jButton2"); // NOI18N
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tambahRestok();
-            }
-        });
+        BtnAdd.setText("Tambah");
+        BtnAdd.setName("BtnAdd"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
-        jPanel1.add(jButton2, gridBagConstraints);
+        Form.add(BtnAdd, gridBagConstraints);
 
-        jButton3.setText("Cancel");
-        jButton3.setName("jButton3"); // NOI18N
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                resetForm();
-            }
-        });
+        BtnClear.setText("Cancel");
+        BtnClear.setName("BtnClear"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 12;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 7, 7);
-        jPanel1.add(jButton3, gridBagConstraints);
+        Form.add(BtnClear, gridBagConstraints);
 
         jLabel11.setText("Akun");
         jLabel11.setName("jLabel11"); // NOI18N
@@ -311,48 +313,49 @@ public
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(7, 7, 0, 7);
-        jPanel1.add(jLabel11, gridBagConstraints);
+        Form.add(jLabel11, gridBagConstraints);
 
-        jComboBox1.setName("jComboBox1"); // NOI18N
+        CbAkun.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cash", "BRI" }));
+        CbAkun.setName("CbAkun"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 7, 7, 7);
-        jPanel1.add(jComboBox1, gridBagConstraints);
+        Form.add(CbAkun, gridBagConstraints);
 
-        jTextField6.setName("jTextField6"); // NOI18N
+        TxtTotal.setName("TxtTotal"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 9;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 6, 6, 6);
-        jPanel1.add(jTextField6, gridBagConstraints);
+        Form.add(TxtTotal, gridBagConstraints);
 
-        jButton4.setText("Update");
-        jButton4.setName("jButton4"); // NOI18N
+        BtnUpdate.setText("Update");
+        BtnUpdate.setName("BtnUpdate"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 13;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel1.add(jButton4, gridBagConstraints);
+        Form.add(BtnUpdate, gridBagConstraints);
 
-        jButton5.setText("Delete");
-        jButton5.setName("jButton5"); // NOI18N
+        BtnDelete.setText("Delete");
+        BtnDelete.setName("BtnDelete"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 13;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel1.add(jButton5, gridBagConstraints);
+        Form.add(BtnDelete, gridBagConstraints);
 
-        jSplitPane1.setRightComponent(jPanel1);
+        jSplitPane1.setRightComponent(Form);
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        TbRestok.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -363,8 +366,8 @@ public
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jTable1.setName("jTable1"); // NOI18N
-        jScrollPane2.setViewportView(jTable1);
+        TbRestok.setName("TbRestok"); // NOI18N
+        jScrollPane2.setViewportView(TbRestok);
 
         jSplitPane1.setLeftComponent(jScrollPane2);
 
@@ -378,12 +381,6 @@ public
 
         BtnData.setText("Data Produk");
         BtnData.setName("BtnData"); // NOI18N
-        this.addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentShown(java.awt.event.ComponentEvent evt) {
-                reloadDataForm();
-            }
-        });
-
         BtnData.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnDataActionPerformed(evt);
@@ -445,22 +442,20 @@ public
     private final ProdukDAO produkDAO = new ProdukDAO();
     private final AkunDAO akunDAO = new AkunDAO();
     private final ProdukRestokDAO produkRestokDAO = new ProdukRestokDAO();
-    private final Map<String, Produk> produkComboMap = new LinkedHashMap<>();
     private final Map<String, Akun> akunComboMap = new LinkedHashMap<>();
 
     private void inisialisasiRestok() {
-        jTextField1.setEditable(false);
-        jTextField2.setEditable(false);
-        jTextField3.setEditable(false);
-        jTextField4.setEditable(false);
-        jTextField5.setEditable(false);
-        jFormattedTextField1.setEditable(false);
-        jSpinner1.setModel(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
-        jButton4.setEnabled(false);
-        jButton5.setEnabled(false);
+        TxtId.setEditable(false);
+        TxtNoTransaksi.setEditable(false);
+        TxtIdProduk.setEditable(false);
+        TxtNama.setEditable(false);
+        TxtHargaBeli.setEditable(false);
+        TxtTgl.setEditable(false);
+        TxtQty.setModel(new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1));
+        BtnUpdate.setEnabled(false);
+        BtnDelete.setEnabled(false);
 
-        jComboBox2.addActionListener(e -> pilihProduk());
-        jTextField6.addFocusListener(new java.awt.event.FocusAdapter() {
+        TxtTotal.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 formatTotalHarga();
             }
@@ -469,90 +464,84 @@ public
     }
 
     private void reloadDataForm() {
-        loadComboProduk();
         loadComboAkun();
         resetForm();
     }
 
-    private void loadComboProduk() {
-        produkComboMap.clear();
-        jComboBox2.removeAllItems();
-        jComboBox2.addItem("-- Pilih Produk --");
-        List<Produk> daftarProduk = produkDAO.getAllProduk("");
-        for (Produk produk : daftarProduk) {
-            String label = produk.getNamaProduk() + " (" + produk.getKodeProduk() + ") - ID " + produk.getIdProduk();
-            produkComboMap.put(label, produk);
-            jComboBox2.addItem(label);
-        }
-    }
-
     private void loadComboAkun() {
         akunComboMap.clear();
-        jComboBox1.removeAllItems();
-        jComboBox1.addItem("-- Pilih Akun --");
+        CbAkun.removeAllItems();
+        CbAkun.addItem("-- Pilih Akun --");
         for (Akun akun : akunDAO.getAllAkun()) {
             String label = akun.getNamaAkun() + " - ID " + akun.getIdAkun();
             akunComboMap.put(label, akun);
-            jComboBox1.addItem(label);
+            CbAkun.addItem(label);
         }
     }
 
     private void pilihProduk() {
         Produk produk = getProdukTerpilih();
         if (produk == null) {
-            jTextField3.setText("");
-            jTextField4.setText("");
-            jTextField5.setText("");
+            TxtIdProduk.setText("");
+            TxtNama.setText("");
+            TxtHargaBeli.setText("");
             return;
         }
-        jTextField3.setText(String.valueOf(produk.getIdProduk()));
-        jTextField4.setText(produk.getNamaProduk());
-        jTextField5.setText(RupiahFormat.format(produk.getHargaBeli()));
+        TxtIdProduk.setText(String.valueOf(produk.getIdProduk()));
+        TxtNama.setText(produk.getNamaProduk());
+        TxtHargaBeli.setText(RupiahFormat.format(produk.getHargaBeli()));
     }
 
     private Produk getProdukTerpilih() {
-        Object item = jComboBox2.getSelectedItem();
-        return item == null ? null : produkComboMap.get(item.toString());
+        String idProdukText = TxtIdProduk.getText().trim();
+        if (idProdukText.isEmpty()) {
+            return null;
+        }
+        try (Connection conn = Koneksi.getConnection()) {
+            return produkDAO.getProdukById(conn, Integer.parseInt(idProdukText));
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     private Akun getAkunTerpilih() {
-        Object item = jComboBox1.getSelectedItem();
+        Object item = CbAkun.getSelectedItem();
         return item == null ? null : akunComboMap.get(item.toString());
     }
 
     private void resetForm() {
-        jTextField1.setText("");
-        jTextField2.setText(NomorTransaksi.generate(KodeTransaksi.RESTOK_PRODUK, "tb_produk_restok"));
-        jFormattedTextField1.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        if (jComboBox2.getItemCount() > 0) {
-            jComboBox2.setSelectedIndex(0);
+        TxtId.setText("");
+        TxtNoTransaksi.setText(NomorTransaksi.generate(KodeTransaksi.RESTOK_PRODUK, "tb_produk_restok"));
+        DatePickerHelper.resetToToday(TxtTgl, DpTgl);
+        TxtIdProduk.setText("");
+        TxtNama.setText("");
+        TxtHargaBeli.setText("");
+        if (CbAkun.getItemCount() > 0) {
+            CbAkun.setSelectedIndex(0);
         }
-        if (jComboBox1.getItemCount() > 0) {
-            jComboBox1.setSelectedIndex(0);
-        }
-        jSpinner1.setValue(1);
-        jTextField6.setText("");
-        jTextArea1.setText("");
+        TxtQty.setValue(1);
+        TxtTotal.setText("");
+        TxtNote.setText("");
         isiTabelKosong();
     }
 
     private void isiTabelKosong() {
         DefaultTableModel model = new DefaultTableModel(new Object[]{"No Transaksi", "Tanggal", "Produk", "Qty", "Total"}, 0);
-        jTable1.setModel(model);
+        TbRestok.setModel(model);
     }
 
     private void formatTotalHarga() {
-        double total = RupiahFormat.parse(jTextField6.getText());
+        double total = RupiahFormat.parse(TxtTotal.getText());
         if (total > 0) {
-            jTextField6.setText(RupiahFormat.format(total));
+            TxtTotal.setText(RupiahFormat.format(total));
         }
     }
 
     private void tambahRestok() {
         Produk produkPilihan = getProdukTerpilih();
         Akun akunPilihan = getAkunTerpilih();
-        int qty = ((Number) jSpinner1.getValue()).intValue();
-        double total = RupiahFormat.parse(jTextField6.getText());
+        int qty = ((Number) TxtQty.getValue()).intValue();
+        double total = RupiahFormat.parse(TxtTotal.getText());
 
         if (produkPilihan == null) {
             JOptionPane.showMessageDialog(this, "Produk wajib dipilih.");
@@ -598,7 +587,7 @@ public
                 double hargaBeliRataRata = ((stokLama * hargaBeliLama) + (qty * hargaBeliBaru)) / (stokLama + qty);
 
                 ProdukRestok restok = new ProdukRestok();
-                restok.setNomorTransaksi(jTextField2.getText());
+                restok.setNomorTransaksi(TxtNoTransaksi.getText());
                 restok.setTanggal(Date.valueOf(LocalDate.now()));
                 restok.setUserId(Session.idUser);
                 restok.setProdukId(produkDb.getIdProduk());
@@ -606,7 +595,7 @@ public
                 restok.setQty(qty);
                 restok.setHargaBeli(hargaBeliBaru);
                 restok.setTotal(total);
-                restok.setCatatan(jTextArea1.getText());
+                restok.setCatatan(TxtNote.getText());
 
                 if (!produkRestokDAO.tambahRestok(conn, restok)) {
                     throw new Exception("Gagal menyimpan transaksi restok.");
@@ -636,16 +625,25 @@ public
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BtnAdd;
     private javax.swing.JButton BtnBack;
+    private javax.swing.JButton BtnClear;
     private javax.swing.JButton BtnData;
+    private javax.swing.JButton BtnDelete;
     private javax.swing.JButton BtnHist;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JFormattedTextField jFormattedTextField1;
+    private javax.swing.JButton BtnUpdate;
+    private javax.swing.JComboBox<String> CbAkun;
+    private javax.swing.JPanel Form;
+    private javax.swing.JTable TbRestok;
+    private javax.swing.JTextField TxtHargaBeli;
+    private javax.swing.JTextField TxtId;
+    private javax.swing.JTextField TxtIdProduk;
+    private javax.swing.JTextField TxtNama;
+    private javax.swing.JTextField TxtNoTransaksi;
+    private javax.swing.JTextArea TxtNote;
+    private javax.swing.JSpinner TxtQty;
+    private javax.swing.JFormattedTextField TxtTgl;
+    private javax.swing.JTextField TxtTotal;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -656,18 +654,8 @@ public
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSpinner jSpinner1;
     private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
     // End of variables declaration//GEN-END:variables
 }

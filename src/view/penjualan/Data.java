@@ -45,23 +45,23 @@ public
             }
         };
 
-        jTable1.setModel(produkTableModel);
-        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        TbData.setModel(produkTableModel);
+        TbData.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         sembunyikanKolomId();
 
-        jTextField1.setEditable(false);
+        TxtId.setEditable(false);
 
-        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+        TbData.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 isiFormDariTabel();
             }
         });
 
-        jButton4.addActionListener(evt -> tambahProduk());
-        jButton5.addActionListener(evt -> clearForm());
-        jButton6.addActionListener(evt -> editProduk());
-        jButton7.addActionListener(evt -> hapusProduk());
+        BtnAdd.addActionListener(evt -> tambahProduk());
+        BtnClear.addActionListener(evt -> clearForm());
+        BtnUpdate.addActionListener(evt -> editProduk());
+        BtnDelete.addActionListener(evt -> hapusProduk());
 
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -98,27 +98,27 @@ public
     }
 
     private void sembunyikanKolomId() {
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setMinWidth(0);
-            jTable1.getColumnModel().getColumn(0).setMaxWidth(0);
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(0);
+        if (TbData.getColumnModel().getColumnCount() > 0) {
+            TbData.getColumnModel().getColumn(0).setMinWidth(0);
+            TbData.getColumnModel().getColumn(0).setMaxWidth(0);
+            TbData.getColumnModel().getColumn(0).setPreferredWidth(0);
         }
     }
 
     private void isiFormDariTabel() {
-        int selectedRow = jTable1.getSelectedRow();
+        int selectedRow = TbData.getSelectedRow();
         if (selectedRow < 0) {
             return;
         }
 
-        int modelRow = jTable1.convertRowIndexToModel(selectedRow);
-        jTextField1.setText(String.valueOf(produkTableModel.getValueAt(modelRow, 0)));
-        jTextField2.setText(String.valueOf(produkTableModel.getValueAt(modelRow, 1)));
-        jTextField3.setText(String.valueOf(produkTableModel.getValueAt(modelRow, 2)));
-        jTextField4.setText(String.valueOf(RupiahFormat.parse(String.valueOf(produkTableModel.getValueAt(modelRow, 3)))));
-        jTextField5.setText(String.valueOf(RupiahFormat.parse(String.valueOf(produkTableModel.getValueAt(modelRow, 4)))));
-        jTextField6.setText(String.valueOf(produkTableModel.getValueAt(modelRow, 5)));
-        jTextField7.setText(String.valueOf(produkTableModel.getValueAt(modelRow, 6)));
+        int modelRow = TbData.convertRowIndexToModel(selectedRow);
+        TxtId.setText(String.valueOf(produkTableModel.getValueAt(modelRow, 0)));
+        TxtKode.setText(String.valueOf(produkTableModel.getValueAt(modelRow, 1)));
+        TxtNama.setText(String.valueOf(produkTableModel.getValueAt(modelRow, 2)));
+        TxtHargaBeli.setText(String.valueOf(RupiahFormat.parse(String.valueOf(produkTableModel.getValueAt(modelRow, 3)))));
+        TxtHargaJual.setText(String.valueOf(RupiahFormat.parse(String.valueOf(produkTableModel.getValueAt(modelRow, 4)))));
+        TxtStok.setText(String.valueOf(produkTableModel.getValueAt(modelRow, 5)));
+        TxtStokMinimum.setText(String.valueOf(produkTableModel.getValueAt(modelRow, 6)));
     }
 
     private void tambahProduk() {
@@ -188,18 +188,18 @@ public
             }
         }
 
-        String kodeProduk = jTextField2.getText().trim();
-        String namaProduk = jTextField3.getText().trim();
+        String kodeProduk = TxtKode.getText().trim();
+        String namaProduk = TxtNama.getText().trim();
 
         if (namaProduk.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Nama produk wajib diisi.");
             return null;
         }
 
-        double hargaBeli = parseAngka(jTextField4.getText());
-        double hargaJual = parseAngka(jTextField5.getText());
-        int stok = parseInteger(jTextField6.getText());
-        int stokMinimum = parseInteger(jTextField7.getText());
+        double hargaBeli = parseAngka(TxtHargaBeli.getText());
+        double hargaJual = parseAngka(TxtHargaJual.getText());
+        int stok = parseInteger(TxtStok.getText());
+        int stokMinimum = parseInteger(TxtStokMinimum.getText());
 
         if (hargaBeli < 0) {
             JOptionPane.showMessageDialog(this, "Harga beli tidak boleh kurang dari 0.");
@@ -226,13 +226,13 @@ public
 
     private int getIdProdukTerpilih() {
         try {
-            if (!jTextField1.getText().trim().isEmpty()) {
-                return Integer.parseInt(jTextField1.getText().trim());
+            if (!TxtId.getText().trim().isEmpty()) {
+                return Integer.parseInt(TxtId.getText().trim());
             }
 
-            int selectedRow = jTable1.getSelectedRow();
+            int selectedRow = TbData.getSelectedRow();
             if (selectedRow >= 0) {
-                int modelRow = jTable1.convertRowIndexToModel(selectedRow);
+                int modelRow = TbData.convertRowIndexToModel(selectedRow);
                 return Integer.parseInt(String.valueOf(produkTableModel.getValueAt(modelRow, 0)));
             }
         } catch (NumberFormatException e) {
@@ -266,14 +266,14 @@ public
     }
 
     private void clearForm() {
-        jTextField1.setText("");
-        jTextField2.setText("");
-        jTextField3.setText("");
-        jTextField4.setText("");
-        jTextField5.setText("");
-        jTextField6.setText("");
-        jTextField7.setText("");
-        jTable1.clearSelection();
+        TxtId.setText("");
+        TxtKode.setText("");
+        TxtNama.setText("");
+        TxtHargaBeli.setText("");
+        TxtHargaJual.setText("");
+        TxtStok.setText("");
+        TxtStokMinimum.setText("");
+        TbData.clearSelection();
     }
 
     /**
@@ -295,22 +295,22 @@ public
         jLabel6 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
-        jTextField7 = new javax.swing.JTextField();
+        TxtId = new javax.swing.JTextField();
+        TxtKode = new javax.swing.JTextField();
+        TxtNama = new javax.swing.JTextField();
+        TxtHargaBeli = new javax.swing.JTextField();
+        TxtHargaJual = new javax.swing.JTextField();
+        TxtStok = new javax.swing.JTextField();
+        TxtStokMinimum = new javax.swing.JTextField();
         BtnBack = new javax.swing.JButton();
         BtnHist = new javax.swing.JButton();
         BtnRestok = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        BtnAdd = new javax.swing.JButton();
+        BtnClear = new javax.swing.JButton();
+        BtnUpdate = new javax.swing.JButton();
+        BtnDelete = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        TbData = new javax.swing.JTable();
 
         jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         jSplitPane1.setResizeWeight(0.1);
@@ -396,68 +396,71 @@ public
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 6);
         jPanel1.add(jLabel1, gridBagConstraints);
 
-        jTextField1.setName("jTextField1"); // NOI18N
+        TxtId.setEditable(false);
+        TxtId.setEnabled(false);
+        TxtId.setFocusable(false);
+        TxtId.setName("TxtId"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.3;
         gridBagConstraints.insets = new java.awt.Insets(0, 6, 6, 6);
-        jPanel1.add(jTextField1, gridBagConstraints);
+        jPanel1.add(TxtId, gridBagConstraints);
 
-        jTextField2.setName("jTextField2"); // NOI18N
+        TxtKode.setName("TxtKode"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.3;
         gridBagConstraints.insets = new java.awt.Insets(0, 6, 6, 6);
-        jPanel1.add(jTextField2, gridBagConstraints);
+        jPanel1.add(TxtKode, gridBagConstraints);
 
-        jTextField3.setName("jTextField3"); // NOI18N
+        TxtNama.setName("TxtNama"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 6, 6, 6);
-        jPanel1.add(jTextField3, gridBagConstraints);
+        jPanel1.add(TxtNama, gridBagConstraints);
 
-        jTextField4.setName("jTextField4"); // NOI18N
+        TxtHargaBeli.setName("TxtHargaBeli"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 6, 6, 6);
-        jPanel1.add(jTextField4, gridBagConstraints);
+        jPanel1.add(TxtHargaBeli, gridBagConstraints);
 
-        jTextField5.setName("jTextField5"); // NOI18N
+        TxtHargaJual.setName("TxtHargaJual"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 6, 6, 6);
-        jPanel1.add(jTextField5, gridBagConstraints);
+        jPanel1.add(TxtHargaJual, gridBagConstraints);
 
-        jTextField6.setName("jTextField6"); // NOI18N
+        TxtStok.setName("TxtStok"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 6, 6, 6);
-        jPanel1.add(jTextField6, gridBagConstraints);
+        jPanel1.add(TxtStok, gridBagConstraints);
 
-        jTextField7.setName("jTextField7"); // NOI18N
+        TxtStokMinimum.setName("TxtStokMinimum"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 7;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 6, 6, 6);
-        jPanel1.add(jTextField7, gridBagConstraints);
+        jPanel1.add(TxtStokMinimum, gridBagConstraints);
 
         BtnBack.setText("Kembali");
         BtnBack.setName("BtnBack"); // NOI18N
@@ -503,8 +506,8 @@ public
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
         jPanel1.add(BtnRestok, gridBagConstraints);
 
-        jButton4.setText("Tambah");
-        jButton4.setName("jButton4"); // NOI18N
+        BtnAdd.setText("Tambah");
+        BtnAdd.setName("BtnAdd"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
@@ -512,20 +515,20 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel1.add(jButton4, gridBagConstraints);
+        jPanel1.add(BtnAdd, gridBagConstraints);
 
-        jButton5.setText("Cancel");
-        jButton5.setName("jButton5"); // NOI18N
+        BtnClear.setText("Cancel");
+        BtnClear.setName("BtnClear"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel1.add(jButton5, gridBagConstraints);
+        jPanel1.add(BtnClear, gridBagConstraints);
 
-        jButton6.setText("Update");
-        jButton6.setName("jButton6"); // NOI18N
+        BtnUpdate.setText("Update");
+        BtnUpdate.setName("BtnUpdate"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 9;
@@ -533,23 +536,23 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel1.add(jButton6, gridBagConstraints);
+        jPanel1.add(BtnUpdate, gridBagConstraints);
 
-        jButton7.setText("Delete");
-        jButton7.setName("jButton7"); // NOI18N
+        BtnDelete.setText("Delete");
+        BtnDelete.setName("BtnDelete"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel1.add(jButton7, gridBagConstraints);
+        jPanel1.add(BtnDelete, gridBagConstraints);
 
         jSplitPane1.setTopComponent(jPanel1);
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        TbData.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -560,8 +563,8 @@ public
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jTable1.setName("jTable1"); // NOI18N
-        jScrollPane1.setViewportView(jTable1);
+        TbData.setName("TbData"); // NOI18N
+        jScrollPane1.setViewportView(TbData);
 
         jSplitPane1.setRightComponent(jScrollPane1);
 
@@ -606,13 +609,21 @@ public
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BtnAdd;
     private javax.swing.JButton BtnBack;
+    private javax.swing.JButton BtnClear;
+    private javax.swing.JButton BtnDelete;
     private javax.swing.JButton BtnHist;
     private javax.swing.JButton BtnRestok;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
+    private javax.swing.JButton BtnUpdate;
+    private javax.swing.JTable TbData;
+    private javax.swing.JTextField TxtHargaBeli;
+    private javax.swing.JTextField TxtHargaJual;
+    private javax.swing.JTextField TxtId;
+    private javax.swing.JTextField TxtKode;
+    private javax.swing.JTextField TxtNama;
+    private javax.swing.JTextField TxtStok;
+    private javax.swing.JTextField TxtStokMinimum;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -623,13 +634,5 @@ public
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
     // End of variables declaration//GEN-END:variables
 }
