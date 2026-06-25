@@ -27,7 +27,7 @@ public
     public
             Kategori() {
         initComponents();
-        jTextField1.setEditable(false);
+        TxtID.setEditable(false);
         initActions();
         loadKategori();
     }
@@ -46,12 +46,12 @@ public
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        TxtID = new javax.swing.JTextField();
+        TxtNamaKategori = new javax.swing.JTextField();
+        BtnAdd = new javax.swing.JButton();
+        BtnDelete = new javax.swing.JButton();
+        BtnClear = new javax.swing.JButton();
+        BtnUpdate = new javax.swing.JButton();
         BtnBack = new javax.swing.JButton();
         BtnHist = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -74,7 +74,7 @@ public
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
         jPanel1.add(jLabel1, gridBagConstraints);
 
-        jLabel2.setText("Nama");
+        jLabel2.setText("Nama Kategori");
         jLabel2.setName("jLabel2"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -85,25 +85,25 @@ public
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
         jPanel1.add(jLabel2, gridBagConstraints);
 
-        jTextField1.setName("jTextField1"); // NOI18N
+        TxtID.setName("TxtID"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel1.add(jTextField1, gridBagConstraints);
+        jPanel1.add(TxtID, gridBagConstraints);
 
-        jTextField2.setName("jTextField2"); // NOI18N
+        TxtNamaKategori.setName("TxtNamaKategori"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel1.add(jTextField2, gridBagConstraints);
+        jPanel1.add(TxtNamaKategori, gridBagConstraints);
 
-        jButton1.setText("Tambah");
-        jButton1.setName("jButton1"); // NOI18N
+        BtnAdd.setText("Tambah");
+        BtnAdd.setName("BtnAdd"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -111,31 +111,31 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.3;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel1.add(jButton1, gridBagConstraints);
+        jPanel1.add(BtnAdd, gridBagConstraints);
 
-        jButton2.setText("Delete");
-        jButton2.setName("jButton2"); // NOI18N
+        BtnDelete.setText("Delete");
+        BtnDelete.setName("BtnDelete"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel1.add(jButton2, gridBagConstraints);
+        jPanel1.add(BtnDelete, gridBagConstraints);
 
-        jButton3.setText("Cancel");
-        jButton3.setName("jButton3"); // NOI18N
+        BtnClear.setText("Cancel");
+        BtnClear.setName("BtnClear"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel1.add(jButton3, gridBagConstraints);
+        jPanel1.add(BtnClear, gridBagConstraints);
 
-        jButton4.setText("Update");
-        jButton4.setName("jButton4"); // NOI18N
+        BtnUpdate.setText("Update");
+        BtnUpdate.setName("BtnUpdate"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel1.add(jButton4, gridBagConstraints);
+        jPanel1.add(BtnUpdate, gridBagConstraints);
 
         BtnBack.setText("Kembali");
         BtnBack.setName("BtnBack"); // NOI18N
@@ -204,15 +204,15 @@ public
     }// </editor-fold>//GEN-END:initComponents
 
     private void initActions() {
-        jButton1.addActionListener(e -> tambahKategori());
-        jButton4.addActionListener(e -> updateKategori());
-        jButton2.addActionListener(e -> deleteKategori());
-        jButton3.addActionListener(e -> clearForm());
+        BtnAdd.addActionListener(e -> tambahKategori());
+        BtnUpdate.addActionListener(e -> updateKategori());
+        BtnDelete.addActionListener(e -> deleteKategori());
+        BtnClear.addActionListener(e -> clearForm());
         jTable1.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && jTable1.getSelectedRow() >= 0) {
                 int row = jTable1.getSelectedRow();
-                jTextField1.setText(jTable1.getValueAt(row, 0).toString());
-                jTextField2.setText(jTable1.getValueAt(row, 1).toString());
+                TxtID.setText(jTable1.getValueAt(row, 0).toString());
+                TxtNamaKategori.setText(jTable1.getValueAt(row, 1).toString());
             }
         });
     }
@@ -226,7 +226,7 @@ public
     }
 
     private void tambahKategori() {
-        String nama = jTextField2.getText().trim();
+        String nama = TxtNamaKategori.getText().trim();
         if (nama.isEmpty()) { JOptionPane.showMessageDialog(this, "Nama kategori wajib diisi."); return; }
         if (kategoriDAO.isDuplicate(nama)) { JOptionPane.showMessageDialog(this, "Nama kategori sudah ada."); return; }
         kategoriDAO.insert(new KategoriTopup(0, nama));
@@ -235,21 +235,21 @@ public
     }
 
     private void updateKategori() {
-        if (jTextField1.getText().trim().isEmpty()) { JOptionPane.showMessageDialog(this, "Pilih kategori yang akan diupdate."); return; }
-        String nama = jTextField2.getText().trim();
+        if (TxtID.getText().trim().isEmpty()) { JOptionPane.showMessageDialog(this, "Pilih kategori yang akan diupdate."); return; }
+        String nama = TxtNamaKategori.getText().trim();
         if (nama.isEmpty()) { JOptionPane.showMessageDialog(this, "Nama kategori wajib diisi."); return; }
-        KategoriTopup existing = kategoriDAO.findById(Integer.parseInt(jTextField1.getText()));
+        KategoriTopup existing = kategoriDAO.findById(Integer.parseInt(TxtID.getText()));
         if (existing != null && !existing.getNamaKategori().equalsIgnoreCase(nama) && kategoriDAO.isDuplicate(nama)) { JOptionPane.showMessageDialog(this, "Nama kategori sudah ada."); return; }
-        kategoriDAO.update(new KategoriTopup(Integer.parseInt(jTextField1.getText()), nama));
+        kategoriDAO.update(new KategoriTopup(Integer.parseInt(TxtID.getText()), nama));
         JOptionPane.showMessageDialog(this, "Kategori berhasil diupdate.");
         clearForm(); loadKategori();
     }
 
     private void deleteKategori() {
-        if (jTextField1.getText().trim().isEmpty()) { JOptionPane.showMessageDialog(this, "Pilih kategori yang akan dihapus."); return; }
+        if (TxtID.getText().trim().isEmpty()) { JOptionPane.showMessageDialog(this, "Pilih kategori yang akan dihapus."); return; }
         if (JOptionPane.showConfirmDialog(this, "Hapus kategori ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) return;
         try {
-            kategoriDAO.delete(Integer.parseInt(jTextField1.getText()));
+            kategoriDAO.delete(Integer.parseInt(TxtID.getText()));
             JOptionPane.showMessageDialog(this, "Kategori berhasil dihapus.");
             clearForm(); loadKategori();
         } catch (RuntimeException e) {
@@ -259,7 +259,7 @@ public
         }
     }
 
-    private void clearForm() { jTextField1.setText(""); jTextField2.setText(""); jTable1.clearSelection(); }
+    private void clearForm() { TxtID.setText(""); TxtNamaKategori.setText(""); jTable1.clearSelection(); }
 
     private void BtnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBackActionPerformed
         CardLayout cl =
@@ -277,19 +277,19 @@ public
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BtnAdd;
     private javax.swing.JButton BtnBack;
+    private javax.swing.JButton BtnClear;
+    private javax.swing.JButton BtnDelete;
     private javax.swing.JButton BtnHist;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton BtnUpdate;
+    private javax.swing.JTextField TxtID;
+    private javax.swing.JTextField TxtNamaKategori;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }

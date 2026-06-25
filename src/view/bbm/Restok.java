@@ -48,7 +48,7 @@ public
         jPanel2 = new javax.swing.JPanel();
         BtnBack = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        TbRestok = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
@@ -94,7 +94,7 @@ public
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        TbRestok.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -105,8 +105,8 @@ public
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jTable1.setName("jTable1"); // NOI18N
-        jScrollPane2.setViewportView(jTable1);
+        TbRestok.setName("TbRestok"); // NOI18N
+        jScrollPane2.setViewportView(TbRestok);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -371,7 +371,7 @@ public
         setupComboAkun();
         jButton1.addActionListener(e -> simpanRestok());
         jButton2.addActionListener(e -> clearForm());
-        jTable1.addMouseListener(new java.awt.event.MouseAdapter() { public void mouseClicked(java.awt.event.MouseEvent evt) { pilihBBM(); } });
+        TbRestok.addMouseListener(new java.awt.event.MouseAdapter() { public void mouseClicked(java.awt.event.MouseEvent evt) { pilihBBM(); } });
         tampilBBM();
     }
 
@@ -397,13 +397,13 @@ public
             public boolean isCellEditable(int row, int column) { return false; }
         };
         for (BBM b : bbmDAO.getAllBBM(null)) model.addRow(new Object[]{b.getIdBbm(), b.getKodeBbm(), b.getNamaBbm(), b.getHargaBeli(), b.getHargaJual(), b.getStok()});
-        jTable1.setModel(model);
+        TbRestok.setModel(model);
     }
 
     private void pilihBBM() {
-        int row = jTable1.getSelectedRow();
+        int row = TbRestok.getSelectedRow();
         if (row < 0) return;
-        selectedBbmId = Integer.parseInt(jTable1.getValueAt(row, 0).toString());
+        selectedBbmId = Integer.parseInt(TbRestok.getValueAt(row, 0).toString());
         jTextField4.setText(String.valueOf(selectedBbmId));
     }
 
@@ -442,7 +442,7 @@ public
     }
 
     private void clearForm() {
-        selectedBbmId = 0; jTextField4.setText(""); jTextField3.setText(""); jTextField5.setText(""); jTextField6.setText(""); jTextArea1.setText(""); jFormattedTextField1.setText(LocalDate.now().toString()); jTextField2.setText("Auto"); if (comboAkun.getItemCount() > 0) comboAkun.setSelectedIndex(0); jTable1.clearSelection();
+        selectedBbmId = 0; jTextField4.setText(""); jTextField3.setText(""); jTextField5.setText(""); jTextField6.setText(""); jTextArea1.setText(""); jFormattedTextField1.setText(LocalDate.now().toString()); jTextField2.setText("Auto"); if (comboAkun.getItemCount() > 0) comboAkun.setSelectedIndex(0); TbRestok.clearSelection();
     }
 
 
@@ -450,6 +450,7 @@ public
     private javax.swing.JButton BtnBack;
     private javax.swing.JButton BtnData;
     private javax.swing.JButton BtnHist;
+    private javax.swing.JTable TbRestok;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JFormattedTextField jFormattedTextField1;
@@ -465,7 +466,6 @@ public
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
