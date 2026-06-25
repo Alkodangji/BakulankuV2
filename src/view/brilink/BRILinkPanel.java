@@ -4,14 +4,13 @@
  */
 package view.brilink;
 
-import com.formdev.flatlaf.FlatClientProperties;
 import dao.BrilinkDAO;
 import dao.KategoriTopupDAO;
 import helper.AppIcon;
 import helper.RupiahFormat;
+import helper.UiThemeUtil;
 import java.awt.CardLayout;
 
-import java.awt.Color;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -23,7 +22,6 @@ import model.Brilink;
 import model.KategoriTopup;
 import session.Session;
 import raven.datetime.DatePicker;
-import raven.datetime.TimePicker;
 import view.main.MainFrame;
 /**
  *
@@ -32,8 +30,6 @@ import view.main.MainFrame;
 public
         class BRILinkPanel extends javax.swing.JPanel {
 
-     private Color PRIMARY = new Color(9,87,195);
-     
      private DatePicker datePicker;
      private final BrilinkDAO brilinkDAO = new BrilinkDAO();
      private final KategoriTopupDAO kategoriDAO = new KategoriTopupDAO();
@@ -57,16 +53,8 @@ public
         updateFormByJenis();
 //        date time setup
         datePicker = new DatePicker();
-        datePicker.setEditor(TxtTgl);
-        datePicker.setColor(Color.BLACK);
-        datePicker.putClientProperty(
-            FlatClientProperties.STYLE,
-            "background:@briColor;" 
-        );
-        datePicker.setSelectionArc(20);
-        datePicker.setEditorValidation(true);
-        datePicker.setValidationOnNull(true);
-        datePicker.now();
+        UiThemeUtil.styleDatePicker(datePicker, TxtTgl, "@briColor");
+        UiThemeUtil.applyTextFieldClearButton(this);
         loadKategoriCombo();
         loadSaldo();
         loadRiwayatRingkas();
@@ -80,7 +68,7 @@ public
               "arc:20" );
    
         BtnAtur.setIcon(
-            AppIcon.CATEGORY.create(Color.decode("#0957C3"))
+            AppIcon.CATEGORY.create(UiThemeUtil.BRILINK)
             );
         BtnAtur.putClientProperty(
                 "FlatLaf.style",
@@ -92,7 +80,7 @@ public
     
         CbJenis.putClientProperty(
             "FlatLaf.style",
-            "borderColor:#0957C3;"
+            "borderColor:@briColor;"
           + "focusedBorderColor:@briColor"
         );
         
@@ -983,30 +971,30 @@ private void hitungTransaksi() {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnAturMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BtnAturMouseEntered
-        BtnAtur.setForeground(Color.decode("#000000"));
+        BtnAtur.setForeground(UiThemeUtil.PENJUALAN);
         BtnAtur.setIcon(
-            AppIcon.CATEGORY.create(Color.decode("#000000"))
+            AppIcon.CATEGORY.create(UiThemeUtil.PENJUALAN)
             );
         BtnAtur.putClientProperty(
                 "FlatLaf.style",
                    "arc:12;"
                  + "borderWidth:2;"
-                 + "borderColor:#000000;"
+                 + "borderColor:@accentColor;"
                  + "background:#ffffff"
             );
         // TODO add your handling code here:
     }//GEN-LAST:event_BtnAturMouseEntered
 
     private void BtnAturMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BtnAturMouseExited
-        BtnAtur.setForeground(Color.decode("#0957C3"));
+        BtnAtur.setForeground(UiThemeUtil.BRILINK);
         BtnAtur.setIcon(
-            AppIcon.CATEGORY.create(Color.decode("#0957C3"))
+            AppIcon.CATEGORY.create(UiThemeUtil.BRILINK)
             );
         BtnAtur.putClientProperty(
                 "FlatLaf.style",
                    "arc:12;"
                  + "borderWidth:2;"
-                 + "borderColor:#0957C3;"
+                 + "borderColor:@briColor;"
                  + "background:#ffffff"
             );
         // TODO add your handling code here:

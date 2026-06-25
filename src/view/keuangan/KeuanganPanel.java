@@ -6,19 +6,20 @@ package view.keuangan;
 
 import dao.AkunDAO;
 import dao.KeuanganDAO;
+import helper.UiThemeUtil;
 import java.awt.CardLayout;
 import java.awt.Window;
 import java.sql.Connection;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import javax.swing.DefaultComboBoxModel;
 import model.KategoriKeuangan;
 import model.KeuanganTransaksi;
 import javax.swing.JOptionPane;
 import session.Session;
 import view.main.MainFrame;
+import raven.datetime.DatePicker;
 
 /**
  *
@@ -32,15 +33,25 @@ public
      */
     private final AkunDAO akunDAO = new AkunDAO();
     private final KeuanganDAO keuanganDAO = new KeuanganDAO();
+    private DatePicker datePicker;
 
     public KeuanganPanel() {
             initComponents();
+            initDatePicker();
+            UiThemeUtil.applyTextFieldClearButton(this);
+            UiThemeUtil.styleField(jTextField1, "@cashColor");
+            UiThemeUtil.styleButton(btn, UiThemeUtil.KEUANGAN);
+            UiThemeUtil.styleButton(btn1, UiThemeUtil.KEUANGAN);
             initPemasukanMinimal();
             refreshRingkasanSaldo();
     }
 
+    private void initDatePicker() {
+        datePicker = new DatePicker();
+        UiThemeUtil.styleDatePicker(datePicker, TxtTgl, "@cashColor");
+    }
+
     private void initPemasukanMinimal() {
-        TxtTgl.setText(LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
         jComboBox4.setSelectedItem("Pemasukan");
         jComboBox2.setModel(new DefaultComboBoxModel<>(new String[] { "Cash", "BRI" }));
         jComboBox3.setModel(new DefaultComboBoxModel<>(new String[] { "Cash", "BRI" }));
@@ -116,11 +127,15 @@ public
     }
 
     private LocalDate getTanggalInput() {
-        String teksTanggal = TxtTgl.getText().trim();
-        if (teksTanggal.isEmpty()) {
+        if (datePicker == null || !datePicker.isDateSelected() || datePicker.getSelectedDate() == null) {
             throw new IllegalArgumentException("Tanggal transaksi wajib diisi.");
         }
-        return LocalDate.parse(teksTanggal, DateTimeFormatter.ISO_LOCAL_DATE);
+        String editorText = TxtTgl.getText() == null ? "" : TxtTgl.getText().trim();
+        String selectedText = datePicker.getSelectedDateAsString();
+        if (editorText.isEmpty() || (selectedText != null && !editorText.equals(selectedText))) {
+            throw new IllegalArgumentException("Tanggal transaksi tidak valid.");
+        }
+        return datePicker.getSelectedDate();
     }
 
     private double parseNominal(String teksNominal) {
@@ -157,7 +172,7 @@ public
     }
 
     private void bersihkanForm() {
-        TxtTgl.setText(LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
+        datePicker.now();
         jTextField1.setText("");
         jTextArea1.setText("");
         jComboBox4.setSelectedItem("Pemasukan");

@@ -4,9 +4,8 @@
  */
 package view.bbm;
 
-import com.formdev.flatlaf.FlatClientProperties;
 import java.awt.CardLayout;
-import java.awt.Color;
+import helper.UiThemeUtil;
 import raven.datetime.DatePicker;
 import view.main.MainFrame;
 
@@ -23,14 +22,10 @@ public
         
 //           date time setup
         datePicker = new DatePicker();
-        datePicker.setEditor(TxtTgl);
-        datePicker.setColor(Color.BLACK);
-        datePicker.putClientProperty(
-            FlatClientProperties.STYLE,
-            "background:@bbmColor;" 
-        );
-        datePicker.setSelectionArc(20);
-        datePicker.now();
+        UiThemeUtil.styleDatePicker(datePicker, TxtTgl, "@bbmColor");
+        UiThemeUtil.applyTextFieldClearButton(this);
+        UiThemeUtil.styleButton(BtnData, UiThemeUtil.BBM);
+        UiThemeUtil.styleButton(BtnRestok, UiThemeUtil.BBM);
     }
 
     /**

@@ -4,7 +4,6 @@
  */
 package view.penjualan;
 
-import com.formdev.flatlaf.FlatClientProperties;
 import static com.formdev.flatlaf.extras.components.FlatTabbedPane.TabType.card;
 import config.Koneksi;
 import dao.AkunDAO;
@@ -15,6 +14,7 @@ import helper.KodeTransaksi;
 import helper.NomorTransaksi;
 import helper.RupiahFormat;
 import helper.WrapLayout;
+import helper.UiThemeUtil;
 import java.awt.CardLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ComponentAdapter;
@@ -26,6 +26,7 @@ import view.main.MainFrame;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import raven.datetime.DatePicker;
 import javax.swing.BoxLayout;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -41,12 +42,17 @@ import view.component.CartItem;
 public
         class PenjualanPanel extends javax.swing.JPanel {
 
+    private DatePicker datePicker;
+
     /**
      * Creates new form PenjualanPanel
      */
     public
             PenjualanPanel() {
         initComponents();
+        initDatePicker();
+        UiThemeUtil.applyTextFieldClearButton(this);
+        UiThemeUtil.styleField(TxtCari, "@accentColor");
         
         resetForm();
         
@@ -85,6 +91,11 @@ public
     loadProduk("");
     }
     
+    private void initDatePicker() {
+        datePicker = new DatePicker();
+        UiThemeUtil.styleDatePicker(datePicker, TxtTgl, "@accentColor");
+    }
+
     private void resetForm() {
 
     TxtNoTrx.setText(
@@ -316,6 +327,15 @@ public
     
     private boolean validasiTransaksi() {
 
+    if (!isTanggalValid()) {
+        JOptionPane.showMessageDialog(
+                this,
+                "Tanggal transaksi wajib diisi dan harus valid"
+        );
+
+        return false;
+    }
+
     if(cartItems.isEmpty()){
 
         JOptionPane.showMessageDialog(
@@ -349,6 +369,15 @@ public
     return true;
 }
     
+    private boolean isTanggalValid() {
+        if (datePicker == null || !datePicker.isDateSelected() || datePicker.getSelectedDate() == null) {
+            return false;
+        }
+        String editorText = TxtTgl.getText() == null ? "" : TxtTgl.getText().trim();
+        String selectedText = datePicker.getSelectedDateAsString();
+        return !editorText.isEmpty() && (selectedText == null || editorText.equals(selectedText));
+    }
+
     private void simpanTransaksi() {
 
     Connection conn = null;
