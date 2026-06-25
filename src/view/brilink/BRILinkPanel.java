@@ -15,8 +15,6 @@ import java.awt.Color;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.ResolverStyle;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -66,6 +64,8 @@ public
             "background:@briColor;" 
         );
         datePicker.setSelectionArc(20);
+        datePicker.setEditorValidation(true);
+        datePicker.setValidationOnNull(true);
         datePicker.now();
         loadKategoriCombo();
         loadSaldo();
@@ -1161,16 +1161,20 @@ private void hitungTransaksi() {
     }
 
     private Date parseTanggal() {
-        String text = TxtTgl.getText() == null ? "" : TxtTgl.getText().trim();
-        if (text.isEmpty()) {
+        if (datePicker == null || !datePicker.isDateSelected() || datePicker.getSelectedDate() == null) {
             JOptionPane.showMessageDialog(this, "Tanggal transaksi wajib diisi.");
             return null;
         }
-        try { return Date.valueOf(LocalDate.parse(text, DateTimeFormatter.ofPattern("dd-MM-uuuu").withResolverStyle(ResolverStyle.STRICT))); }
-        catch (Exception e) {
+
+        String editorText = TxtTgl.getText() == null ? "" : TxtTgl.getText().trim();
+        String selectedText = datePicker.getSelectedDateAsString();
+        if (editorText.isEmpty() || (selectedText != null && !editorText.equals(selectedText))) {
             JOptionPane.showMessageDialog(this, "Tanggal transaksi wajib diisi.");
             return null;
         }
+
+        LocalDate selectedDate = datePicker.getSelectedDate();
+        return Date.valueOf(selectedDate);
     }
 
     private BigDecimal parseMoney(String text) { return BigDecimal.valueOf((long) RupiahFormat.parse(text)); }
