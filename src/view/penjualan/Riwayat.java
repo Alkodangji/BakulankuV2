@@ -687,6 +687,7 @@ public
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnBack;
+    private javax.swing.JButton BtnDetail;
     private javax.swing.JButton BtnClear;
     private javax.swing.JButton BtnDelete;
     private javax.swing.JButton BtnRestok;
