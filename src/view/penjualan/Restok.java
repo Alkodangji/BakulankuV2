@@ -18,7 +18,6 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
@@ -446,7 +445,6 @@ public
     private final ProdukDAO produkDAO = new ProdukDAO();
     private final AkunDAO akunDAO = new AkunDAO();
     private final ProdukRestokDAO produkRestokDAO = new ProdukRestokDAO();
-    private final Map<String, Produk> produkComboMap = new LinkedHashMap<>();
     private final Map<String, Akun> akunComboMap = new LinkedHashMap<>();
 
     private void inisialisasiRestok() {
@@ -470,7 +468,6 @@ public
     }
 
     private void reloadDataForm() {
-        loadComboProduk();
         loadComboAkun();
         resetForm();
     }
@@ -528,6 +525,9 @@ public
         if (CbProduk.getItemCount() > 0) {
             CbProduk.setSelectedIndex(0);
         }
+        TxtIdProduk.setText("");
+        TxtNama.setText("");
+        TxtHargaBeli.setText("");
         if (CbAkun.getItemCount() > 0) {
             CbAkun.setSelectedIndex(0);
         }

@@ -9,6 +9,7 @@ import dao.KategoriTopupDAO;
 import helper.AppIcon;
 import helper.DatePickerHelper;
 import helper.RupiahFormat;
+import helper.StrukPrinter;
 import helper.UiThemeUtil;
 import java.awt.CardLayout;
 
@@ -1106,12 +1107,42 @@ private void hitungTransaksi() {
                 KategoriTopup kategori = (KategoriTopup) CbKategori.getSelectedItem();
                 if (kategori == null || kategori.getIdKategori() == 0) { JOptionPane.showMessageDialog(this, "Kategori wajib dipilih untuk Top Up."); return; }
                 b.setKategoriId(kategori.getIdKategori());
+                b.setKategoriNama(kategori.getNamaKategori());
             }
             brilinkDAO.insert(b);
+            cetakStrukJikaDipilih(b);
             JOptionPane.showMessageDialog(this, "Transaksi BRILink berhasil disimpan.");
             clearTransaksi(); loadKategoriCombo(); loadSaldo(); loadRiwayatRingkas(); refreshSaldoHeader();
         } catch (RuntimeException e) {
             JOptionPane.showMessageDialog(this, "Gagal menyimpan transaksi: " + rootMessage(e));
+        }
+    }
+
+    private void cetakStrukJikaDipilih(Brilink transaksi) {
+        if (!CStruk.isSelected()) {
+            return;
+        }
+
+        try {
+            BigDecimal total = transaksi.getNominal().add(transaksi.getFee());
+            if ("Tarik Tunai".equals(transaksi.getJenis())
+                    && "Terpotong".equals(transaksi.getMetodeFee())) {
+                total = transaksi.getNominal().subtract(transaksi.getFee());
+            }
+
+            StrukPrinter.printBrilink(
+                    transaksi.getNomorTransaksi(),
+                    transaksi.getTanggal(),
+                    transaksi.getJenis(),
+                    transaksi.getKategoriNama(),
+                    transaksi.getNominal().doubleValue(),
+                    transaksi.getFee().doubleValue(),
+                    transaksi.getMetodeFee(),
+                    total.doubleValue()
+            );
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Transaksi berhasil disimpan, tetapi struk gagal dicetak.\n" + e.getMessage());
         }
     }
 

@@ -61,6 +61,9 @@ public class CartItem extends javax.swing.JPanel {
     public int getIdProduk() {
     return idProduk;
 }
+    public String getNamaProduk() {
+    return namaProduk;
+}
     public int getQty() {
     return qty;
 }
