@@ -12,6 +12,58 @@ import javax.swing.table.DefaultTableModel;
 
 public class PenjualanDAO {
 
+    public int insert(Connection conn, Penjualan penjualan) throws Exception {
+        String sql = "INSERT INTO tb_penjualan "
+                + "(nomor_transaksi, tanggal, user_id, total, metode_pembayaran, diterima, kembalian) "
+                + "VALUES (?, NOW(), ?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, penjualan.getNomorTransaksi());
+            ps.setInt(2, penjualan.getUserId());
+            ps.setDouble(3, penjualan.getTotal());
+            ps.setString(4, penjualan.getMetodePembayaran());
+            ps.setDouble(5, penjualan.getDiterima());
+            ps.setDouble(6, penjualan.getKembalian());
+            ps.executeUpdate();
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        }
+        return 0;
+    }
+
+    public Penjualan findById(Connection conn, int idPenjualan) throws Exception {
+        String sql = "SELECT id_penjualan, nomor_transaksi, tanggal, user_id, total, metode_pembayaran, diterima, kembalian "
+                + "FROM tb_penjualan WHERE id_penjualan = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idPenjualan);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Penjualan p = new Penjualan();
+                    p.setIdPenjualan(rs.getInt("id_penjualan"));
+                    p.setNomorTransaksi(rs.getString("nomor_transaksi"));
+                    p.setTanggal(rs.getTimestamp("tanggal"));
+                    p.setUserId(rs.getInt("user_id"));
+                    p.setTotal(rs.getDouble("total"));
+                    p.setMetodePembayaran(rs.getString("metode_pembayaran"));
+                    p.setDiterima(rs.getDouble("diterima"));
+                    p.setKembalian(rs.getDouble("kembalian"));
+                    return p;
+                }
+            }
+        }
+        return null;
+    }
+
+    public boolean delete(Connection conn, int idPenjualan) throws Exception {
+        String sql = "DELETE FROM tb_penjualan WHERE id_penjualan = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idPenjualan);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
     public int insert(Penjualan penjualan) {
 
         try {

@@ -40,6 +40,23 @@ public class AkunDAO {
         return 0;
     }
 
+    public double getSaldoById(Connection conn, int idAkun) throws Exception {
+        return getSaldo(conn, idAkun);
+    }
+
+    public int getIdByNama(Connection conn, String namaAkun) throws Exception {
+        String sql = "SELECT id_akun FROM tb_akun WHERE LOWER(nama_akun) = LOWER(?) LIMIT 1";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, namaAkun == null ? "" : namaAkun.trim());
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("id_akun");
+                }
+            }
+        }
+        return 0;
+    }
+
     public double getSaldo(Connection conn, int idAkun) throws Exception {
         String sql = "SELECT saldo FROM tb_akun WHERE id_akun = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {

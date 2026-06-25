@@ -7,6 +7,7 @@ package view.penjualan;
 import com.formdev.flatlaf.FlatClientProperties;
 import static com.formdev.flatlaf.extras.components.FlatTabbedPane.TabType.card;
 import config.Koneksi;
+import dao.AkunDAO;
 import dao.PenjualanDAO;
 import dao.PenjualanDetailDAO;
 import dao.ProdukDAO;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.BoxLayout;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import model.Penjualan;
 import model.PenjualanDetail;
 import session.Session;
@@ -349,29 +351,77 @@ public
     
     private void simpanTransaksi() {
 
-    if(!validasiTransaksi()){
-        return;
-    }
+    Connection conn = null;
 
-    PenjualanDAO dao =
-            new PenjualanDAO();
+    try {
 
-    int idPenjualan =
-            dao.insert(
-                    getDataPenjualan()
-            );
+        conn = Koneksi.getConnection();
+        if (conn == null) {
+            throw new Exception("Koneksi database tidak tersedia");
+        }
+        conn.setAutoCommit(false);
 
-    if(idPenjualan > 0){
+        if(!validasiTransaksi()){
+            throw new Exception("Validasi transaksi gagal");
+        }
 
-        simpanDetailPenjualan(
-                idPenjualan
-        );
-        
-        updateStokProduk();
-        
+        Penjualan penjualan = getDataPenjualan();
+        PenjualanDAO penjualanDAO = new PenjualanDAO();
+        PenjualanDetailDAO detailDAO = new PenjualanDetailDAO();
+        ProdukDAO produkDAO = new ProdukDAO();
+        AkunDAO akunDAO = new AkunDAO();
+
+        for (CartItem item : cartItems.values()) {
+            if (item.getQty() <= 0) {
+                throw new Exception("Qty produk harus lebih dari 0");
+            }
+
+            int stokTerbaru = produkDAO.getStokById(conn, item.getIdProduk());
+            if (stokTerbaru < 0) {
+                throw new Exception("Produk tidak ditemukan");
+            }
+            if (stokTerbaru < item.getQty()) {
+                throw new Exception("Stok tidak cukup untuk produk ID "
+                        + item.getIdProduk() + ". Stok tersedia: " + stokTerbaru);
+            }
+        }
+
+        int idPenjualan = penjualanDAO.insert(conn, penjualan);
+        if (idPenjualan <= 0) {
+            throw new Exception("Gagal menyimpan header penjualan");
+        }
+
+        for (CartItem item : cartItems.values()) {
+            PenjualanDetail detail = new PenjualanDetail();
+            detail.setPenjualanId(idPenjualan);
+            detail.setProdukId(item.getIdProduk());
+            detail.setQty(item.getQty());
+            detail.setHarga(item.getHarga());
+            detail.setSubtotal(item.getSubtotal());
+
+            if (!detailDAO.insert(conn, detail)) {
+                throw new Exception("Gagal menyimpan detail penjualan");
+            }
+
+            if (!produkDAO.kurangiStokAman(conn, item.getIdProduk(), item.getQty())) {
+                throw new Exception("Stok tidak cukup saat update produk ID " + item.getIdProduk());
+            }
+        }
+
+        int idAkun = akunDAO.getIdByNama(conn, penjualan.getMetodePembayaran());
+        if (idAkun <= 0) {
+            throw new Exception("Akun " + penjualan.getMetodePembayaran() + " tidak ditemukan");
+        }
+        if (!akunDAO.tambahSaldo(conn, idAkun, penjualan.getTotal())) {
+            throw new Exception("Gagal menambah saldo " + penjualan.getMetodePembayaran());
+        }
+
+        conn.commit();
+
         if (MainFrame.RiwayatPenjualanPanel != null) {
-        MainFrame.RiwayatPenjualanPanel.loadTable();
-    }
+            MainFrame.RiwayatPenjualanPanel.loadTable();
+        }
+        refreshSaldoHeaderMainFrame();
 
         JOptionPane.showMessageDialog(
                 this,
@@ -379,72 +429,47 @@ public
         );
 
         bersihkanTransaksi();
-
         resetForm();
 
-    }else{
+    } catch (Exception e) {
+
+        if (conn != null) {
+            try {
+                conn.rollback();
+            } catch (Exception rollbackError) {
+                rollbackError.printStackTrace();
+            }
+        }
+
+        e.printStackTrace();
 
         JOptionPane.showMessageDialog(
                 this,
-                "Transaksi gagal"
+                e.getMessage() == null ? "Transaksi gagal" : e.getMessage()
         );
+
+    } finally {
+
+        if (conn != null) {
+            try {
+                conn.setAutoCommit(true);
+                conn.close();
+            } catch (Exception closeError) {
+                closeError.printStackTrace();
+            }
+        }
     }
 }
-    
-    
-    private void simpanDetailPenjualan(
-        int idPenjualan
-){
 
-    PenjualanDetailDAO dao =
-            new PenjualanDetailDAO();
+    private void refreshSaldoHeaderMainFrame() {
 
-    for(CartItem item :
-            cartItems.values()){
-
-        PenjualanDetail detail =
-                new PenjualanDetail();
-
-        detail.setPenjualanId(
-                idPenjualan
-        );
-
-        detail.setProdukId(
-                item.getIdProduk()
-        );
-
-        detail.setQty(
-                item.getQty()
-        );
-
-        detail.setHarga(
-                item.getHarga()
-        );
-
-        detail.setSubtotal(
-                item.getSubtotal()
-        );
-
-        dao.insert(detail);
+    java.awt.Window window = SwingUtilities.getWindowAncestor(this);
+    if (window instanceof MainFrame) {
+        ((MainFrame) window).refreshSaldoHeader();
     }
 }
-    
-    private void updateStokProduk() {
 
-    ProdukDAO dao =
-            new ProdukDAO();
 
-    for(CartItem item :
-            cartItems.values()) {
-
-        dao.kurangiStok(
-                item.getIdProduk(),
-                item.getQty()
-        );
-    }
-}
-    
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

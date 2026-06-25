@@ -4,6 +4,7 @@
  */
 package view.penjualan;
 
+import dao.AkunDAO;
 import dao.PenjualanDAO;
 import dao.PenjualanDetailDAO;
 import dao.ProdukDAO;
@@ -15,7 +16,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import view.main.MainFrame;
+import model.Penjualan;
+import model.PenjualanDetail;
 
 /**
  *
@@ -189,7 +193,7 @@ public
 
     int konfirmasi2 = JOptionPane.showConfirmDialog(
             this,
-            "Penghapusan akan mengembalikan stok produk dan menghapus riwayat transaksi. Lanjutkan?",
+            "Penghapusan akan mengembalikan stok produk dan mengurangi saldo akun transaksi. Lanjutkan?",
             "Peringatan",
             JOptionPane.YES_NO_OPTION
     );
@@ -198,64 +202,108 @@ public
         return;
     }
 
+    Connection conn = null;
+
     try {
 
         int idPenjualan = Integer.parseInt(
                 TxtId.getText()
         );
 
+        conn = config.Koneksi.getConnection();
+        if (conn == null) {
+            throw new Exception("Koneksi database tidak tersedia");
+        }
+        conn.setAutoCommit(false);
+
         PenjualanDAO penjualanDAO = new PenjualanDAO();
+        PenjualanDetailDAO detailDAO = new PenjualanDetailDAO();
         ProdukDAO produkDAO = new ProdukDAO();
+        AkunDAO akunDAO = new AkunDAO();
 
-        ResultSet rs = penjualanDAO.getDetailByPenjualanId(
-                idPenjualan
-        );
-
-        while (rs != null && rs.next()) {
-
-            int idProduk = rs.getInt("produk_id");
-            int qty = rs.getInt("qty");
-
-            produkDAO.tambahStok(
-                    idProduk,
-                    qty
-            );
+        Penjualan penjualan = penjualanDAO.findById(conn, idPenjualan);
+        if (penjualan == null) {
+            throw new Exception("Transaksi tidak ditemukan");
         }
 
-        penjualanDAO.deleteDetail(
-                idPenjualan
-        );
-
-        boolean berhasil = penjualanDAO.deleteHeader(
-                idPenjualan
-        );
-
-        if (berhasil) {
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Transaksi berhasil dihapus"
-            );
-
-            loadTable();
-            resetForm();
-
-        } else {
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Transaksi gagal dihapus"
-            );
+        java.util.List<PenjualanDetail> details = detailDAO.getByPenjualanId(conn, idPenjualan);
+        if (details.isEmpty()) {
+            throw new Exception("Detail transaksi tidak ditemukan");
         }
+
+        int idAkun = akunDAO.getIdByNama(conn, penjualan.getMetodePembayaran());
+        if (idAkun <= 0) {
+            throw new Exception("Akun " + penjualan.getMetodePembayaran() + " tidak ditemukan");
+        }
+
+        double saldo = akunDAO.getSaldoById(conn, idAkun);
+        if (saldo < penjualan.getTotal()) {
+            throw new Exception("Saldo " + penjualan.getMetodePembayaran()
+                    + " tidak cukup untuk rollback transaksi. Saldo saat ini lebih kecil dari total transaksi.");
+        }
+
+        for (PenjualanDetail detail : details) {
+            if (!produkDAO.tambahStok(conn, detail.getProdukId(), detail.getQty())) {
+                throw new Exception("Gagal mengembalikan stok produk ID " + detail.getProdukId());
+            }
+        }
+
+        if (!akunDAO.kurangiSaldo(conn, idAkun, penjualan.getTotal())) {
+            throw new Exception("Gagal mengurangi saldo " + penjualan.getMetodePembayaran());
+        }
+
+        detailDAO.deleteByPenjualanId(conn, idPenjualan);
+
+        if (!penjualanDAO.delete(conn, idPenjualan)) {
+            throw new Exception("Gagal menghapus header transaksi");
+        }
+
+        conn.commit();
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Transaksi berhasil dihapus"
+        );
+
+        loadTable();
+        resetForm();
+        refreshSaldoHeaderMainFrame();
 
     } catch (Exception e) {
+
+        if (conn != null) {
+            try {
+                conn.rollback();
+            } catch (Exception rollbackError) {
+                rollbackError.printStackTrace();
+            }
+        }
 
         e.printStackTrace();
 
         JOptionPane.showMessageDialog(
                 this,
-                "Terjadi kesalahan saat menghapus transaksi"
+                e.getMessage() == null ? "Terjadi kesalahan saat menghapus transaksi" : e.getMessage()
         );
+
+    } finally {
+
+        if (conn != null) {
+            try {
+                conn.setAutoCommit(true);
+                conn.close();
+            } catch (Exception closeError) {
+                closeError.printStackTrace();
+            }
+        }
+    }
+}
+
+    private void refreshSaldoHeaderMainFrame() {
+
+    java.awt.Window window = SwingUtilities.getWindowAncestor(this);
+    if (window instanceof MainFrame) {
+        ((MainFrame) window).refreshSaldoHeader();
     }
 }
     
