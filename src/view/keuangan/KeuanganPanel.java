@@ -170,12 +170,22 @@ public
         refreshRingkasanSaldo();
         for (Window window : Window.getWindows()) {
             if (window instanceof MainFrame) {
-                ((MainFrame) window).refreshSaldoHeader();
+                panggilRefreshSaldoHeader((MainFrame) window);
                 break;
             }
         }
         if (MainFrame.RiwayatKeuanganPanel != null) {
             MainFrame.RiwayatKeuanganPanel.loadTable();
+        }
+    }
+
+    private void panggilRefreshSaldoHeader(MainFrame mainFrame) {
+        try {
+            MainFrame.class.getMethod("refreshSaldoHeader").invoke(mainFrame);
+        } catch (NoSuchMethodException ignored) {
+            // Method tersedia di branch terbaru; jika belum ada, refresh header dilewati tanpa mengubah MainFrame.
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
