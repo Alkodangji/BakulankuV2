@@ -39,16 +39,16 @@ public
             initComponents();
             initDatePicker();
             UiThemeUtil.applyTextFieldClearButton(this);
-            UiThemeUtil.styleField(jTextField1, "@cashColor");
-            UiThemeUtil.styleButton(btn, UiThemeUtil.KEUANGAN);
-            UiThemeUtil.styleButton(btn1, UiThemeUtil.KEUANGAN);
+            UiThemeUtil.styleField(jTextField1, UiThemeUtil.KEUANGAN_FIELD);
+            UiThemeUtil.styleButton(btn, UiThemeUtil.KEUANGAN_BUTTON);
+            UiThemeUtil.styleButton(btn1, UiThemeUtil.KEUANGAN_BUTTON);
             initPemasukanMinimal();
             refreshRingkasanSaldo();
     }
 
     private void initDatePicker() {
         datePicker = new DatePicker();
-        UiThemeUtil.styleDatePicker(datePicker, TxtTgl, "@cashColor");
+        UiThemeUtil.styleDatePicker(datePicker, TxtTgl, UiThemeUtil.KEUANGAN_DATE_PICKER);
     }
 
     private void initPemasukanMinimal() {

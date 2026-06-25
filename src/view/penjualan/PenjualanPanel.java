@@ -52,7 +52,7 @@ public
         initComponents();
         initDatePicker();
         UiThemeUtil.applyTextFieldClearButton(this);
-        UiThemeUtil.styleField(TxtCari, "@accentColor");
+        UiThemeUtil.styleField(TxtCari, UiThemeUtil.PENJUALAN_FIELD);
         
         resetForm();
         
@@ -93,7 +93,7 @@ public
     
     private void initDatePicker() {
         datePicker = new DatePicker();
-        UiThemeUtil.styleDatePicker(datePicker, TxtTgl, "@accentColor");
+        UiThemeUtil.styleDatePicker(datePicker, TxtTgl, UiThemeUtil.PENJUALAN_DATE_PICKER);
     }
 
     private void resetForm() {

@@ -53,7 +53,7 @@ public
         updateFormByJenis();
 //        date time setup
         datePicker = new DatePicker();
-        UiThemeUtil.styleDatePicker(datePicker, TxtTgl, "@briColor");
+        UiThemeUtil.styleDatePicker(datePicker, TxtTgl, UiThemeUtil.BRILINK_DATE_PICKER);
         UiThemeUtil.applyTextFieldClearButton(this);
         loadKategoriCombo();
         loadSaldo();
@@ -68,7 +68,7 @@ public
               "arc:20" );
    
         BtnAtur.setIcon(
-            AppIcon.CATEGORY.create(UiThemeUtil.BRILINK)
+            AppIcon.CATEGORY.create(UiThemeUtil.brilinkColor())
             );
         BtnAtur.putClientProperty(
                 "FlatLaf.style",
@@ -78,15 +78,11 @@ public
                  + "background:#ffffff"
             );
     
-        CbJenis.putClientProperty(
-            "FlatLaf.style",
-            "borderColor:@briColor;"
-          + "focusedBorderColor:@briColor"
-        );
+        UiThemeUtil.styleField(CbJenis, UiThemeUtil.BRILINK_FIELD);
         
         TxtNominal.putClientProperty(
-            "FlatLaf.style",
-          "showClearButton:true");
+            "JTextField.showClearButton",
+            true);
         
         
         RupiahFormat.formatTextField(TxtTotal);
@@ -971,9 +967,9 @@ private void hitungTransaksi() {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnAturMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BtnAturMouseEntered
-        BtnAtur.setForeground(UiThemeUtil.PENJUALAN);
+        BtnAtur.setForeground(UiThemeUtil.penjualanColor());
         BtnAtur.setIcon(
-            AppIcon.CATEGORY.create(UiThemeUtil.PENJUALAN)
+            AppIcon.CATEGORY.create(UiThemeUtil.penjualanColor())
             );
         BtnAtur.putClientProperty(
                 "FlatLaf.style",
@@ -986,9 +982,9 @@ private void hitungTransaksi() {
     }//GEN-LAST:event_BtnAturMouseEntered
 
     private void BtnAturMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BtnAturMouseExited
-        BtnAtur.setForeground(UiThemeUtil.BRILINK);
+        BtnAtur.setForeground(UiThemeUtil.brilinkColor());
         BtnAtur.setIcon(
-            AppIcon.CATEGORY.create(UiThemeUtil.BRILINK)
+            AppIcon.CATEGORY.create(UiThemeUtil.brilinkColor())
             );
         BtnAtur.putClientProperty(
                 "FlatLaf.style",

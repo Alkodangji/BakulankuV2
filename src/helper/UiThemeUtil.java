@@ -5,7 +5,9 @@ import java.awt.Component;
 import java.awt.Container;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 import raven.datetime.DatePicker;
 
 /**
@@ -13,10 +15,15 @@ import raven.datetime.DatePicker;
  */
 public final class UiThemeUtil {
 
-    public static final Color PENJUALAN = new Color(0x000000);
-    public static final Color KEUANGAN = new Color(0x009900);
-    public static final Color BRILINK = new Color(0x0466c8);
-    public static final Color BBM = new Color(0xFF0000);
+    public static final String PENJUALAN_FIELD = "penjualanField";
+    public static final String KEUANGAN_FIELD = "keuanganField";
+    public static final String BRILINK_FIELD = "brilinkField";
+    public static final String BRILINK_DATE_PICKER = "brilinkDatePicker";
+    public static final String BBM_DATE_PICKER = "bbmDatePicker";
+    public static final String PENJUALAN_DATE_PICKER = "penjualanDatePicker";
+    public static final String KEUANGAN_DATE_PICKER = "keuanganDatePicker";
+    public static final String BBM_BUTTON = "bbmButton";
+    public static final String KEUANGAN_BUTTON = "keuanganButton";
 
     private UiThemeUtil() {
     }
@@ -39,33 +46,34 @@ public final class UiThemeUtil {
         }
     }
 
-    public static void styleDatePicker(DatePicker datePicker, JTextField editor, String flatLafColorToken) {
+    public static void styleDatePicker(DatePicker datePicker, JFormattedTextField editor, String styleClass) {
         datePicker.setEditor(editor);
         datePicker.setColor(Color.BLACK);
-        datePicker.putClientProperty(
-                "FlatLaf.style",
-                "background:" + flatLafColorToken + ";"
-        );
+        datePicker.putClientProperty("FlatLaf.styleClass", styleClass);
         datePicker.setSelectionArc(20);
         datePicker.setEditorValidation(true);
         datePicker.setValidationOnNull(true);
         datePicker.now();
     }
 
-    public static void styleButton(JButton button, Color color) {
-        button.setBackground(color);
-        button.setForeground(Color.WHITE);
-        button.putClientProperty(
-                "FlatLaf.style",
-                "arc:12;"
-        );
+    public static void styleButton(JButton button, String styleClass) {
+        button.putClientProperty("FlatLaf.styleClass", styleClass);
     }
 
-    public static void styleField(JComponent component, String flatLafColorToken) {
-        component.putClientProperty(
-                "FlatLaf.style",
-                "borderColor:" + flatLafColorToken + ";"
-                        + "focusedBorderColor:" + flatLafColorToken + ";"
-        );
+    public static void styleField(JComponent component, String styleClass) {
+        component.putClientProperty("FlatLaf.styleClass", styleClass);
+    }
+
+    public static Color penjualanColor() {
+        return getThemeColor("accentColor", 0x000000);
+    }
+
+    public static Color brilinkColor() {
+        return getThemeColor("briColor", 0x0466c8);
+    }
+
+    private static Color getThemeColor(String key, int fallbackRgb) {
+        Color color = UIManager.getColor(key);
+        return color != null ? color : new Color(fallbackRgb);
     }
 }

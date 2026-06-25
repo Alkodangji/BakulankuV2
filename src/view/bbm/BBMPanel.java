@@ -22,10 +22,10 @@ public
         
 //           date time setup
         datePicker = new DatePicker();
-        UiThemeUtil.styleDatePicker(datePicker, TxtTgl, "@bbmColor");
+        UiThemeUtil.styleDatePicker(datePicker, TxtTgl, UiThemeUtil.BBM_DATE_PICKER);
         UiThemeUtil.applyTextFieldClearButton(this);
-        UiThemeUtil.styleButton(BtnData, UiThemeUtil.BBM);
-        UiThemeUtil.styleButton(BtnRestok, UiThemeUtil.BBM);
+        UiThemeUtil.styleButton(BtnData, UiThemeUtil.BBM_BUTTON);
+        UiThemeUtil.styleButton(BtnRestok, UiThemeUtil.BBM_BUTTON);
     }
 
     /**
