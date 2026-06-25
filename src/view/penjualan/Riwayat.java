@@ -4,6 +4,7 @@
  */
 package view.penjualan;
 
+import helper.UiThemeUtil;
 import dao.AkunDAO;
 import dao.PenjualanDAO;
 import dao.PenjualanDetailDAO;
@@ -34,6 +35,7 @@ public
     public
             Riwayat() {
         initComponents();
+        UiThemeUtil.styleNamedTables(this, "arc: 12", "Tb");
         BtnUpdate.setEnabled(false);
         loadTable();
         kosongkanDetailTransaksi();

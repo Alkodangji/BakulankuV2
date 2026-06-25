@@ -4,6 +4,7 @@
  */
 package view.keuangan;
 
+import helper.UiThemeUtil;
 import dao.KeuanganDAO;
 import helper.RupiahFormat;
 import java.awt.CardLayout;
@@ -25,6 +26,8 @@ public
     public
             Riwayat() {
         initComponents();
+        UiThemeUtil.styleNamedTables(this, "arc: 12", "Tb");
+        UiThemeUtil.styleNamedPanels(this, "arc: 12", "Card", "Form");
         loadTable();
     }
 

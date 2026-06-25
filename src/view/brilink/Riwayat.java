@@ -4,6 +4,7 @@
  */
 package view.brilink;
 
+import helper.UiThemeUtil;
 import dao.BrilinkDAO;
 import helper.RupiahFormat;
 import java.awt.CardLayout;
@@ -28,6 +29,7 @@ public
     public
             Riwayat() {
         initComponents();
+        UiThemeUtil.styleNamedTables(this, "arc: 12", "Tb");
         initActions();
         loadRiwayat();
     }

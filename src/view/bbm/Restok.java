@@ -4,12 +4,10 @@
  */
 package view.bbm;
 
+import helper.UiThemeUtil;
 import dao.BBMDAO;
 import helper.DatePickerHelper;
 import java.awt.CardLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.BBM;
@@ -31,6 +29,7 @@ public
     public
             Restok() {
         initComponents();
+        UiThemeUtil.styleNamedTables(this, "arc: 12", "Tb");
         setupRestokBBM();
     }
 
@@ -381,7 +380,6 @@ public
     }//GEN-LAST:event_BtnHistActionPerformed
 
     private final BBMDAO bbmDAO = new BBMDAO();
-    private final JComboBox<String> comboAkun = new JComboBox<>();
     private DatePicker DpTgl;
     private int selectedBbmId = 0;
 
@@ -395,28 +393,19 @@ public
         TxtNoTransaksi.setEditable(false);
         TxtNoTransaksi.setText("Auto");
         DpTgl = DatePickerHelper.install(TxtTgl);
-        setupComboAkun();
+        setupAkunBBM();
         BtnOk.addActionListener(e -> simpanRestok());
         BtnClear.addActionListener(e -> clearForm());
         TbRestok.addMouseListener(new java.awt.event.MouseAdapter() { public void mouseClicked(java.awt.event.MouseEvent evt) { pilihBBM(); } });
         tampilBBM();
     }
 
-    private void setupComboAkun() {
-        CbAkun.setVisible(false);
-        comboAkun.setName("comboAkunBBMRestok");
-        comboAkun.removeAllItems();
+    private void setupAkunBBM() {
+        CbAkun.setName("CbAkunBBMRestok");
+        CbAkun.removeAllItems();
         for (String namaAkun : bbmDAO.getNamaAkun()) {
-            comboAkun.addItem(namaAkun);
+            CbAkun.addItem(namaAkun);
         }
-        GridBagConstraints gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.insets = new Insets(0, 6, 6, 6);
-        jPanel1.add(comboAkun, gridBagConstraints);
-        jPanel1.revalidate();
-        jPanel1.repaint();
     }
 
     private void tampilBBM() {
@@ -439,7 +428,7 @@ public
             if (selectedBbmId <= 0) throw new Exception("BBM wajib dipilih dari tabel.");
             double liter = parseDouble(TxtLiter.getText());
             double total = parseDouble(TxtHargaBeli.getText());
-            String namaAkun = comboAkun.getSelectedItem() == null ? "" : comboAkun.getSelectedItem().toString();
+            String namaAkun = CbAkun.getSelectedItem() == null ? "" : CbAkun.getSelectedItem().toString();
             if (liter <= 0) throw new Exception("Liter harus lebih dari 0.");
             if (total <= 0) throw new Exception("Total harga harus lebih dari 0.");
             if (namaAkun.trim().isEmpty()) throw new Exception("Akun pembayaran wajib dipilih.");
@@ -465,7 +454,7 @@ public
     }
 
     private void clearForm() {
-        selectedBbmId = 0;  TxtLiter.setText(""); TxtHargaBeli.setText(""); TxtNote.setText(""); DatePickerHelper.resetToToday(TxtTgl, DpTgl); TxtNoTransaksi.setText("Auto"); if (comboAkun.getItemCount() > 0) comboAkun.setSelectedIndex(0); TbRestok.clearSelection();
+        selectedBbmId = 0;  TxtLiter.setText(""); TxtHargaBeli.setText(""); TxtNote.setText(""); DatePickerHelper.resetToToday(TxtTgl, DpTgl); TxtNoTransaksi.setText("Auto"); if (CbAkun.getItemCount() > 0) CbAkun.setSelectedIndex(0); TbRestok.clearSelection();
     }
 
 

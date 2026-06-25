@@ -48,6 +48,8 @@ public
             BRILinkPanel(Runnable saldoRefreshCallback) {
         this.saldoRefreshCallback = saldoRefreshCallback;
         initComponents();
+        UiThemeUtil.styleNamedTables(this, "arc: 12", "Tb");
+        UiThemeUtil.styleNamedPanels(this, "arc: 12", "Card", "Form");
 //        Load UI
 //        Update Form
         updateFormByJenis();

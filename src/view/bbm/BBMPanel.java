@@ -4,10 +4,15 @@
  */
 package view.bbm;
 
+import dao.BBMDAO;
 import java.awt.CardLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 import helper.DatePickerHelper;
 import helper.RupiahFormat;
 import helper.UiThemeUtil;
+import javax.swing.JLabel;
+import model.BBM;
 import raven.datetime.DatePicker;
 import view.main.MainFrame;
 
@@ -21,12 +26,15 @@ public
     public
             BBMPanel() {
         initComponents();
+        UiThemeUtil.styleNamedTables(this, "arc: 12", "Tb");
         
 //           date time setup
         DpTgl = DatePickerHelper.install(TxtTgl);
         UiThemeUtil.applyTextFieldClearButton(this);
         UiThemeUtil.styleButton(BtnData, UiThemeUtil.BBM_BUTTON);
         UiThemeUtil.styleButton(BtnRestok, UiThemeUtil.BBM_BUTTON);
+        UiThemeUtil.styleNamedPanels(this, "arc: 12", "Card", "Form");
+        loadStokBBMCard();
     }
 
     /**
@@ -690,6 +698,49 @@ public
         RupiahFormat.formatTextField(TxtNominal);
         // TODO add your handling code here:
     }//GEN-LAST:event_TxtNominalKeyReleased
+
+
+    private final BBMDAO bbmDAO = new BBMDAO();
+
+    private void loadStokBBMCard() {
+        Card4.removeAll();
+
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new Insets(6, 6, 4, 6);
+        Card4.add(jLabel6, gridBagConstraints);
+
+        int row = 1;
+        for (BBM bbm : bbmDAO.getAllBBM(null)) {
+            JLabel stokLabel = new JLabel(bbm.getNamaBbm() + " " + formatLiter(bbm.getStok()) + " L");
+            stokLabel.setFont(new java.awt.Font("Poppins Medium", 1, 14));
+            stokLabel.setName("LblStokBBM" + row);
+
+            gridBagConstraints = new GridBagConstraints();
+            gridBagConstraints.gridx = 0;
+            gridBagConstraints.gridy = row;
+            gridBagConstraints.gridwidth = 2;
+            gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+            gridBagConstraints.weightx = 1.0;
+            gridBagConstraints.insets = new Insets(2, 6, 2, 6);
+            Card4.add(stokLabel, gridBagConstraints);
+            row++;
+        }
+
+        Card4.revalidate();
+        Card4.repaint();
+    }
+
+    private String formatLiter(double liter) {
+        if (liter == Math.rint(liter)) {
+            return String.valueOf((long) liter);
+        }
+        return String.valueOf(liter);
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

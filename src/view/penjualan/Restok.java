@@ -4,6 +4,7 @@
  */
 package view.penjualan;
 
+import helper.UiThemeUtil;
 import config.Koneksi;
 import dao.AkunDAO;
 import dao.ProdukDAO;
@@ -46,6 +47,8 @@ public
     public
             Restok() {
         initComponents();
+        UiThemeUtil.styleNamedTables(this, "arc: 12", "Tb");
+        UiThemeUtil.styleNamedPanels(this, "arc: 12", "Card", "Form");
         DpTgl = DatePickerHelper.install(
             TxtTgl,
             LocalDate.now(),

@@ -4,6 +4,7 @@
  */
 package view.brilink;
 
+import helper.UiThemeUtil;
 import dao.KategoriTopupDAO;
 import java.awt.CardLayout;
 import java.sql.SQLException;
@@ -27,6 +28,7 @@ public
     public
             Kategori() {
         initComponents();
+        UiThemeUtil.styleNamedTables(this, "arc: 12", "Tb");
         TxtID.setEditable(false);
         initActions();
         loadKategori();

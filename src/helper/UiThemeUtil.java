@@ -6,7 +6,11 @@ import java.awt.Container;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import raven.datetime.DatePicker;
 
@@ -58,6 +62,51 @@ public final class UiThemeUtil {
 
     public static void styleButton(JButton button, String styleClass) {
         button.putClientProperty("FlatLaf.styleClass", styleClass);
+    }
+
+    public static void styleNamedPanels(Container root, String style, String... namePrefixes) {
+        for (Component component : root.getComponents()) {
+            if (component instanceof JPanel) {
+                String name = component.getName();
+                if (name != null) {
+                    for (String prefix : namePrefixes) {
+                        if (name.startsWith(prefix)) {
+                            ((JPanel) component).putClientProperty("FlatLaf.style", style);
+                            break;
+                        }
+                    }
+                }
+            }
+            if (component instanceof Container) {
+                styleNamedPanels((Container) component, style, namePrefixes);
+            }
+        }
+    }
+
+
+
+    public static void styleNamedTables(Container root, String style, String... namePrefixes) {
+        for (Component component : root.getComponents()) {
+            if (component instanceof JTable) {
+                JTable table = (JTable) component;
+                String name = table.getName();
+                if (name != null) {
+                    for (String prefix : namePrefixes) {
+                        if (name.startsWith(prefix)) {
+                            table.putClientProperty("FlatLaf.style", style);
+                            JScrollPane scrollPane = (JScrollPane) SwingUtilities.getAncestorOfClass(JScrollPane.class, table);
+                            if (scrollPane != null) {
+                                scrollPane.putClientProperty("FlatLaf.style", style);
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            if (component instanceof Container) {
+                styleNamedTables((Container) component, style, namePrefixes);
+            }
+        }
     }
 
     public static void styleField(JComponent component, String styleClass) {
