@@ -8,6 +8,7 @@ import dao.BrilinkDAO;
 import helper.RupiahFormat;
 import java.awt.CardLayout;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import model.Brilink;
 import view.main.MainFrame;
@@ -456,9 +457,16 @@ public
         try {
             brilinkDAO.delete(Integer.parseInt(jTextField1.getText()));
             JOptionPane.showMessageDialog(this, "Transaksi berhasil dihapus dan saldo dikembalikan.");
-            clearForm(); loadRiwayat();
+            clearForm(); loadRiwayat(); refreshSaldoHeader();
         } catch (RuntimeException e) {
             JOptionPane.showMessageDialog(this, "Gagal menghapus transaksi: " + rootMessage(e));
+        }
+    }
+
+    private void refreshSaldoHeader() {
+        java.awt.Window window = SwingUtilities.getWindowAncestor(this);
+        if (window instanceof MainFrame) {
+            ((MainFrame) window).refreshSaldoHeader();
         }
     }
 
