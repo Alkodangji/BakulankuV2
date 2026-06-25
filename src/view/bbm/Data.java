@@ -4,6 +4,7 @@
  */
 package view.bbm;
 
+import helper.UiThemeUtil;
 import dao.BBMDAO;
 import java.awt.CardLayout;
 import javax.swing.JOptionPane;
@@ -24,6 +25,7 @@ public
     public
             Data() {
         initComponents();
+        UiThemeUtil.styleNamedTables(this, "arc: 12", "Tb");
         setupDataBBM();
     }
 

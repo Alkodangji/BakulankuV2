@@ -26,6 +26,7 @@ public
     public
             BBMPanel() {
         initComponents();
+        UiThemeUtil.styleNamedTables(this, "arc: 12", "Tb");
         
 //           date time setup
         DpTgl = DatePickerHelper.install(TxtTgl);

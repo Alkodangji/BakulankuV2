@@ -39,6 +39,8 @@ public
 
     public KeuanganPanel() {
             initComponents();
+        UiThemeUtil.styleNamedTables(this, "arc: 12", "Tb");
+        UiThemeUtil.styleNamedPanels(this, "arc: 12", "Card", "Form");
             initDatePicker();
             UiThemeUtil.applyTextFieldClearButton(this);
             UiThemeUtil.styleField(TxtNominal, UiThemeUtil.KEUANGAN_FIELD);

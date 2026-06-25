@@ -4,6 +4,7 @@
  */
 package view.penjualan;
 
+import helper.UiThemeUtil;
 import dao.ProdukDAO;
 import helper.RupiahFormat;
 import java.awt.CardLayout;
@@ -31,6 +32,7 @@ public
     public
             Data() {
         initComponents();
+        UiThemeUtil.styleNamedTables(this, "arc: 12", "Tb");
         initProdukCrud();
     }
 

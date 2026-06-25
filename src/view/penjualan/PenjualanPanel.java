@@ -55,6 +55,7 @@ public
     public
             PenjualanPanel() {
         initComponents();
+        UiThemeUtil.styleNamedPanels(this, "arc: 12", "Card", "Form");
         DpTgl = DatePickerHelper.install(
             TxtTgl,
             LocalDate.now(),

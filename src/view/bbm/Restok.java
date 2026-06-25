@@ -4,6 +4,7 @@
  */
 package view.bbm;
 
+import helper.UiThemeUtil;
 import dao.BBMDAO;
 import helper.DatePickerHelper;
 import java.awt.CardLayout;
@@ -28,6 +29,7 @@ public
     public
             Restok() {
         initComponents();
+        UiThemeUtil.styleNamedTables(this, "arc: 12", "Tb");
         setupRestokBBM();
     }
 

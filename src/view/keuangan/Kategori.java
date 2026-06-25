@@ -4,6 +4,7 @@
  */
 package view.keuangan;
 
+import helper.UiThemeUtil;
 import dao.KeuanganDAO;
 import java.awt.CardLayout;
 import javax.swing.JOptionPane;
@@ -25,6 +26,7 @@ public
     public
             Kategori() {
         initComponents();
+        UiThemeUtil.styleNamedTables(this, "arc: 12", "Tb");
         TxtId.setEditable(false);
         BtnAdd.addActionListener(e -> simpanKategori());
         BtnClear.addActionListener(e -> bersihkanForm());
