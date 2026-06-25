@@ -18,7 +18,6 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
@@ -443,7 +442,6 @@ public
     private final ProdukDAO produkDAO = new ProdukDAO();
     private final AkunDAO akunDAO = new AkunDAO();
     private final ProdukRestokDAO produkRestokDAO = new ProdukRestokDAO();
-    private final Map<String, Produk> produkComboMap = new LinkedHashMap<>();
     private final Map<String, Akun> akunComboMap = new LinkedHashMap<>();
 
     private void inisialisasiRestok() {
@@ -457,7 +455,6 @@ public
         BtnUpdate.setEnabled(false);
         BtnDelete.setEnabled(false);
 
-        jComboBox2.addActionListener(e -> pilihProduk());
         TxtTotal.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 formatTotalHarga();
@@ -467,21 +464,8 @@ public
     }
 
     private void reloadDataForm() {
-        loadComboProduk();
         loadComboAkun();
         resetForm();
-    }
-
-    private void loadComboProduk() {
-        produkComboMap.clear();
-        jComboBox2.removeAllItems();
-        jComboBox2.addItem("-- Pilih Produk --");
-        List<Produk> daftarProduk = produkDAO.getAllProduk("");
-        for (Produk produk : daftarProduk) {
-            String label = produk.getNamaProduk() + " (" + produk.getKodeProduk() + ") - ID " + produk.getIdProduk();
-            produkComboMap.put(label, produk);
-            jComboBox2.addItem(label);
-        }
     }
 
     private void loadComboAkun() {
@@ -509,8 +493,15 @@ public
     }
 
     private Produk getProdukTerpilih() {
-        Object item = jComboBox2.getSelectedItem();
-        return item == null ? null : produkComboMap.get(item.toString());
+        String idProdukText = TxtIdProduk.getText().trim();
+        if (idProdukText.isEmpty()) {
+            return null;
+        }
+        try (Connection conn = Koneksi.getConnection()) {
+            return produkDAO.getProdukById(conn, Integer.parseInt(idProdukText));
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     private Akun getAkunTerpilih() {
@@ -522,9 +513,9 @@ public
         TxtId.setText("");
         TxtNoTransaksi.setText(NomorTransaksi.generate(KodeTransaksi.RESTOK_PRODUK, "tb_produk_restok"));
         DatePickerHelper.resetToToday(TxtTgl, DpTgl);
-        if (jComboBox2.getItemCount() > 0) {
-            jComboBox2.setSelectedIndex(0);
-        }
+        TxtIdProduk.setText("");
+        TxtNama.setText("");
+        TxtHargaBeli.setText("");
         if (CbAkun.getItemCount() > 0) {
             CbAkun.setSelectedIndex(0);
         }
