@@ -62,7 +62,7 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout"/>
       <SubComponents>
-        <Container class="javax.swing.JPanel" name="jPanel2">
+        <Container class="javax.swing.JPanel" name="Form">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -73,7 +73,7 @@
             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[210, 376]"/>
             </Property>
-            <Property name="name" type="java.lang.String" value="jPanel2" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="Form" noResource="true"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout$JSplitPaneConstraintsDescription">
@@ -270,12 +270,12 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JFormattedTextField" name="TxtNoTrx">
+            <Component class="javax.swing.JFormattedTextField" name="TxtNoTransaksi">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
                 <Property name="enabled" type="boolean" value="false"/>
                 <Property name="focusable" type="boolean" value="false"/>
-                <Property name="name" type="java.lang.String" value="TxtNoTrx" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="TxtNoTransaksi" noResource="true"/>
                 <Property name="requestFocusEnabled" type="boolean" value="false"/>
               </Properties>
               <Constraints>

@@ -10,12 +10,14 @@ import dao.AkunDAO;
 import dao.PenjualanDAO;
 import dao.PenjualanDetailDAO;
 import dao.ProdukDAO;
+import helper.DatePickerHelper;
 import helper.KodeTransaksi;
 import helper.NomorTransaksi;
 import helper.RupiahFormat;
 import helper.WrapLayout;
 import helper.UiThemeUtil;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -24,6 +26,7 @@ import java.awt.event.MouseEvent;
 import view.component.MenuCard;
 import view.main.MainFrame;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import raven.datetime.DatePicker;
@@ -43,6 +46,7 @@ public
         class PenjualanPanel extends javax.swing.JPanel {
 
     private DatePicker datePicker;
+    private DatePicker DpTgl;
 
     /**
      * Creates new form PenjualanPanel
@@ -53,6 +57,11 @@ public
         initDatePicker();
         UiThemeUtil.applyTextFieldClearButton(this);
         UiThemeUtil.styleField(TxtCari, UiThemeUtil.PENJUALAN_FIELD);
+        DpTgl = DatePickerHelper.install(
+            TxtTgl,
+            LocalDate.now(),
+            Color.WHITE
+    );
         
         resetForm();
         
@@ -98,7 +107,7 @@ public
 
     private void resetForm() {
 
-    TxtNoTrx.setText(
+    TxtNoTransaksi.setText(
         NomorTransaksi.generate(
             KodeTransaksi.PENJUALAN,
             "tb_penjualan"
@@ -292,7 +301,7 @@ public
             new Penjualan();
 
     penjualan.setNomorTransaksi(
-            TxtNoTrx.getText()
+            TxtNoTransaksi.getText()
     );
 
     penjualan.setUserId(
@@ -511,7 +520,7 @@ public
 
         jPanel1 = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
-        jPanel2 = new javax.swing.JPanel();
+        Form = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         PnlCart = new javax.swing.JPanel();
@@ -524,7 +533,7 @@ public
         CStruk = new javax.swing.JCheckBox();
         BtnOk = new javax.swing.JButton();
         BtnClear = new javax.swing.JButton();
-        TxtNoTrx = new javax.swing.JFormattedTextField();
+        TxtNoTransaksi = new javax.swing.JFormattedTextField();
         TxtTgl = new javax.swing.JFormattedTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -554,11 +563,11 @@ public
         jSplitPane1.setResizeWeight(0.7);
         jSplitPane1.setName("jSplitPane1"); // NOI18N
 
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setForeground(new java.awt.Color(231, 75, 44));
-        jPanel2.setMinimumSize(new java.awt.Dimension(210, 376));
-        jPanel2.setName("jPanel2"); // NOI18N
-        jPanel2.setLayout(new java.awt.GridBagLayout());
+        Form.setBackground(new java.awt.Color(255, 255, 255));
+        Form.setForeground(new java.awt.Color(231, 75, 44));
+        Form.setMinimumSize(new java.awt.Dimension(210, 376));
+        Form.setName("Form"); // NOI18N
+        Form.setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Poppins SemiBold", 0, 12)); // NOI18N
         jLabel1.setText("Detail Transaksi");
@@ -570,7 +579,7 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel2.add(jLabel1, gridBagConstraints);
+        Form.add(jLabel1, gridBagConstraints);
 
         jScrollPane2.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -590,7 +599,7 @@ public
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.6;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel2.add(jScrollPane2, gridBagConstraints);
+        Form.add(jScrollPane2, gridBagConstraints);
 
         LblInfoTitle.setFont(new java.awt.Font("Poppins SemiBold", 0, 14)); // NOI18N
         LblInfoTitle.setText("Total");
@@ -602,7 +611,7 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 6);
-        jPanel2.add(LblInfoTitle, gridBagConstraints);
+        Form.add(LblInfoTitle, gridBagConstraints);
 
         TxtTotal.setEnabled(false);
         TxtTotal.setName("TxtTotal"); // NOI18N
@@ -623,7 +632,7 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(0, 6, 6, 6);
-        jPanel2.add(TxtTotal, gridBagConstraints);
+        Form.add(TxtTotal, gridBagConstraints);
 
         jLabel9.setFont(new java.awt.Font("Poppins Medium", 0, 12)); // NOI18N
         jLabel9.setText("Bayar");
@@ -634,7 +643,7 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel2.add(jLabel9, gridBagConstraints);
+        Form.add(jLabel9, gridBagConstraints);
 
         TxtBayar.setName("TxtBayar"); // NOI18N
         TxtBayar.addActionListener(new java.awt.event.ActionListener() {
@@ -654,7 +663,7 @@ public
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel2.add(TxtBayar, gridBagConstraints);
+        Form.add(TxtBayar, gridBagConstraints);
 
         jLabel10.setFont(new java.awt.Font("Poppins Medium", 0, 12)); // NOI18N
         jLabel10.setText("Kembali");
@@ -665,7 +674,7 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel2.add(jLabel10, gridBagConstraints);
+        Form.add(jLabel10, gridBagConstraints);
 
         TxtKembali.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         TxtKembali.setEnabled(false);
@@ -687,7 +696,7 @@ public
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel2.add(TxtKembali, gridBagConstraints);
+        Form.add(TxtKembali, gridBagConstraints);
 
         CStruk.setText("Cetak Struk Sekaligus?");
         CStruk.setContentAreaFilled(false);
@@ -707,7 +716,7 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel2.add(CStruk, gridBagConstraints);
+        Form.add(CStruk, gridBagConstraints);
 
         BtnOk.setFont(new java.awt.Font("Poppins SemiBold", 0, 14)); // NOI18N
         BtnOk.setText("Konfirmasi");
@@ -724,7 +733,7 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel2.add(BtnOk, gridBagConstraints);
+        Form.add(BtnOk, gridBagConstraints);
 
         BtnClear.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
         BtnClear.setText("Bersih");
@@ -741,20 +750,20 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel2.add(BtnClear, gridBagConstraints);
+        Form.add(BtnClear, gridBagConstraints);
 
-        TxtNoTrx.setEditable(false);
-        TxtNoTrx.setEnabled(false);
-        TxtNoTrx.setFocusable(false);
-        TxtNoTrx.setName("TxtNoTrx"); // NOI18N
-        TxtNoTrx.setRequestFocusEnabled(false);
+        TxtNoTransaksi.setEditable(false);
+        TxtNoTransaksi.setEnabled(false);
+        TxtNoTransaksi.setFocusable(false);
+        TxtNoTransaksi.setName("TxtNoTransaksi"); // NOI18N
+        TxtNoTransaksi.setRequestFocusEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel2.add(TxtNoTrx, gridBagConstraints);
+        Form.add(TxtNoTransaksi, gridBagConstraints);
 
         TxtTgl.setName("TxtTgl"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -763,7 +772,7 @@ public
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 6, 6, 6);
-        jPanel2.add(TxtTgl, gridBagConstraints);
+        Form.add(TxtTgl, gridBagConstraints);
 
         jLabel3.setText("Tanggal");
         jLabel3.setName("jLabel3"); // NOI18N
@@ -773,7 +782,7 @@ public
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 6);
-        jPanel2.add(jLabel3, gridBagConstraints);
+        Form.add(jLabel3, gridBagConstraints);
 
         jLabel4.setText("Metode Bayar");
         jLabel4.setName("jLabel4"); // NOI18N
@@ -782,7 +791,7 @@ public
         gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel2.add(jLabel4, gridBagConstraints);
+        Form.add(jLabel4, gridBagConstraints);
 
         CbAkun.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BRI", "Cash" }));
         CbAkun.setName("CbAkun"); // NOI18N
@@ -791,9 +800,9 @@ public
         gridBagConstraints.gridy = 9;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel2.add(CbAkun, gridBagConstraints);
+        Form.add(CbAkun, gridBagConstraints);
 
-        jSplitPane1.setRightComponent(jPanel2);
+        jSplitPane1.setRightComponent(Form);
 
         jPanel3.setBackground(new java.awt.Color(0, 0, 0));
         jPanel3.setName("jPanel3"); // NOI18N
@@ -992,13 +1001,14 @@ public
     private javax.swing.JButton BtnOk;
     private javax.swing.JCheckBox CStruk;
     private javax.swing.JComboBox<String> CbAkun;
+    private javax.swing.JPanel Form;
     private javax.swing.JLabel LblInfoTitle;
     private javax.swing.JPanel PnlCart;
     private javax.swing.JPanel PnlMenu;
     private javax.swing.JTextField TxtBayar;
     private javax.swing.JTextField TxtCari;
     private javax.swing.JTextField TxtKembali;
-    private javax.swing.JFormattedTextField TxtNoTrx;
+    private javax.swing.JFormattedTextField TxtNoTransaksi;
     private javax.swing.JFormattedTextField TxtTgl;
     private javax.swing.JTextField TxtTotal;
     private javax.swing.JLabel jLabel1;
@@ -1008,7 +1018,6 @@ public
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;

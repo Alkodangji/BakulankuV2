@@ -29,7 +29,7 @@ public
 
     public void loadTable() {
         try {
-            jTable1.setModel(keuanganDAO.getRiwayatTableModel());
+            TbRiwayat.setModel(keuanganDAO.getRiwayatTableModel());
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Gagal memuat riwayat keuangan: " + e.getMessage());
         }
@@ -48,28 +48,27 @@ public
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        TbRiwayat = new javax.swing.JTable();
         BtnBack = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         BtnAtur = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
-        jFormattedTextField1 = new javax.swing.JFormattedTextField();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jComboBox3 = new javax.swing.JComboBox<>();
+        Form = new javax.swing.JPanel();
+        TxtTgl = new javax.swing.JFormattedTextField();
+        CbAkunAsal = new javax.swing.JComboBox<>();
+        CbAkunTujuan = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jComboBox4 = new javax.swing.JComboBox<>();
+        TxtNominal = new javax.swing.JTextField();
+        CbJenis = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
-        jComboBox5 = new javax.swing.JComboBox<>();
+        CbKategori = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        btn = new javax.swing.JButton();
-        btn1 = new javax.swing.JButton();
-        jComboBox6 = new javax.swing.JComboBox<>();
+        TxtNote = new javax.swing.JTextArea();
+        BtnOk = new javax.swing.JButton();
+        BtnClear = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
 
         jSplitPane1.setResizeWeight(0.7);
@@ -80,7 +79,7 @@ public
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        TbRiwayat.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -91,8 +90,8 @@ public
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jTable1.setName("jTable1"); // NOI18N
-        jScrollPane2.setViewportView(jTable1);
+        TbRiwayat.setName("TbRiwayat"); // NOI18N
+        jScrollPane2.setViewportView(TbRiwayat);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -143,11 +142,11 @@ public
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
         jPanel1.add(BtnAtur, gridBagConstraints);
 
-        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setName("jPanel3"); // NOI18N
-        jPanel3.setLayout(new java.awt.GridBagLayout());
+        Form.setBackground(new java.awt.Color(255, 255, 255));
+        Form.setName("Form"); // NOI18N
+        Form.setLayout(new java.awt.GridBagLayout());
 
-        jFormattedTextField1.setName("jFormattedTextField1"); // NOI18N
+        TxtTgl.setName("TxtTgl"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -155,27 +154,27 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 6, 6);
-        jPanel3.add(jFormattedTextField1, gridBagConstraints);
+        Form.add(TxtTgl, gridBagConstraints);
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BRI", "Cash" }));
-        jComboBox2.setName("jComboBox2"); // NOI18N
+        CbAkunAsal.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BRI", "Cash" }));
+        CbAkunAsal.setName("CbAkunAsal"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 6, 6);
-        jPanel3.add(jComboBox2, gridBagConstraints);
+        Form.add(CbAkunAsal, gridBagConstraints);
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BRI", "Cash" }));
-        jComboBox3.setName("jComboBox3"); // NOI18N
+        CbAkunTujuan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BRI", "Cash" }));
+        CbAkunTujuan.setName("CbAkunTujuan"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 6, 6);
-        jPanel3.add(jComboBox3, gridBagConstraints);
+        Form.add(CbAkunTujuan, gridBagConstraints);
 
         jLabel1.setText("Tanggal");
         jLabel1.setName("jLabel1"); // NOI18N
@@ -186,7 +185,7 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 2, 6);
-        jPanel3.add(jLabel1, gridBagConstraints);
+        Form.add(jLabel1, gridBagConstraints);
 
         jLabel2.setText("Akun Tujuan");
         jLabel2.setName("jLabel2"); // NOI18N
@@ -196,7 +195,7 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 2, 6);
-        jPanel3.add(jLabel2, gridBagConstraints);
+        Form.add(jLabel2, gridBagConstraints);
 
         jLabel3.setText("Akun");
         jLabel3.setName("jLabel3"); // NOI18N
@@ -206,7 +205,7 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 2, 6);
-        jPanel3.add(jLabel3, gridBagConstraints);
+        Form.add(jLabel3, gridBagConstraints);
 
         jLabel4.setText("Nominal");
         jLabel4.setName("jLabel4"); // NOI18N
@@ -217,9 +216,9 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 2, 6);
-        jPanel3.add(jLabel4, gridBagConstraints);
+        Form.add(jLabel4, gridBagConstraints);
 
-        jTextField1.setName("jTextField1"); // NOI18N
+        TxtNominal.setName("TxtNominal"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
@@ -227,10 +226,10 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 6, 6);
-        jPanel3.add(jTextField1, gridBagConstraints);
+        Form.add(TxtNominal, gridBagConstraints);
 
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pemasukan", "Pengeluaran", "Transfer" }));
-        jComboBox4.setName("jComboBox4"); // NOI18N
+        CbJenis.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pemasukan", "Pengeluaran", "Transfer" }));
+        CbJenis.setName("CbJenis"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -238,7 +237,7 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel3.add(jComboBox4, gridBagConstraints);
+        Form.add(CbJenis, gridBagConstraints);
 
         jLabel5.setText("Kategori");
         jLabel5.setName("jLabel5"); // NOI18N
@@ -249,10 +248,10 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 2, 6);
-        jPanel3.add(jLabel5, gridBagConstraints);
+        Form.add(jLabel5, gridBagConstraints);
 
-        jComboBox5.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BRI", "Cash" }));
-        jComboBox5.setName("jComboBox5"); // NOI18N
+        CbKategori.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BRI", "Cash" }));
+        CbKategori.setName("CbKategori"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 9;
@@ -260,7 +259,7 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 6, 6);
-        jPanel3.add(jComboBox5, gridBagConstraints);
+        Form.add(CbKategori, gridBagConstraints);
 
         jLabel6.setText("Catatan");
         jLabel6.setName("jLabel6"); // NOI18N
@@ -271,14 +270,14 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 2, 6);
-        jPanel3.add(jLabel6, gridBagConstraints);
+        Form.add(jLabel6, gridBagConstraints);
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jTextArea1.setName("jTextArea1"); // NOI18N
-        jScrollPane1.setViewportView(jTextArea1);
+        TxtNote.setColumns(20);
+        TxtNote.setRows(5);
+        TxtNote.setName("TxtNote"); // NOI18N
+        jScrollPane1.setViewportView(TxtNote);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -289,14 +288,14 @@ public
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 6, 6);
-        jPanel3.add(jScrollPane1, gridBagConstraints);
+        Form.add(jScrollPane1, gridBagConstraints);
 
-        btn.setFont(new java.awt.Font("Poppins SemiBold", 0, 14)); // NOI18N
-        btn.setText("Konfirmasi");
-        btn.setName("btn"); // NOI18N
-        btn.addActionListener(new java.awt.event.ActionListener() {
+        BtnOk.setFont(new java.awt.Font("Poppins SemiBold", 0, 14)); // NOI18N
+        BtnOk.setText("Konfirmasi");
+        BtnOk.setName("BtnOk"); // NOI18N
+        BtnOk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnActionPerformed(evt);
+                BtnOkActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -306,14 +305,14 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel3.add(btn, gridBagConstraints);
+        Form.add(BtnOk, gridBagConstraints);
 
-        btn1.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
-        btn1.setText("Bersih");
-        btn1.setName("btn1"); // NOI18N
-        btn1.addActionListener(new java.awt.event.ActionListener() {
+        BtnClear.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
+        BtnClear.setText("Bersih");
+        BtnClear.setName("BtnClear"); // NOI18N
+        BtnClear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn1ActionPerformed(evt);
+                BtnClearActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -323,18 +322,7 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel3.add(btn1, gridBagConstraints);
-
-        jComboBox6.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BRI", "Cash" }));
-        jComboBox6.setName("jComboBox6"); // NOI18N
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.insets = new java.awt.Insets(2, 6, 6, 6);
-        jPanel3.add(jComboBox6, gridBagConstraints);
+        Form.add(BtnClear, gridBagConstraints);
 
         jLabel12.setText("Kategori");
         jLabel12.setName("jLabel12"); // NOI18N
@@ -345,7 +333,7 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 2, 6);
-        jPanel3.add(jLabel12, gridBagConstraints);
+        Form.add(jLabel12, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -353,7 +341,7 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        jPanel1.add(jPanel3, gridBagConstraints);
+        jPanel1.add(Form, gridBagConstraints);
 
         jSplitPane1.setRightComponent(jPanel1);
 
@@ -375,13 +363,13 @@ public
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActionPerformed
+    private void BtnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnOkActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnActionPerformed
+    }//GEN-LAST:event_BtnOkActionPerformed
 
-    private void btn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn1ActionPerformed
+    private void BtnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnClearActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btn1ActionPerformed
+    }//GEN-LAST:event_BtnClearActionPerformed
 
     private void BtnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBackActionPerformed
         CardLayout cl =
@@ -401,14 +389,17 @@ public
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnAtur;
     private javax.swing.JButton BtnBack;
-    private javax.swing.JButton btn;
-    private javax.swing.JButton btn1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
-    private javax.swing.JComboBox<String> jComboBox4;
-    private javax.swing.JComboBox<String> jComboBox5;
-    private javax.swing.JComboBox<String> jComboBox6;
-    private javax.swing.JFormattedTextField jFormattedTextField1;
+    private javax.swing.JButton BtnClear;
+    private javax.swing.JButton BtnOk;
+    private javax.swing.JComboBox<String> CbAkunAsal;
+    private javax.swing.JComboBox<String> CbAkunTujuan;
+    private javax.swing.JComboBox<String> CbJenis;
+    private javax.swing.JComboBox<String> CbKategori;
+    private javax.swing.JPanel Form;
+    private javax.swing.JTable TbRiwayat;
+    private javax.swing.JTextField TxtNominal;
+    private javax.swing.JTextArea TxtNote;
+    private javax.swing.JFormattedTextField TxtTgl;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
@@ -418,12 +409,8 @@ public
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

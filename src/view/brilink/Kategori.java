@@ -54,11 +54,12 @@ public
         BtnUpdate = new javax.swing.JButton();
         BtnBack = new javax.swing.JButton();
         BtnHist = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        TbKategori = new javax.swing.JTable();
 
         jSplitPane1.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
-        jSplitPane1.setResizeWeight(0.4);
+        jSplitPane1.setResizeWeight(0.1);
         jSplitPane1.setName("jSplitPane1"); // NOI18N
 
         jPanel1.setName("jPanel1"); // NOI18N
@@ -70,7 +71,7 @@ public
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
         jPanel1.add(jLabel1, gridBagConstraints);
 
@@ -81,7 +82,7 @@ public
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
         jPanel1.add(jLabel2, gridBagConstraints);
 
@@ -90,6 +91,7 @@ public
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
         jPanel1.add(TxtID, gridBagConstraints);
 
@@ -99,6 +101,7 @@ public
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
         jPanel1.add(TxtNamaKategori, gridBagConstraints);
 
@@ -109,6 +112,7 @@ public
         gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.weightx = 0.3;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
         jPanel1.add(BtnAdd, gridBagConstraints);
@@ -118,6 +122,7 @@ public
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
         jPanel1.add(BtnDelete, gridBagConstraints);
 
@@ -126,6 +131,7 @@ public
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
         jPanel1.add(BtnClear, gridBagConstraints);
 
@@ -134,6 +140,7 @@ public
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
         jPanel1.add(BtnUpdate, gridBagConstraints);
 
@@ -148,6 +155,7 @@ public
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
         jPanel1.add(BtnBack, gridBagConstraints);
 
@@ -162,14 +170,36 @@ public
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
         jPanel1.add(BtnHist, gridBagConstraints);
+
+        jPanel2.setName("jPanel2"); // NOI18N
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 0.7;
+        jPanel1.add(jPanel2, gridBagConstraints);
 
         jSplitPane1.setTopComponent(jPanel1);
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        TbKategori.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -180,8 +210,8 @@ public
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jTable1.setName("jTable1"); // NOI18N
-        jScrollPane1.setViewportView(jTable1);
+        TbKategori.setName("TbKategori"); // NOI18N
+        jScrollPane1.setViewportView(TbKategori);
 
         jSplitPane1.setRightComponent(jScrollPane1);
 
@@ -198,8 +228,8 @@ public
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 558, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(6, 6, 6))
+                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -208,11 +238,11 @@ public
         BtnUpdate.addActionListener(e -> updateKategori());
         BtnDelete.addActionListener(e -> deleteKategori());
         BtnClear.addActionListener(e -> clearForm());
-        jTable1.getSelectionModel().addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting() && jTable1.getSelectedRow() >= 0) {
-                int row = jTable1.getSelectedRow();
-                TxtID.setText(jTable1.getValueAt(row, 0).toString());
-                TxtNamaKategori.setText(jTable1.getValueAt(row, 1).toString());
+        TbKategori.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting() && TbKategori.getSelectedRow() >= 0) {
+                int row = TbKategori.getSelectedRow();
+                TxtID.setText(TbKategori.getValueAt(row, 0).toString());
+                TxtNamaKategori.setText(TbKategori.getValueAt(row, 1).toString());
             }
         });
     }
@@ -222,7 +252,7 @@ public
             @Override public boolean isCellEditable(int row, int column) { return false; }
         };
         for (KategoriTopup k : kategoriDAO.getAll()) model.addRow(new Object[]{k.getIdKategori(), k.getNamaKategori()});
-        jTable1.setModel(model);
+        TbKategori.setModel(model);
     }
 
     private void tambahKategori() {
@@ -259,7 +289,7 @@ public
         }
     }
 
-    private void clearForm() { TxtID.setText(""); TxtNamaKategori.setText(""); jTable1.clearSelection(); }
+    private void clearForm() { TxtID.setText(""); TxtNamaKategori.setText(""); TbKategori.clearSelection(); }
 
     private void BtnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBackActionPerformed
         CardLayout cl =
@@ -283,13 +313,14 @@ public
     private javax.swing.JButton BtnDelete;
     private javax.swing.JButton BtnHist;
     private javax.swing.JButton BtnUpdate;
+    private javax.swing.JTable TbKategori;
     private javax.swing.JTextField TxtID;
     private javax.swing.JTextField TxtNamaKategori;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }

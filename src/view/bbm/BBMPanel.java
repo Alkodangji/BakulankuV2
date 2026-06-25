@@ -40,26 +40,26 @@ public
 
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel1 = new javax.swing.JPanel();
-        BriCard = new javax.swing.JPanel();
+        Card1 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         saldoCash1 = new javax.swing.JLabel();
         BtnHist = new javax.swing.JButton();
-        CashCard = new javax.swing.JPanel();
+        Card2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        saldoCash = new javax.swing.JLabel();
+        LiterTerjual = new javax.swing.JLabel();
         BtnData = new javax.swing.JButton();
-        CashCard1 = new javax.swing.JPanel();
+        Card3 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
-        saldoCash2 = new javax.swing.JLabel();
+        LiterRestok = new javax.swing.JLabel();
         BtnRestok = new javax.swing.JButton();
-        CashCard2 = new javax.swing.JPanel();
+        Card4 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         saldoCash3 = new javax.swing.JLabel();
         saldoCash4 = new javax.swing.JLabel();
         saldoCash5 = new javax.swing.JLabel();
         saldoCash6 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        TbTransaksi = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         Form = new javax.swing.JPanel();
         TxtTgl = new javax.swing.JFormattedTextField();
@@ -76,9 +76,9 @@ public
         TxtBayar = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         TxtKembali = new javax.swing.JTextField();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        btn = new javax.swing.JButton();
-        btn1 = new javax.swing.JButton();
+        CStruk = new javax.swing.JCheckBox();
+        BtnOk = new javax.swing.JButton();
+        BtnClear = new javax.swing.JButton();
 
         jSplitPane1.setResizeWeight(0.8);
         jSplitPane1.setContinuousLayout(false);
@@ -87,8 +87,8 @@ public
         jPanel1.setName("jPanel1"); // NOI18N
         jPanel1.setLayout(new java.awt.GridBagLayout());
 
-        BriCard.setBackground(new java.awt.Color(255, 0, 0));
-        BriCard.setName("BriCard"); // NOI18N
+        Card1.setBackground(new java.awt.Color(255, 0, 0));
+        Card1.setName("Card1"); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Poppins Light", 0, 12)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
@@ -123,29 +123,29 @@ public
             }
         });
 
-        javax.swing.GroupLayout BriCardLayout = new javax.swing.GroupLayout(BriCard);
-        BriCard.setLayout(BriCardLayout);
-        BriCardLayout.setHorizontalGroup(
-            BriCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(BriCardLayout.createSequentialGroup()
+        javax.swing.GroupLayout Card1Layout = new javax.swing.GroupLayout(Card1);
+        Card1.setLayout(Card1Layout);
+        Card1Layout.setHorizontalGroup(
+            Card1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Card1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(BriCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(Card1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addComponent(saldoCash1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 235, Short.MAX_VALUE)
                 .addComponent(BtnHist)
                 .addGap(14, 14, 14))
         );
-        BriCardLayout.setVerticalGroup(
-            BriCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(BriCardLayout.createSequentialGroup()
-                .addGroup(BriCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(BriCardLayout.createSequentialGroup()
+        Card1Layout.setVerticalGroup(
+            Card1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Card1Layout.createSequentialGroup()
+                .addGroup(Card1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(Card1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel4)
                         .addGap(0, 0, 0)
                         .addComponent(saldoCash1))
-                    .addGroup(BriCardLayout.createSequentialGroup()
+                    .addGroup(Card1Layout.createSequentialGroup()
                         .addGap(16, 16, 16)
                         .addComponent(BtnHist, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -157,18 +157,18 @@ public
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(0, 0, 6, 0);
-        jPanel1.add(BriCard, gridBagConstraints);
+        jPanel1.add(Card1, gridBagConstraints);
 
-        CashCard.setBackground(new java.awt.Color(255, 255, 255));
-        CashCard.setName("CashCard"); // NOI18N
+        Card2.setBackground(new java.awt.Color(255, 255, 255));
+        Card2.setName("Card2"); // NOI18N
 
         jLabel3.setFont(new java.awt.Font("Poppins Light", 0, 12)); // NOI18N
         jLabel3.setText("Liter Terjual Hari ini");
         jLabel3.setName("jLabel3"); // NOI18N
 
-        saldoCash.setFont(new java.awt.Font("Poppins Medium", 1, 16)); // NOI18N
-        saldoCash.setText("12 L");
-        saldoCash.setName("saldoCash"); // NOI18N
+        LiterTerjual.setFont(new java.awt.Font("Poppins Medium", 1, 16)); // NOI18N
+        LiterTerjual.setText("12 L");
+        LiterTerjual.setName("LiterTerjual"); // NOI18N
 
         BtnData.setBackground(new java.awt.Color(255, 0, 0));
         BtnData.setFont(new java.awt.Font("Poppins SemiBold", 0, 12)); // NOI18N
@@ -181,28 +181,28 @@ public
             }
         });
 
-        javax.swing.GroupLayout CashCardLayout = new javax.swing.GroupLayout(CashCard);
-        CashCard.setLayout(CashCardLayout);
-        CashCardLayout.setHorizontalGroup(
-            CashCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(CashCardLayout.createSequentialGroup()
+        javax.swing.GroupLayout Card2Layout = new javax.swing.GroupLayout(Card2);
+        Card2.setLayout(Card2Layout);
+        Card2Layout.setHorizontalGroup(
+            Card2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Card2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(CashCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(Card2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
-                    .addComponent(saldoCash, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE))
+                    .addComponent(LiterTerjual, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
                 .addComponent(BtnData)
                 .addGap(6, 6, 6))
         );
-        CashCardLayout.setVerticalGroup(
-            CashCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(CashCardLayout.createSequentialGroup()
+        Card2Layout.setVerticalGroup(
+            Card2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Card2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(CashCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(Card2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(BtnData))
                 .addGap(2, 2, 2)
-                .addComponent(saldoCash)
+                .addComponent(LiterTerjual)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -212,18 +212,18 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(6, 0, 6, 6);
-        jPanel1.add(CashCard, gridBagConstraints);
+        jPanel1.add(Card2, gridBagConstraints);
 
-        CashCard1.setBackground(new java.awt.Color(255, 255, 255));
-        CashCard1.setName("CashCard1"); // NOI18N
+        Card3.setBackground(new java.awt.Color(255, 255, 255));
+        Card3.setName("Card3"); // NOI18N
 
         jLabel5.setFont(new java.awt.Font("Poppins Light", 0, 12)); // NOI18N
         jLabel5.setText("Restock Liter Hari ini");
         jLabel5.setName("jLabel5"); // NOI18N
 
-        saldoCash2.setFont(new java.awt.Font("Poppins Medium", 1, 16)); // NOI18N
-        saldoCash2.setText("20 L");
-        saldoCash2.setName("saldoCash2"); // NOI18N
+        LiterRestok.setFont(new java.awt.Font("Poppins Medium", 1, 16)); // NOI18N
+        LiterRestok.setText("20 L");
+        LiterRestok.setName("LiterRestok"); // NOI18N
 
         BtnRestok.setBackground(new java.awt.Color(255, 0, 0));
         BtnRestok.setFont(new java.awt.Font("Poppins SemiBold", 0, 12)); // NOI18N
@@ -236,29 +236,29 @@ public
             }
         });
 
-        javax.swing.GroupLayout CashCard1Layout = new javax.swing.GroupLayout(CashCard1);
-        CashCard1.setLayout(CashCard1Layout);
-        CashCard1Layout.setHorizontalGroup(
-            CashCard1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(CashCard1Layout.createSequentialGroup()
+        javax.swing.GroupLayout Card3Layout = new javax.swing.GroupLayout(Card3);
+        Card3.setLayout(Card3Layout);
+        Card3Layout.setHorizontalGroup(
+            Card3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Card3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(CashCard1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(Card3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(saldoCash2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(LiterRestok, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(BtnRestok)
                 .addContainerGap())
         );
-        CashCard1Layout.setVerticalGroup(
-            CashCard1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(CashCard1Layout.createSequentialGroup()
+        Card3Layout.setVerticalGroup(
+            Card3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(Card3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(CashCard1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(Card3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(BtnRestok)
-                    .addGroup(CashCard1Layout.createSequentialGroup()
+                    .addGroup(Card3Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addGap(2, 2, 2)
-                        .addComponent(saldoCash2)))
+                        .addComponent(LiterRestok)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -268,11 +268,11 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 0);
-        jPanel1.add(CashCard1, gridBagConstraints);
+        jPanel1.add(Card3, gridBagConstraints);
 
-        CashCard2.setBackground(new java.awt.Color(255, 255, 255));
-        CashCard2.setName("CashCard2"); // NOI18N
-        CashCard2.setLayout(new java.awt.GridBagLayout());
+        Card4.setBackground(new java.awt.Color(255, 255, 255));
+        Card4.setName("Card4"); // NOI18N
+        Card4.setLayout(new java.awt.GridBagLayout());
 
         jLabel6.setFont(new java.awt.Font("Poppins Light", 0, 12)); // NOI18N
         jLabel6.setText("Sisa Stock :");
@@ -283,7 +283,7 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        CashCard2.add(jLabel6, gridBagConstraints);
+        Card4.add(jLabel6, gridBagConstraints);
 
         saldoCash3.setFont(new java.awt.Font("Poppins Medium", 1, 14)); // NOI18N
         saldoCash3.setText("Pertalite");
@@ -294,7 +294,7 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 2, 6);
-        CashCard2.add(saldoCash3, gridBagConstraints);
+        Card4.add(saldoCash3, gridBagConstraints);
 
         saldoCash4.setFont(new java.awt.Font("Poppins Medium", 1, 14)); // NOI18N
         saldoCash4.setText("Pertamax");
@@ -305,7 +305,7 @@ public
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 6, 6);
-        CashCard2.add(saldoCash4, gridBagConstraints);
+        Card4.add(saldoCash4, gridBagConstraints);
 
         saldoCash5.setFont(new java.awt.Font("Poppins Medium", 1, 14)); // NOI18N
         saldoCash5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -319,7 +319,7 @@ public
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.4;
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 2, 6);
-        CashCard2.add(saldoCash5, gridBagConstraints);
+        Card4.add(saldoCash5, gridBagConstraints);
 
         saldoCash6.setFont(new java.awt.Font("Poppins Medium", 1, 14)); // NOI18N
         saldoCash6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -333,7 +333,7 @@ public
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 0.4;
         gridBagConstraints.insets = new java.awt.Insets(2, 6, 6, 6);
-        CashCard2.add(saldoCash6, gridBagConstraints);
+        Card4.add(saldoCash6, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -341,11 +341,11 @@ public
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(6, 0, 6, 0);
-        jPanel1.add(CashCard2, gridBagConstraints);
+        jPanel1.add(Card4, gridBagConstraints);
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        TbTransaksi.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -356,8 +356,8 @@ public
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jTable1.setName("jTable1"); // NOI18N
-        jScrollPane1.setViewportView(jTable1);
+        TbTransaksi.setName("TbTransaksi"); // NOI18N
+        jScrollPane1.setViewportView(TbTransaksi);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -567,12 +567,12 @@ public
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
         Form.add(TxtKembali, gridBagConstraints);
 
-        jCheckBox1.setText("Cetak Struk Sekaligus?");
-        jCheckBox1.setContentAreaFilled(false);
-        jCheckBox1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jCheckBox1.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        jCheckBox1.setName("jCheckBox1"); // NOI18N
-        jCheckBox1.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        CStruk.setText("Cetak Struk Sekaligus?");
+        CStruk.setContentAreaFilled(false);
+        CStruk.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        CStruk.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        CStruk.setName("CStruk"); // NOI18N
+        CStruk.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 10;
@@ -581,14 +581,14 @@ public
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.weighty = 0.7;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 6);
-        Form.add(jCheckBox1, gridBagConstraints);
+        Form.add(CStruk, gridBagConstraints);
 
-        btn.setFont(new java.awt.Font("Poppins SemiBold", 0, 14)); // NOI18N
-        btn.setText("Konfirmasi");
-        btn.setName("btn"); // NOI18N
-        btn.addActionListener(new java.awt.event.ActionListener() {
+        BtnOk.setFont(new java.awt.Font("Poppins SemiBold", 0, 14)); // NOI18N
+        BtnOk.setText("Konfirmasi");
+        BtnOk.setName("BtnOk"); // NOI18N
+        BtnOk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnActionPerformed(evt);
+                BtnOkActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -596,14 +596,14 @@ public
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        Form.add(btn, gridBagConstraints);
+        Form.add(BtnOk, gridBagConstraints);
 
-        btn1.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
-        btn1.setText("Bersih");
-        btn1.setName("btn1"); // NOI18N
-        btn1.addActionListener(new java.awt.event.ActionListener() {
+        BtnClear.setFont(new java.awt.Font("Poppins Medium", 0, 14)); // NOI18N
+        BtnClear.setText("Bersih");
+        BtnClear.setName("BtnClear"); // NOI18N
+        BtnClear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn1ActionPerformed(evt);
+                BtnClearActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -612,7 +612,7 @@ public
         gridBagConstraints.gridwidth = 3;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        Form.add(btn1, gridBagConstraints);
+        Form.add(BtnClear, gridBagConstraints);
 
         jSplitPane1.setRightComponent(Form);
 
@@ -666,13 +666,13 @@ public
         // TODO add your handling code here:
     }//GEN-LAST:event_TxtKembaliKeyReleased
 
-    private void btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActionPerformed
+    private void BtnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnOkActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnActionPerformed
+    }//GEN-LAST:event_BtnOkActionPerformed
 
-    private void btn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn1ActionPerformed
+    private void BtnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnClearActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btn1ActionPerformed
+    }//GEN-LAST:event_BtnClearActionPerformed
 
     private void BtnDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnDataActionPerformed
         CardLayout cl =
@@ -697,15 +697,21 @@ public
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel BriCard;
+    private javax.swing.JButton BtnClear;
     private javax.swing.JButton BtnData;
     private javax.swing.JButton BtnHist;
+    private javax.swing.JButton BtnOk;
     private javax.swing.JButton BtnRestok;
-    private javax.swing.JPanel CashCard;
-    private javax.swing.JPanel CashCard1;
-    private javax.swing.JPanel CashCard2;
+    private javax.swing.JCheckBox CStruk;
+    private javax.swing.JPanel Card1;
+    private javax.swing.JPanel Card2;
+    private javax.swing.JPanel Card3;
+    private javax.swing.JPanel Card4;
     private javax.swing.JPanel Form;
     private javax.swing.JLabel LblInfoTitle;
+    private javax.swing.JLabel LiterRestok;
+    private javax.swing.JLabel LiterTerjual;
+    private javax.swing.JTable TbTransaksi;
     private javax.swing.JTextField TxtBayar;
     private javax.swing.JComboBox<String> TxtJenis;
     private javax.swing.JTextField TxtKembali;
@@ -713,9 +719,6 @@ public
     private javax.swing.JTextField TxtNominal;
     private javax.swing.JFormattedTextField TxtTgl;
     private javax.swing.JTextField TxtTotal;
-    private javax.swing.JButton btn;
-    private javax.swing.JButton btn1;
-    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -729,11 +732,8 @@ public
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JPanel line;
-    private javax.swing.JLabel saldoCash;
     private javax.swing.JLabel saldoCash1;
-    private javax.swing.JLabel saldoCash2;
     private javax.swing.JLabel saldoCash3;
     private javax.swing.JLabel saldoCash4;
     private javax.swing.JLabel saldoCash5;

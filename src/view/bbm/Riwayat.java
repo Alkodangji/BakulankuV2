@@ -56,7 +56,7 @@ public
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        BtnOk = new javax.swing.JButton();
+        BtnUpdate = new javax.swing.JButton();
         BtnClear = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -73,6 +73,7 @@ public
         BtnData = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         TbRiwayat = new javax.swing.JTable();
+        BtnDelete = new javax.swing.JButton();
 
         jPanel1.setName("jPanel1"); // NOI18N
         jPanel1.setLayout(new java.awt.GridBagLayout());
@@ -190,18 +191,18 @@ public
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 5);
         jPanel1.add(jLabel6, gridBagConstraints);
 
-        BtnOk.setBackground(new java.awt.Color(255, 0, 0));
-        BtnOk.setForeground(new java.awt.Color(255, 255, 255));
-        BtnOk.setText("Konfirmasi");
-        BtnOk.setName("BtnOk"); // NOI18N
+        BtnUpdate.setBackground(new java.awt.Color(255, 0, 0));
+        BtnUpdate.setForeground(new java.awt.Color(255, 255, 255));
+        BtnUpdate.setText("Update");
+        BtnUpdate.setName("BtnUpdate"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 11;
-        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel1.add(BtnOk, gridBagConstraints);
+        jPanel1.add(BtnUpdate, gridBagConstraints);
 
         BtnClear.setBackground(new java.awt.Color(0, 0, 0));
         BtnClear.setForeground(new java.awt.Color(255, 255, 255));
@@ -248,7 +249,7 @@ public
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 6);
         jPanel1.add(jLabel9, gridBagConstraints);
 
-        jLabel10.setText("BBM");
+        jLabel10.setText("Nama BBM");
         jLabel10.setName("jLabel10"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -269,6 +270,8 @@ public
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 6);
         jPanel1.add(jLabel11, gridBagConstraints);
 
+        TxtID.setEditable(false);
+        TxtID.setFocusable(false);
         TxtID.setName("TxtID"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -279,6 +282,8 @@ public
         gridBagConstraints.insets = new java.awt.Insets(0, 5, 6, 6);
         jPanel1.add(TxtID, gridBagConstraints);
 
+        TxtNoTransaksi.setEditable(false);
+        TxtNoTransaksi.setEnabled(false);
         TxtNoTransaksi.setName("TxtNoTransaksi"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -390,6 +395,15 @@ public
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
         jPanel1.add(jScrollPane2, gridBagConstraints);
 
+        BtnDelete.setText("Delete");
+        BtnDelete.setName("BtnDelete"); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
+        jPanel1.add(BtnDelete, gridBagConstraints);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -440,7 +454,7 @@ public
     private String modeTabel = "DATA";
 
     private void setupPenjualanBBM() {
-        BtnOk.setText("Simpan Penjualan");
+        BtnUpdate.setText("Simpan Penjualan");
         BtnClear.setText("Clear");
         TxtID.setEditable(false);
         TxtNama.setEditable(false);
@@ -449,7 +463,7 @@ public
         TxtTgl.setText(LocalDate.now().toString());
         setupMetodePembayaran();
         setupTombolRiwayat();
-        BtnOk.addActionListener(e -> simpanPenjualan());
+        BtnUpdate.addActionListener(e -> simpanPenjualan());
         BtnClear.addActionListener(e -> clearForm());
         TbRiwayat.addMouseListener(new java.awt.event.MouseAdapter() { public void mouseClicked(java.awt.event.MouseEvent evt) { pilihBarisTabel(); } });
         TbRiwayat.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -608,8 +622,9 @@ if (selectedHistoryId <= 0) {
     private javax.swing.JButton BtnBack;
     private javax.swing.JButton BtnClear;
     private javax.swing.JButton BtnData;
-    private javax.swing.JButton BtnOk;
+    private javax.swing.JButton BtnDelete;
     private javax.swing.JButton BtnRestok;
+    private javax.swing.JButton BtnUpdate;
     private javax.swing.JTable TbRiwayat;
     private javax.swing.JTextField TxtDiterima;
     private javax.swing.JTextField TxtHargaJual;

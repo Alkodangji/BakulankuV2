@@ -35,7 +35,7 @@ public
             Riwayat() {
         initComponents();
         initDetailButton();
-        jButton2.setEnabled(false);
+        BtnUpdate.setEnabled(false);
         loadTable();
         
         addComponentListener(new ComponentAdapter() {
@@ -335,7 +335,7 @@ public
         TxtTotal = new javax.swing.JTextField();
         TxtBayar = new javax.swing.JTextField();
         TxtKembalian = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
+        BtnUpdate = new javax.swing.JButton();
         BtnDelete = new javax.swing.JButton();
         BtnBack = new javax.swing.JButton();
         Btndata = new javax.swing.JButton();
@@ -436,6 +436,9 @@ public
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 0, 6);
         jPanel1.add(jLabel7, gridBagConstraints);
 
+        TxtId.setEditable(false);
+        TxtId.setEnabled(false);
+        TxtId.setFocusable(false);
         TxtId.setName("TxtId"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -447,6 +450,9 @@ public
         gridBagConstraints.insets = new java.awt.Insets(0, 6, 6, 6);
         jPanel1.add(TxtId, gridBagConstraints);
 
+        TxtNoTransaksi.setEditable(false);
+        TxtNoTransaksi.setEnabled(false);
+        TxtNoTransaksi.setFocusable(false);
         TxtNoTransaksi.setName("TxtNoTransaksi"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -514,8 +520,8 @@ public
         gridBagConstraints.insets = new java.awt.Insets(0, 6, 6, 6);
         jPanel1.add(TxtKembalian, gridBagConstraints);
 
-        jButton2.setText("Update");
-        jButton2.setName("jButton2"); // NOI18N
+        BtnUpdate.setText("Update");
+        BtnUpdate.setName("BtnUpdate"); // NOI18N
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
@@ -524,7 +530,7 @@ public
         gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE_LEADING;
         gridBagConstraints.weightx = 0.5;
         gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel1.add(jButton2, gridBagConstraints);
+        jPanel1.add(BtnUpdate, gridBagConstraints);
 
         BtnDelete.setText("Delete");
         BtnDelete.setName("BtnDelete"); // NOI18N
@@ -683,8 +689,8 @@ public
     private javax.swing.JButton BtnBack;
     private javax.swing.JButton BtnClear;
     private javax.swing.JButton BtnDelete;
-    private javax.swing.JButton BtnDetail;
     private javax.swing.JButton BtnRestok;
+    private javax.swing.JButton BtnUpdate;
     private javax.swing.JButton Btndata;
     private javax.swing.JComboBox<String> CbMetode;
     private javax.swing.JTable TbRiwayat;
@@ -694,7 +700,6 @@ public
     private javax.swing.JTextField TxtNoTransaksi;
     private javax.swing.JFormattedTextField TxtTgl;
     private javax.swing.JTextField TxtTotal;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

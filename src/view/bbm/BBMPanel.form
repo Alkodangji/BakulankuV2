@@ -57,12 +57,12 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout"/>
           <SubComponents>
-            <Container class="javax.swing.JPanel" name="BriCard">
+            <Container class="javax.swing.JPanel" name="Card1">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="0" green="0" red="ff" type="rgb"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="BriCard" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="Card1" noResource="true"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -158,12 +158,12 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Container class="javax.swing.JPanel" name="CashCard">
+            <Container class="javax.swing.JPanel" name="Card2">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="CashCard" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="Card2" noResource="true"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -178,7 +178,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="jLabel3" pref="116" max="32767" attributes="0"/>
-                              <Component id="saldoCash" pref="116" max="32767" attributes="0"/>
+                              <Component id="LiterTerjual" pref="116" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace pref="45" max="32767" attributes="0"/>
                           <Component id="BtnData" min="-2" max="-2" attributes="0"/>
@@ -195,7 +195,7 @@
                               <Component id="BtnData" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-                          <Component id="saldoCash" min="-2" max="-2" attributes="0"/>
+                          <Component id="LiterTerjual" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
@@ -211,13 +211,13 @@
                     <Property name="name" type="java.lang.String" value="jLabel3" noResource="true"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="saldoCash">
+                <Component class="javax.swing.JLabel" name="LiterTerjual">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Poppins Medium" size="16" style="1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="12 L"/>
-                    <Property name="name" type="java.lang.String" value="saldoCash" noResource="true"/>
+                    <Property name="name" type="java.lang.String" value="LiterTerjual" noResource="true"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JButton" name="BtnData">
@@ -240,12 +240,12 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Container class="javax.swing.JPanel" name="CashCard1">
+            <Container class="javax.swing.JPanel" name="Card3">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="CashCard1" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="Card3" noResource="true"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -260,7 +260,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="jLabel5" max="32767" attributes="0"/>
-                              <Component id="saldoCash2" max="32767" attributes="0"/>
+                              <Component id="LiterRestok" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
                           <Component id="BtnRestok" min="-2" max="-2" attributes="0"/>
@@ -277,7 +277,7 @@
                               <Group type="102" attributes="0">
                                   <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-                                  <Component id="saldoCash2" min="-2" max="-2" attributes="0"/>
+                                  <Component id="LiterRestok" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
@@ -295,13 +295,13 @@
                     <Property name="name" type="java.lang.String" value="jLabel5" noResource="true"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JLabel" name="saldoCash2">
+                <Component class="javax.swing.JLabel" name="LiterRestok">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Poppins Medium" size="16" style="1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="20 L"/>
-                    <Property name="name" type="java.lang.String" value="saldoCash2" noResource="true"/>
+                    <Property name="name" type="java.lang.String" value="LiterRestok" noResource="true"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JButton" name="BtnRestok">
@@ -324,12 +324,12 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Container class="javax.swing.JPanel" name="CashCard2">
+            <Container class="javax.swing.JPanel" name="Card4">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="CashCard2" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="Card4" noResource="true"/>
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -428,7 +428,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JTable" name="jTable1">
+                <Component class="javax.swing.JTable" name="TbTransaksi">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="4" rowCount="4">
@@ -438,7 +438,7 @@
                         <Column editable="true" title="Title 4" type="java.lang.Object"/>
                       </Table>
                     </Property>
-                    <Property name="name" type="java.lang.String" value="jTable1" noResource="true"/>
+                    <Property name="name" type="java.lang.String" value="TbTransaksi" noResource="true"/>
                   </Properties>
                 </Component>
               </SubComponents>
@@ -666,13 +666,13 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="jCheckBox1">
+            <Component class="javax.swing.JCheckBox" name="CStruk">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Cetak Struk Sekaligus?"/>
                 <Property name="contentAreaFilled" type="boolean" value="false"/>
                 <Property name="horizontalAlignment" type="int" value="4"/>
                 <Property name="horizontalTextPosition" type="int" value="2"/>
-                <Property name="name" type="java.lang.String" value="jCheckBox1" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="CStruk" noResource="true"/>
                 <Property name="verticalAlignment" type="int" value="3"/>
               </Properties>
               <Constraints>
@@ -681,16 +681,16 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JButton" name="btn">
+            <Component class="javax.swing.JButton" name="BtnOk">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Poppins SemiBold" size="14" style="0"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Konfirmasi"/>
-                <Property name="name" type="java.lang.String" value="btn" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="BtnOk" noResource="true"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnOkActionPerformed"/>
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -698,16 +698,16 @@
                 </Constraint>
               </Constraints>
             </Component>
-            <Component class="javax.swing.JButton" name="btn1">
+            <Component class="javax.swing.JButton" name="BtnClear">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Poppins Medium" size="14" style="0"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Bersih"/>
-                <Property name="name" type="java.lang.String" value="btn1" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="BtnClear" noResource="true"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn1ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnClearActionPerformed"/>
               </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
