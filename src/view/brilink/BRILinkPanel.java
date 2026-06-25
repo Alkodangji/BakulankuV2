@@ -16,8 +16,10 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.ResolverStyle;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import model.Brilink;
 import model.KategoriTopup;
@@ -37,6 +39,7 @@ public
      private DatePicker datePicker;
      private final BrilinkDAO brilinkDAO = new BrilinkDAO();
      private final KategoriTopupDAO kategoriDAO = new KategoriTopupDAO();
+     private Runnable saldoRefreshCallback;
      
 
      
@@ -44,6 +47,12 @@ public
 
     public
             BRILinkPanel() {
+        this(null);
+    }
+
+    public
+            BRILinkPanel(Runnable saldoRefreshCallback) {
+        this.saldoRefreshCallback = saldoRefreshCallback;
         initComponents();
 //        Load UI
 //        Update Form
@@ -1113,8 +1122,21 @@ private void hitungTransaksi() {
             BigDecimal fee = parseMoney(TxtFee.getText());
             if (nominal.compareTo(BigDecimal.ZERO) <= 0) { JOptionPane.showMessageDialog(this, "Nominal wajib diisi dan harus lebih dari 0."); return; }
             if (fee.compareTo(BigDecimal.ZERO) < 0) { JOptionPane.showMessageDialog(this, "Fee wajib diisi dan tidak boleh negatif."); return; }
+            Date tanggal = parseTanggal();
+            if (tanggal == null) {
+                return;
+            }
+            if ("Tarik Tunai".equals(jenis)) {
+                String metodeFee = CbFee.getSelectedItem() == null ? null : CbFee.getSelectedItem().toString();
+                if (metodeFee == null || metodeFee.trim().isEmpty()) { JOptionPane.showMessageDialog(this, "Metode fee wajib dipilih untuk Tarik Tunai."); return; }
+                if ("Terpotong".equals(metodeFee) && nominal.compareTo(fee) < 0) { JOptionPane.showMessageDialog(this, "Nominal Tarik Tunai Terpotong wajib lebih besar atau sama dengan fee."); return; }
+            } else if ("Setor Tunai".equals(jenis) || "Setor / Transfer".equals(jenis) || "Top Up".equals(jenis)) {
+                BigDecimal totalBayar = nominal.add(fee);
+                BigDecimal bayar = parseMoney(TxtBayar.getText());
+                if (bayar.compareTo(totalBayar) < 0) { JOptionPane.showMessageDialog(this, "Bayar wajib lebih besar atau sama dengan total nominal + fee."); return; }
+            }
             Brilink b = new Brilink();
-            b.setTanggal(parseTanggal());
+            b.setTanggal(tanggal);
             b.setUserId(Session.idUser);
             b.setJenis(jenis);
             b.setNominal(nominal);
@@ -1132,18 +1154,37 @@ private void hitungTransaksi() {
             }
             brilinkDAO.insert(b);
             JOptionPane.showMessageDialog(this, "Transaksi BRILink berhasil disimpan.");
-            clearTransaksi(); loadKategoriCombo(); loadSaldo(); loadRiwayatRingkas();
+            clearTransaksi(); loadKategoriCombo(); loadSaldo(); loadRiwayatRingkas(); refreshSaldoHeader();
         } catch (RuntimeException e) {
             JOptionPane.showMessageDialog(this, "Gagal menyimpan transaksi: " + rootMessage(e));
         }
     }
 
     private Date parseTanggal() {
-        try { return Date.valueOf(LocalDate.parse(TxtTgl.getText(), DateTimeFormatter.ofPattern("dd-MM-yyyy"))); }
-        catch (Exception e) { return new Date(System.currentTimeMillis()); }
+        String text = TxtTgl.getText() == null ? "" : TxtTgl.getText().trim();
+        if (text.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Tanggal transaksi wajib diisi.");
+            return null;
+        }
+        try { return Date.valueOf(LocalDate.parse(text, DateTimeFormatter.ofPattern("dd-MM-uuuu").withResolverStyle(ResolverStyle.STRICT))); }
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Tanggal transaksi wajib diisi.");
+            return null;
+        }
     }
 
     private BigDecimal parseMoney(String text) { return BigDecimal.valueOf((long) RupiahFormat.parse(text)); }
+
+    private void refreshSaldoHeader() {
+        if (saldoRefreshCallback != null) {
+            saldoRefreshCallback.run();
+            return;
+        }
+        java.awt.Window window = SwingUtilities.getWindowAncestor(this);
+        if (window instanceof MainFrame) {
+            ((MainFrame) window).refreshSaldoHeader();
+        }
+    }
     private String rootMessage(Throwable e) { Throwable t=e; while(t.getCause()!=null) t=t.getCause(); return t.getMessage(); }
     private void clearTransaksi() { TxtNominal.setText(""); TxtFee.setText(""); TxtBayar.setText(""); TxtTotal.setText(""); TxtKembali.setText(""); jTextArea1.setText(""); }
 
