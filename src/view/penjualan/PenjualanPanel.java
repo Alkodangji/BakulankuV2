@@ -14,6 +14,7 @@ import helper.DatePickerHelper;
 import helper.KodeTransaksi;
 import helper.NomorTransaksi;
 import helper.RupiahFormat;
+import helper.StrukPrinter;
 import helper.WrapLayout;
 import helper.UiThemeUtil;
 import java.awt.CardLayout;
@@ -444,6 +445,8 @@ public
 
         conn.commit();
 
+        cetakStrukJikaDipilih(penjualan);
+
         if (MainFrame.RiwayatPenjualanPanel != null) {
             MainFrame.RiwayatPenjualanPanel.loadTable();
         }
@@ -486,6 +489,37 @@ public
         }
     }
 }
+
+    private void cetakStrukJikaDipilih(Penjualan penjualan) {
+        if (!CStruk.isSelected()) {
+            return;
+        }
+
+        try {
+            ArrayList<StrukPrinter.Item> items = new ArrayList<>();
+            for (CartItem item : cartItems.values()) {
+                items.add(new StrukPrinter.Item(
+                        item.getNamaProduk(),
+                        item.getQty(),
+                        item.getHarga(),
+                        item.getSubtotal()
+                ));
+            }
+
+            StrukPrinter.printPenjualan(
+                    penjualan.getNomorTransaksi(),
+                    new java.util.Date(),
+                    items,
+                    penjualan.getTotal(),
+                    penjualan.getMetodePembayaran(),
+                    penjualan.getDiterima(),
+                    penjualan.getKembalian()
+            );
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Transaksi berhasil disimpan, tetapi struk gagal dicetak.\n" + e.getMessage());
+        }
+    }
 
     private void refreshSaldoHeaderMainFrame() {
 
