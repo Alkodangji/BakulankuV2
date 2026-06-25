@@ -61,6 +61,8 @@ public class MainFrame extends javax.swing.JFrame {
     public static JPanel KeuanganContainer;
     
     public static view.penjualan.Riwayat RiwayatPenjualanPanel;
+    public static view.keuangan.KeuanganPanel KeuanganPanel;
+    public static view.keuangan.Riwayat RiwayatKeuanganPanel;
     
     
     
@@ -135,9 +137,11 @@ LblLogo.setIcon(logo);
         Penjualan.add(RiwayatPenjualanPanel, "RIWAYAT");
 
         Keuangan.setLayout(new CardLayout());
-        Keuangan.add(new view.keuangan.KeuanganPanel(), "HOME");
+        KeuanganPanel = new view.keuangan.KeuanganPanel();
+        RiwayatKeuanganPanel = new view.keuangan.Riwayat();
+        Keuangan.add(KeuanganPanel, "HOME");
         Keuangan.add(new view.keuangan.Kategori(), "KATEGORI");
-        Keuangan.add(new view.keuangan.Riwayat(), "RIWAYAT");
+        Keuangan.add(RiwayatKeuanganPanel, "RIWAYAT");
 
         BRILink.setLayout(new CardLayout());
         BRILink.add(new view.brilink.BRILinkPanel(), "HOME");
