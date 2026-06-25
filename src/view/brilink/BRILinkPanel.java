@@ -7,13 +7,13 @@ package view.brilink;
 import dao.BrilinkDAO;
 import dao.KategoriTopupDAO;
 import helper.AppIcon;
+import helper.DatePickerHelper;
 import helper.RupiahFormat;
 import helper.UiThemeUtil;
 import java.awt.CardLayout;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.time.LocalDate;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -30,7 +30,7 @@ import view.main.MainFrame;
 public
         class BRILinkPanel extends javax.swing.JPanel {
 
-     private DatePicker datePicker;
+     private DatePicker DpTgl;
      private final BrilinkDAO brilinkDAO = new BrilinkDAO();
      private final KategoriTopupDAO kategoriDAO = new KategoriTopupDAO();
      private Runnable saldoRefreshCallback;
@@ -52,8 +52,7 @@ public
 //        Update Form
         updateFormByJenis();
 //        date time setup
-        datePicker = new DatePicker();
-        UiThemeUtil.styleDatePicker(datePicker, TxtTgl, UiThemeUtil.BRILINK_DATE_PICKER);
+        DpTgl = DatePickerHelper.install(TxtTgl);
         UiThemeUtil.applyTextFieldClearButton(this);
         loadKategoriCombo();
         loadSaldo();
@@ -1117,20 +1116,10 @@ private void hitungTransaksi() {
     }
 
     private Date parseTanggal() {
-        if (datePicker == null || !datePicker.isDateSelected() || datePicker.getSelectedDate() == null) {
-            JOptionPane.showMessageDialog(this, "Tanggal transaksi wajib diisi.");
+        if (!DatePickerHelper.validateRequired(TxtTgl, "Tanggal transaksi")) {
             return null;
         }
-
-        String editorText = TxtTgl.getText() == null ? "" : TxtTgl.getText().trim();
-        String selectedText = datePicker.getSelectedDateAsString();
-        if (editorText.isEmpty() || (selectedText != null && !editorText.equals(selectedText))) {
-            JOptionPane.showMessageDialog(this, "Tanggal transaksi wajib diisi.");
-            return null;
-        }
-
-        LocalDate selectedDate = datePicker.getSelectedDate();
-        return Date.valueOf(selectedDate);
+        return DatePickerHelper.requireSqlDate(TxtTgl, "Tanggal transaksi");
     }
 
     private BigDecimal parseMoney(String text) { return BigDecimal.valueOf((long) RupiahFormat.parse(text)); }

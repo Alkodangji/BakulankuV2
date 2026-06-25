@@ -45,7 +45,6 @@ import view.component.CartItem;
 public
         class PenjualanPanel extends javax.swing.JPanel {
 
-    private DatePicker datePicker;
     private DatePicker DpTgl;
 
     /**
@@ -54,14 +53,13 @@ public
     public
             PenjualanPanel() {
         initComponents();
-        initDatePicker();
-        UiThemeUtil.applyTextFieldClearButton(this);
-        UiThemeUtil.styleField(TxtCari, UiThemeUtil.PENJUALAN_FIELD);
         DpTgl = DatePickerHelper.install(
             TxtTgl,
             LocalDate.now(),
             Color.WHITE
-    );
+        );
+        UiThemeUtil.applyTextFieldClearButton(this);
+        UiThemeUtil.styleField(TxtCari, UiThemeUtil.PENJUALAN_FIELD);
         
         resetForm();
         
@@ -100,11 +98,6 @@ public
     loadProduk("");
     }
     
-    private void initDatePicker() {
-        datePicker = new DatePicker();
-        UiThemeUtil.styleDatePicker(datePicker, TxtTgl, UiThemeUtil.PENJUALAN_DATE_PICKER);
-    }
-
     private void resetForm() {
 
     TxtNoTransaksi.setText(
@@ -379,12 +372,7 @@ public
 }
     
     private boolean isTanggalValid() {
-        if (datePicker == null || !datePicker.isDateSelected() || datePicker.getSelectedDate() == null) {
-            return false;
-        }
-        String editorText = TxtTgl.getText() == null ? "" : TxtTgl.getText().trim();
-        String selectedText = datePicker.getSelectedDateAsString();
-        return !editorText.isEmpty() && (selectedText == null || editorText.equals(selectedText));
+        return DatePickerHelper.validateRequired(TxtTgl, "Tanggal transaksi");
     }
 
     private void simpanTransaksi() {

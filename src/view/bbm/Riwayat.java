@@ -5,11 +5,10 @@
 package view.bbm;
 
 import dao.BBMDAO;
+import helper.DatePickerHelper;
 import java.awt.CardLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.sql.Date;
-import java.time.LocalDate;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -17,6 +16,7 @@ import javax.swing.table.DefaultTableModel;
 import model.BBM;
 import model.BBMPenjualan;
 import session.Session;
+import raven.datetime.DatePicker;
 import view.main.MainFrame;
 
 /**
@@ -449,6 +449,7 @@ public
 
     private final BBMDAO bbmDAO = new BBMDAO();
     private final JComboBox<String> comboMetodePembayaran = new JComboBox<>();
+    private DatePicker DpTgl;
     private int selectedBbmId = 0;
     private int selectedHistoryId = 0;
     private String modeTabel = "DATA";
@@ -460,7 +461,7 @@ public
         TxtNama.setEditable(false);
         TxtTotal.setEditable(false);
         TxtKembalian.setEditable(false);
-        TxtTgl.setText(LocalDate.now().toString());
+        DpTgl = DatePickerHelper.install(TxtTgl);
         setupMetodePembayaran();
         setupTombolRiwayat();
         BtnUpdate.addActionListener(e -> simpanPenjualan());
@@ -567,7 +568,7 @@ public
             if (metode.equalsIgnoreCase("Cash") && diterima < total) throw new Exception("Uang diterima tidak boleh kurang dari total.");
             double kembali = metode.equalsIgnoreCase("Cash") ? diterima - total : 0;
             BBMPenjualan p = new BBMPenjualan();
-            p.setTanggal(parseTanggal(TxtTgl.getText())); p.setUserId(Session.idUser); p.setBbmId(selectedBbmId);
+            p.setTanggal(DatePickerHelper.requireSqlDate(TxtTgl, "Tanggal penjualan")); p.setUserId(Session.idUser); p.setBbmId(selectedBbmId);
             p.setLiter(liter); p.setHargaJual(hargaJual); p.setTotal(total); p.setMetodePembayaran(metode); p.setDiterima(diterima); p.setKembalian(kembali);
             bbmDAO.prosesPenjualan(p);
             JOptionPane.showMessageDialog(this, "Penjualan BBM berhasil disimpan: " + p.getNomorTransaksi());
@@ -613,9 +614,8 @@ if (selectedHistoryId <= 0) {
     private void hitungTotal() {
         try { double liter = parseDouble(TxtLiter.getText()); double harga = parseDouble(TxtHargaJual.getText()); TxtTotal.setText(String.valueOf(liter * harga)); } catch (Exception ignored) {}
     }
-    private Date parseTanggal(String value) throws Exception { try { return Date.valueOf(value.trim()); } catch (Exception e) { throw new Exception("Tanggal wajib diisi dengan format yyyy-MM-dd."); } }
     private double parseDouble(String value) throws Exception { try { return Double.parseDouble(value.trim().replace(",", ".")); } catch (Exception e) { throw new Exception("Input angka tidak valid."); } }
-    private void clearForm() { selectedBbmId = 0; selectedHistoryId = 0; TxtID.setText(""); TxtNoTransaksi.setText(""); TxtNama.setText(""); TxtLiter.setText(""); TxtHargaJual.setText(""); TxtTotal.setText(""); TxtPembayaran.setText(""); if (comboMetodePembayaran.getItemCount() > 0) comboMetodePembayaran.setSelectedIndex(0); TxtDiterima.setText(""); TxtKembalian.setText(""); TxtTgl.setText(LocalDate.now().toString()); TbRiwayat.clearSelection(); }
+    private void clearForm() { selectedBbmId = 0; selectedHistoryId = 0; TxtID.setText(""); TxtNoTransaksi.setText(""); TxtNama.setText(""); TxtLiter.setText(""); TxtHargaJual.setText(""); TxtTotal.setText(""); TxtPembayaran.setText(""); if (comboMetodePembayaran.getItemCount() > 0) comboMetodePembayaran.setSelectedIndex(0); TxtDiterima.setText(""); TxtKembalian.setText(""); DatePickerHelper.resetToToday(TxtTgl, DpTgl); TbRiwayat.clearSelection(); }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

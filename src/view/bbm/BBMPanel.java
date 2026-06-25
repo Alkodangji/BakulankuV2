@@ -5,6 +5,7 @@
 package view.bbm;
 
 import java.awt.CardLayout;
+import helper.DatePickerHelper;
 import helper.UiThemeUtil;
 import raven.datetime.DatePicker;
 import view.main.MainFrame;
@@ -14,15 +15,14 @@ import view.main.MainFrame;
 public
         class BBMPanel extends javax.swing.JPanel {
     
-    private DatePicker datePicker;
+    private DatePicker DpTgl;
     
     public
             BBMPanel() {
         initComponents();
         
 //           date time setup
-        datePicker = new DatePicker();
-        UiThemeUtil.styleDatePicker(datePicker, TxtTgl, UiThemeUtil.BBM_DATE_PICKER);
+        DpTgl = DatePickerHelper.install(TxtTgl);
         UiThemeUtil.applyTextFieldClearButton(this);
         UiThemeUtil.styleButton(BtnData, UiThemeUtil.BBM_BUTTON);
         UiThemeUtil.styleButton(BtnRestok, UiThemeUtil.BBM_BUTTON);

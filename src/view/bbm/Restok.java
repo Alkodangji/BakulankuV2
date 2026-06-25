@@ -5,17 +5,17 @@
 package view.bbm;
 
 import dao.BBMDAO;
+import helper.DatePickerHelper;
 import java.awt.CardLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.sql.Date;
-import java.time.LocalDate;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.BBM;
 import model.BBMRestok;
 import session.Session;
+import raven.datetime.DatePicker;
 import view.main.MainFrame;
 
 /**
@@ -382,6 +382,7 @@ public
 
     private final BBMDAO bbmDAO = new BBMDAO();
     private final JComboBox<String> comboAkun = new JComboBox<>();
+    private DatePicker DpTgl;
     private int selectedBbmId = 0;
 
     private void setupRestokBBM() {
@@ -393,7 +394,7 @@ public
         BtnClear.setText("Clear");
         TxtNoTransaksi.setEditable(false);
         TxtNoTransaksi.setText("Auto");
-        TxtTgl.setText(LocalDate.now().toString());
+        DpTgl = DatePickerHelper.install(TxtTgl);
         setupComboAkun();
         BtnOk.addActionListener(e -> simpanRestok());
         BtnClear.addActionListener(e -> clearForm());
@@ -444,7 +445,7 @@ public
             if (namaAkun.trim().isEmpty()) throw new Exception("Akun pembayaran wajib dipilih.");
             int akunId = bbmDAO.getAkunIdByNama(namaAkun);
             BBMRestok r = new BBMRestok();
-            r.setTanggal(Date.valueOf(TxtTgl.getText().trim()));
+            r.setTanggal(DatePickerHelper.requireSqlDate(TxtTgl, "Tanggal restok"));
             r.setUserId(Session.idUser);
             r.setBbmId(selectedBbmId);
             r.setAkunId(akunId);
@@ -459,16 +460,12 @@ public
         }
     }
 
-    private Date parseTanggal(String value) throws Exception {
-        try { return Date.valueOf(value.trim()); } catch (Exception e) { throw new Exception("Tanggal wajib diisi dengan format yyyy-MM-dd."); }
-    }
-
     private double parseDouble(String value) throws Exception {
         try { return Double.parseDouble(value.trim().replace(",", ".")); } catch (Exception e) { throw new Exception("Input angka tidak valid."); }
     }
 
     private void clearForm() {
-        selectedBbmId = 0;  TxtLiter.setText(""); TxtHargaBeli.setText(""); TxtNote.setText(""); TxtTgl.setText(LocalDate.now().toString()); TxtNoTransaksi.setText("Auto"); if (comboAkun.getItemCount() > 0) comboAkun.setSelectedIndex(0); TbRestok.clearSelection();
+        selectedBbmId = 0;  TxtLiter.setText(""); TxtHargaBeli.setText(""); TxtNote.setText(""); DatePickerHelper.resetToToday(TxtTgl, DpTgl); TxtNoTransaksi.setText("Auto"); if (comboAkun.getItemCount() > 0) comboAkun.setSelectedIndex(0); TbRestok.clearSelection();
     }
 
 
