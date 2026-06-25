@@ -53,6 +53,15 @@ public class AkunDAO {
         return 0;
     }
 
+    public boolean tambahSaldo(Connection conn, int idAkun, double nominal) throws Exception {
+        String sql = "UPDATE tb_akun SET saldo = saldo + ? WHERE id_akun = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setDouble(1, nominal);
+            ps.setInt(2, idAkun);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
     public boolean kurangiSaldo(int idAkun, double nominal) {
         try (Connection conn = Koneksi.getConnection()) {
             return kurangiSaldo(conn, idAkun, nominal);

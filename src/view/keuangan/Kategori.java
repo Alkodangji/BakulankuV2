@@ -4,7 +4,9 @@
  */
 package view.keuangan;
 
+import dao.KeuanganDAO;
 import java.awt.CardLayout;
+import javax.swing.JOptionPane;
 import view.main.MainFrame;
 
 /**
@@ -17,9 +19,49 @@ public
     /**
      * Creates new form Kategori
      */
+    private final KeuanganDAO keuanganDAO = new KeuanganDAO();
+
     public
             Kategori() {
         initComponents();
+        jTextField1.setEditable(false);
+        jButton4.addActionListener(e -> simpanKategori());
+        jButton3.addActionListener(e -> bersihkanForm());
+        loadTable();
+    }
+
+    public void loadTable() {
+        try {
+            jTable1.setModel(keuanganDAO.getKategoriTableModel());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Gagal memuat kategori keuangan: " + e.getMessage());
+        }
+    }
+
+    private void simpanKategori() {
+        String nama = jTextField2.getText().trim();
+        String jenis = String.valueOf(jComboBox1.getSelectedItem());
+        if (nama.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Nama kategori wajib diisi.");
+            return;
+        }
+        try {
+            keuanganDAO.tambahKategori(nama, jenis);
+            bersihkanForm();
+            loadTable();
+            if (MainFrame.KeuanganPanel != null) {
+                MainFrame.KeuanganPanel.refreshKategoriByJenis();
+            }
+            JOptionPane.showMessageDialog(this, "Kategori berhasil disimpan.");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Gagal simpan kategori: " + e.getMessage());
+        }
+    }
+
+    private void bersihkanForm() {
+        jTextField1.setText("");
+        jTextField2.setText("");
+        jComboBox1.setSelectedIndex(0);
     }
 
     /**
@@ -220,6 +262,9 @@ public
     private void BtnHistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnHistActionPerformed
         CardLayout cl =
         (CardLayout) MainFrame.KeuanganContainer.getLayout();
+        if (MainFrame.RiwayatKeuanganPanel != null) {
+            MainFrame.RiwayatKeuanganPanel.loadTable();
+        }
         cl.show(MainFrame.KeuanganContainer, "RIWAYAT");
         // TODO add your handling code here:
     }//GEN-LAST:event_BtnHistActionPerformed

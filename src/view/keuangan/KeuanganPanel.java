@@ -4,7 +4,20 @@
  */
 package view.keuangan;
 
+import dao.AkunDAO;
+import dao.KeuanganDAO;
 import java.awt.CardLayout;
+import java.awt.Window;
+import java.sql.Connection;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import javax.swing.DefaultComboBoxModel;
+import model.KategoriKeuangan;
+import model.KeuanganTransaksi;
+import javax.swing.JOptionPane;
+import session.Session;
 import view.main.MainFrame;
 
 /**
@@ -17,8 +30,156 @@ public
     /**
      * Creates new form KeuanganPanel
      */
+    private final AkunDAO akunDAO = new AkunDAO();
+    private final KeuanganDAO keuanganDAO = new KeuanganDAO();
+
     public KeuanganPanel() {
             initComponents();
+            initPemasukanMinimal();
+            refreshRingkasanSaldo();
+    }
+
+    private void initPemasukanMinimal() {
+        TxtTgl.setText(LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
+        jComboBox4.setSelectedItem("Pemasukan");
+        jComboBox2.setModel(new DefaultComboBoxModel<>(new String[] { "Cash", "BRI" }));
+        jComboBox3.setModel(new DefaultComboBoxModel<>(new String[] { "Cash", "BRI" }));
+        jComboBox4.addActionListener(e -> refreshKategoriByJenis());
+        refreshKategoriByJenis();
+    }
+
+    private void simpanTransaksiKeuangan() {
+        try {
+            KeuanganTransaksi transaksi = buatTransaksiDariForm();
+            keuanganDAO.simpanTransaksi(transaksi);
+            JOptionPane.showMessageDialog(this, transaksi.getJenis() + " berhasil disimpan.");
+            bersihkanForm();
+            refreshSemuaTampilan();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Gagal simpan transaksi: " + e.getMessage());
+        }
+    }
+
+    private KeuanganTransaksi buatTransaksiDariForm() throws Exception {
+        String jenis = String.valueOf(jComboBox4.getSelectedItem());
+        double nominal = parseNominal(jTextField1.getText());
+        KategoriKeuangan kategori = getKategoriDipilih();
+
+        KeuanganTransaksi transaksi = new KeuanganTransaksi();
+        transaksi.setJenis(jenis);
+        transaksi.setTanggal(getTanggalInput());
+        transaksi.setUserId(Session.idUser > 0 ? Session.idUser : 1);
+        transaksi.setNominal(nominal);
+        transaksi.setCatatan(jTextArea1.getText().trim());
+
+        if ("Pemasukan".equals(jenis)) {
+            transaksi.setAkunTujuanId(getIdAkun(String.valueOf(jComboBox3.getSelectedItem())));
+            transaksi.setIdKategori(kategori == null ? null : kategori.getIdKategori());
+            transaksi.setKategori(kategori == null ? null : kategori.getNamaKategori());
+        } else if ("Pengeluaran".equals(jenis)) {
+            transaksi.setAkunAsalId(getIdAkun(String.valueOf(jComboBox2.getSelectedItem())));
+            transaksi.setIdKategori(kategori == null ? null : kategori.getIdKategori());
+            transaksi.setKategori(kategori == null ? null : kategori.getNamaKategori());
+        } else if ("Transfer".equals(jenis)) {
+            transaksi.setAkunAsalId(getIdAkun(String.valueOf(jComboBox2.getSelectedItem())));
+            transaksi.setAkunTujuanId(getIdAkun(String.valueOf(jComboBox3.getSelectedItem())));
+            transaksi.setIdKategori(null);
+            transaksi.setKategori("Transfer");
+        }
+        return transaksi;
+    }
+
+    private KategoriKeuangan getKategoriDipilih() {
+        Object item = jComboBox5.getSelectedItem();
+        return item instanceof KategoriKeuangan ? (KategoriKeuangan) item : null;
+    }
+
+    public void refreshKategoriByJenis() {
+        String jenis = String.valueOf(jComboBox4.getSelectedItem());
+        DefaultComboBoxModel modelKategori = new DefaultComboBoxModel();
+        DefaultComboBoxModel modelKategoriDuplikat = new DefaultComboBoxModel();
+        if (!"Transfer".equals(jenis)) {
+            try {
+                for (KategoriKeuangan kategori : keuanganDAO.getKategoriByJenis(jenis)) {
+                    modelKategori.addElement(kategori);
+                    modelKategoriDuplikat.addElement(kategori);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Gagal memuat kategori: " + e.getMessage());
+            }
+        }
+        jComboBox5.setModel(modelKategori);
+        jComboBox6.setModel(modelKategoriDuplikat);
+        boolean pakaiKategori = !"Transfer".equals(jenis);
+        jComboBox5.setEnabled(pakaiKategori);
+        jComboBox6.setEnabled(pakaiKategori);
+    }
+
+    private LocalDate getTanggalInput() {
+        String teksTanggal = TxtTgl.getText().trim();
+        if (teksTanggal.isEmpty()) {
+            return LocalDate.now();
+        }
+        return LocalDate.parse(teksTanggal, DateTimeFormatter.ISO_LOCAL_DATE);
+    }
+
+    private double parseNominal(String teksNominal) {
+        String bersih = teksNominal.replace("Rp", "").replace(".", "").replace(",", "").trim();
+        if (bersih.isEmpty()) {
+            return 0;
+        }
+        return Double.parseDouble(bersih);
+    }
+
+    private int getIdAkun(String namaAkun) {
+        return "BRI".equalsIgnoreCase(namaAkun) ? 2 : 1;
+    }
+
+    public void refreshRingkasanSaldo() {
+        try (Connection conn = config.Koneksi.getConnection()) {
+            if (conn == null) {
+                return;
+            }
+            saldoCash.setText(formatRupiah(akunDAO.getSaldo(conn, 1)));
+            saldoCash1.setText(formatRupiah(akunDAO.getSaldo(conn, 2)));
+            saldoCash2.setText(formatRupiah(0));
+            saldoCash3.setText(formatRupiah(0));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String formatRupiah(double nominal) {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setGroupingSeparator('.');
+        symbols.setDecimalSeparator(',');
+        return "Rp " + new DecimalFormat("#,##0", symbols).format(nominal);
+    }
+
+    private void bersihkanForm() {
+        TxtTgl.setText(LocalDate.now().format(DateTimeFormatter.ISO_LOCAL_DATE));
+        jTextField1.setText("");
+        jTextArea1.setText("");
+        jComboBox4.setSelectedItem("Pemasukan");
+        jComboBox2.setSelectedItem("Cash");
+        jComboBox3.setSelectedItem("Cash");
+        refreshKategoriByJenis();
+    }
+
+    private void refreshSemuaTampilan() {
+        refreshRingkasanSaldo();
+        for (Window window : Window.getWindows()) {
+            if (window instanceof MainFrame) {
+                ((MainFrame) window).refreshSaldoHeader();
+                break;
+            }
+        }
+        if (MainFrame.DashboardPanel != null) {
+            MainFrame.DashboardPanel.refreshData();
+        }
+        if (MainFrame.RiwayatKeuanganPanel != null) {
+            MainFrame.RiwayatKeuanganPanel.loadTable();
+        }
     }
 
     /**
@@ -533,11 +694,11 @@ public
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActionPerformed
-        // TODO add your handling code here:
+        simpanTransaksiKeuangan();
     }//GEN-LAST:event_btnActionPerformed
 
     private void btn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn1ActionPerformed
-        // TODO add your handling code here:
+        bersihkanForm();
     }//GEN-LAST:event_btn1ActionPerformed
 
     private void BtnHistMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BtnHistMouseEntered
