@@ -13,7 +13,6 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.sql.*;
 import javax.swing.JOptionPane;
-import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
@@ -34,7 +33,6 @@ public
     public
             Riwayat() {
         initComponents();
-        initDetailButton();
         BtnUpdate.setEnabled(false);
         loadTable();
         
@@ -45,23 +43,6 @@ public
             resetForm();
         }
     });
-    }
-
-    private void initDetailButton() {
-
-        BtnDetail = new JButton("Detail");
-        BtnDetail.setName("BtnDetail");
-        BtnDetail.addActionListener(evt -> tampilkanDetailTransaksi());
-
-        java.awt.GridBagConstraints gridBagConstraints =
-                new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 3;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE_LEADING;
-        gridBagConstraints.weightx = 0.5;
-        gridBagConstraints.insets = new java.awt.Insets(6, 6, 6, 6);
-        jPanel1.add(BtnDetail, gridBagConstraints);
     }
 
     private void resetForm() {
@@ -687,7 +668,6 @@ public
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnBack;
-    private javax.swing.JButton BtnDetail;
     private javax.swing.JButton BtnClear;
     private javax.swing.JButton BtnDelete;
     private javax.swing.JButton BtnRestok;
