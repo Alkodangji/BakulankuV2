@@ -17,7 +17,6 @@ import java.awt.Color;
 import java.sql.Connection;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,13 +46,12 @@ public
     public
             Restok() {
         initComponents();
-        inisialisasiRestok();
-        
         DpTgl = DatePickerHelper.install(
             TxtTgl,
             LocalDate.now(),
             Color.WHITE
-    );
+        );
+        inisialisasiRestok();
     }
 
     /**
@@ -523,7 +521,7 @@ public
     private void resetForm() {
         TxtId.setText("");
         TxtNoTransaksi.setText(NomorTransaksi.generate(KodeTransaksi.RESTOK_PRODUK, "tb_produk_restok"));
-        TxtTgl.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        DatePickerHelper.resetToToday(TxtTgl, DpTgl);
         if (jComboBox2.getItemCount() > 0) {
             jComboBox2.setSelectedIndex(0);
         }

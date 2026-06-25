@@ -3,6 +3,7 @@ package helper;
 import java.awt.Color;
 import java.awt.Font;
 import java.lang.reflect.Method;
+import java.util.Objects;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -16,7 +17,7 @@ import raven.datetime.DatePicker;
 
 public final class DatePickerHelper {
 
-    private static final String DISPLAY_PATTERN = "dd-MM-yyyy";
+    public static final String DISPLAY_PATTERN = "dd-MM-yyyy";
 
     private static final DateTimeFormatter FORMATTER =
             DateTimeFormatter.ofPattern(DISPLAY_PATTERN);
@@ -41,12 +42,12 @@ public final class DatePickerHelper {
             LocalDate defaultDate,
             Color background
     ) {
+        Objects.requireNonNull(field, "field tidak boleh null");
+
         DatePicker datePicker = new DatePicker();
 
         applyStyle(field, background);
-
-       
-        datePicker.setEditor(field);
+        configureDatePicker(datePicker, field);
 
         if (defaultDate != null) {
             setDate(field, datePicker, defaultDate);
@@ -193,6 +194,14 @@ public final class DatePickerHelper {
         } else {
             field.setBackground(DEFAULT_BACKGROUND);
         }
+    }
+
+    private static void configureDatePicker(DatePicker datePicker, JFormattedTextField field) {
+        datePicker.setEditor(field);
+        datePicker.setColor(Color.BLACK);
+        datePicker.setSelectionArc(20);
+        datePicker.setEditorValidation(true);
+        datePicker.setValidationOnNull(true);
     }
 
     private static void syncDatePicker(DatePicker datePicker, LocalDate localDate) {

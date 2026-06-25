@@ -6,6 +6,7 @@ package view.keuangan;
 
 import dao.AkunDAO;
 import dao.KeuanganDAO;
+import helper.DatePickerHelper;
 import helper.UiThemeUtil;
 import java.awt.CardLayout;
 import java.awt.Window;
@@ -33,7 +34,7 @@ public
      */
     private final AkunDAO akunDAO = new AkunDAO();
     private final KeuanganDAO keuanganDAO = new KeuanganDAO();
-    private DatePicker datePicker;
+    private DatePicker DpTgl;
 
     public KeuanganPanel() {
             initComponents();
@@ -47,8 +48,7 @@ public
     }
 
     private void initDatePicker() {
-        datePicker = new DatePicker();
-        UiThemeUtil.styleDatePicker(datePicker, TxtTgl, UiThemeUtil.KEUANGAN_DATE_PICKER);
+        DpTgl = DatePickerHelper.install(TxtTgl);
     }
 
     private void initPemasukanMinimal() {
@@ -127,15 +127,7 @@ public
     }
 
     private LocalDate getTanggalInput() {
-        if (datePicker == null || !datePicker.isDateSelected() || datePicker.getSelectedDate() == null) {
-            throw new IllegalArgumentException("Tanggal transaksi wajib diisi.");
-        }
-        String editorText = TxtTgl.getText() == null ? "" : TxtTgl.getText().trim();
-        String selectedText = datePicker.getSelectedDateAsString();
-        if (editorText.isEmpty() || (selectedText != null && !editorText.equals(selectedText))) {
-            throw new IllegalArgumentException("Tanggal transaksi tidak valid.");
-        }
-        return datePicker.getSelectedDate();
+        return DatePickerHelper.requireLocalDate(TxtTgl, "Tanggal transaksi");
     }
 
     private double parseNominal(String teksNominal) {
@@ -172,7 +164,7 @@ public
     }
 
     private void bersihkanForm() {
-        datePicker.now();
+        DatePickerHelper.resetToToday(TxtTgl, DpTgl);
         TxtNominal.setText("");
         TxtNote.setText("");
         CbJenis.setSelectedItem("Pemasukan");
